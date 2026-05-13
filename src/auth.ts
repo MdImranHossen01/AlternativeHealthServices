@@ -1,17 +1,15 @@
 import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import connectToDatabase from './lib/db';
 import User from './models/User';
 import bcrypt from 'bcryptjs';
 import { getTenantDomain } from './lib/tenant';
+import authConfig from './auth.config';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
-    GoogleProvider({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
-    }),
+    ...authConfig.providers,
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -50,79 +48,53 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    ...authConfig.callbacks,
     async jwt({ token, user, trigger, session }) {
+      // 1. First, apply base logic from authConfig
       if (user) {
-        // When user logs in, fetch fresh data from DB for role
-        // Security: DO NOT use headers() here as it causes Configuration Error in OAuth
-        if (user.id) {
-           await connectToDatabase();
-           const mongoose = (await import('mongoose')).default;
-           
-           // Only query DB if it's a valid MongoDB ObjectId
-           // This prevents "Configuration Error" when Google sends its own string ID
-           if (mongoose.Types.ObjectId.isValid(user.id)) {
-             const dbUser = await User.findById(user.id);
-             if (dbUser) {
-               token.id = dbUser._id.toString();
-               token.role = dbUser.role ?? 'user';
-               token.domain = dbUser.domain;
-               token.phone = dbUser.phone;
-               token.image = dbUser.image || user.image || token.picture;
-             } else {
-               token.id = user.id;
-               token.role = (user as any).role ?? 'user';
-               token.image = user.image || token.picture;
-             }
-           } else {
-             // If not a valid ObjectId, we still need to keep the user's data
-             token.id = user.id;
-             token.role = (user as any).role ?? 'user';
-             token.image = user.image || token.picture;
-           }
-        } else {
-           token.id = user.id;
-           token.role = (user as any).role ?? 'user';
-           token.image = user.image || token.picture;
+        token.id = user.id;
+        token.role = (user as any).role ?? 'user';
+        token.image = user.image || token.picture;
+      }
+
+      // 2. Add DB-specific logic
+      if (user && user.id) {
+        try {
+          await connectToDatabase();
+          const mongoose = (await import('mongoose')).default;
+          
+          if (mongoose.Types.ObjectId.isValid(user.id)) {
+            const dbUser = await User.findById(user.id);
+            if (dbUser) {
+              token.id = dbUser._id.toString();
+              token.role = dbUser.role ?? 'user';
+              token.domain = dbUser.domain;
+              token.phone = dbUser.phone;
+              token.image = dbUser.image || user.image || token.picture;
+            }
+          }
+        } catch (error) {
+          console.error("JWT DB Enhancement Error:", error);
         }
       }
 
-      // Update session if requested (e.g. name/image update)
       if (trigger === 'update') {
         if (session?.name !== undefined) token.name = session.name;
         if (session?.image !== undefined) token.image = session.image;
       }
       
-      // Global Super Admin Override
       if (token.email === 'imranshuvo101@gmail.com') {
         token.role = 'super_admin';
       }
       
       return token;
     },
-    async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (session.user as any).role = token.role ?? 'user';
-        (session.user as any).domain = token.domain as string;
-        (session.user as any).phone = token.phone as string;
-        if (token.image) {
-          session.user.image = token.image as string;
-        }
-      }
-      return session;
-    },
     async signIn({ user, account }) {
       if (account?.provider === 'google') {
-        if (!user.email) {
-          console.error('Google login failed: No email provided by Google');
-          return false;
-        }
+        if (!user.email) return false;
         
         try {
           await connectToDatabase();
-          
-          // Use a safer way to get the hub domain without using headers() in OAuth callback
           const hubDomain = process.env.NEXT_PUBLIC_HUB_DOMAIN || 'elyjen.shop';
           const domain = hubDomain.replace('www.', '');
 
@@ -145,30 +117,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (savedUser) {
             user.id = savedUser._id.toString();
-            // Assign super_admin role for the specific email during sign-in
             if (user.email === 'imranshuvo101@gmail.com') {
               (user as any).role = 'super_admin';
             }
           }
-          
           return true;
         } catch (error) {
-          console.error('Detailed Error in Google signIn callback:', error);
-          return true; // Return true to allow login even if upsert fails
+          console.error('Error in Google signIn:', error);
+          return true;
         }
       }
       return true;
     },
   },
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
-  trustHost: true,
-  debug: process.env.NODE_ENV === 'development',
-  session: {
-    strategy: 'jwt',
-  },
-  pages: {
-    signIn: '/login',
-    error: '/login',
-  },
 });
-
