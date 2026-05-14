@@ -22,7 +22,7 @@ export async function DELETE(
     if (!deleted) return NextResponse.json({ message: 'Not found' }, { status: 404 });
     return NextResponse.json({ message: 'Deleted' });
   } catch (error: any) {
-    console.error(`Error deleting course ${id}:`, error);
+    console.error(`Error deleting course:`, error);
     return NextResponse.json({ message: 'Error' }, { status: 500 });
   }
 }
