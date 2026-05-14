@@ -95,6 +95,11 @@ export interface IGlobalSettings extends Document {
     label: string;
     href: string;
   }[];
+  testimonials?: {
+    name: string;
+    role: string;
+    content: string;
+    image: string;
     rating: number;
   }[];
   academyConfig?: {
