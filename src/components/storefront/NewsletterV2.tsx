@@ -13,7 +13,7 @@ export function NewsletterV2() {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [subscribed, setSubscribed] = useState(false);
-    
+
     useEffect(() => {
         const isSubscribed = localStorage.getItem('newsletter_subscribed');
         if (isSubscribed === 'true') {
@@ -53,7 +53,7 @@ export function NewsletterV2() {
         <section className="py-10 bg-primary text-white relative overflow-hidden">
             {/* Dark gradient overlay for the professional gradient look */}
             <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/40 pointer-events-none" />
-            
+
             {/* Threads animated background */}
             <div className="absolute inset-0 opacity-100 mix-blend-screen">
                 <Threads
@@ -103,7 +103,7 @@ export function NewsletterV2() {
                             <form onSubmit={handleSubscribe} className="w-full relative group">
                                 <Input
                                     type="email"
-                                    placeholder="Enter your email address"
+                                    placeholder="Enter your email"
                                     className="h-14 w-full rounded-xl bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-white/40 pl-6 pr-36 focus-visible:ring-white/30 transition-all text-base"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}

@@ -118,14 +118,14 @@ export default function HeroV2({ banners }: HeroSliderProps) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
                   >
-                    <h1 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-4 sm:mb-8 drop-shadow-2xl uppercase">
+                    <h1 className="text-[18px] sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tighter mb-4 sm:mb-8 drop-shadow-2xl uppercase">
                       {banner.title}
                     </h1>
 
-                    <div className="flex flex-row items-center justify-start gap-2.5 sm:gap-6 flex-wrap">
+                    <div className="flex flex-row items-center justify-start gap-2 sm:gap-6">
                       <Link
                         href={banner.primaryBtnLink || banner.link || '/shop'}
-                        className="group inline-flex items-center gap-1.5 px-4 py-2 sm:px-12 sm:py-5 bg-primary text-white font-black rounded-full hover:bg-white hover:text-black transition-all text-[10px] sm:text-base uppercase tracking-widest shadow-2xl"
+                        className="group inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-12 sm:py-5 bg-primary text-white font-black rounded-full hover:bg-white hover:text-black transition-all text-[8px] sm:text-base uppercase tracking-widest shadow-2xl"
                       >
                         {banner.primaryBtnText || 'Shop Now'}
                         <ArrowRight className="h-3 w-3 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-2" />
@@ -134,7 +134,7 @@ export default function HeroV2({ banners }: HeroSliderProps) {
                       {banner.secondaryBtnText && (
                         <Link
                           href={banner.secondaryBtnLink || '/contact'}
-                          className="inline-flex items-center px-4 py-2 sm:px-12 sm:py-5 bg-white/10 backdrop-blur-md border border-white/30 text-white font-black rounded-full hover:bg-white hover:text-black transition-all text-[10px] sm:text-base uppercase tracking-widest"
+                          className="inline-flex items-center px-3.5 py-1.5 sm:px-12 sm:py-5 bg-white/10 backdrop-blur-md border border-white/30 text-white font-black rounded-full hover:bg-white hover:text-black transition-all text-[8px] sm:text-base uppercase tracking-widest"
                         >
                           {banner.secondaryBtnText}
                         </Link>

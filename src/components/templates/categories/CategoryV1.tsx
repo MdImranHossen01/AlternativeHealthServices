@@ -6,6 +6,8 @@ import { Plus } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
+import { cn } from '@/lib/utils';
+
 interface Category {
   _id: string;
   name: string;
@@ -21,14 +23,17 @@ export default function CategoryV1({ categories }: CategoryShowcaseProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 
+  const canScroll = categories.length > 6;
+
   // Initialize Embla Carousel with Autoplay and Full Slide Grouping
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
-      loop: true,
-      align: 'start',
-      slidesToScroll: 'auto', // Slides a full page at once
+      loop: canScroll,
+      align: canScroll ? 'start' : 'center',
+      slidesToScroll: 'auto',
+      watchDrag: canScroll,
     },
-    [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })]
+    canScroll ? [Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })] : []
   );
 
   const onSelect = useCallback(() => {
@@ -68,7 +73,11 @@ export default function CategoryV1({ categories }: CategoryShowcaseProps) {
         {/* Embla Carousel Viewport */}
         <div className="relative">
           <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
-            <div className="flex -ml-4">
+            <div className={cn(
+              "flex -ml-4",
+              !canScroll && "lg:justify-center",
+              categories.length < 4 && "md:justify-center"
+            )}>
               {categories.map((category) => (
                 <div
                   key={category._id}
@@ -101,22 +110,25 @@ export default function CategoryV1({ categories }: CategoryShowcaseProps) {
           </div>
 
           {/* Pagination Dots */}
-          <div className="flex justify-center items-center gap-2 mt-8">
-            {scrollSnaps.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => scrollTo(index)}
-                className={`transition-all duration-300 cursor-pointer rounded-full ${index === selectedIndex
-                  ? "w-8 bg-primary h-1.5"
-                  : "w-2 bg-muted-foreground/30 h-1.5 hover:bg-muted-foreground/50"
-                  }`}
-                aria-label={`Go to slide group ${index + 1}`}
-              />
-            ))}
-          </div>
+          {canScroll && (
+            <div className="flex justify-center items-center gap-2 mt-8">
+              {scrollSnaps.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollTo(index)}
+                  className={`transition-all duration-300 cursor-pointer rounded-full ${index === selectedIndex
+                    ? "w-8 bg-primary h-1.5"
+                    : "w-2 bg-muted-foreground/30 h-1.5 hover:bg-muted-foreground/50"
+                    }`}
+                  aria-label={`Go to slide group ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
+  );
   );
 }
 
