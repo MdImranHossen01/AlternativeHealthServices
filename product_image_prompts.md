@@ -1,22 +1,22 @@
-# Alternative Health Services - Clinical & Healthcare Banner Prompts
+# Alternative Health Services - Final Professional Banner Prompts
 
-This document contains final, refined image generation prompts focused on **Clinical Care**, **Medical Treatment**, and **Professional Healthcare Services**. No retail shelves—only clinic vibes. All prompts feature **Right-side focus** for text clearance on the left.
+This document contains perfected image generation prompts for high-end clinical banners. Each prompt creates a **full, immersive clinical scene** where the primary subject is on the **right side**, while the **left side** features a softly blurred, atmospheric clinic background (not empty or solid) to maintain visual richness while allowing for text readability.
 
 ---
 
-## Hero Banner Prompts (Clinic & Care - 16:9 - Right Focus)
+## Hero Banner Prompts (Full Immersive Scene - 16:9 - Right Focus)
 
-1. **Compassionate Doctor-Patient Consultation**
-   - **Prompt:** A professional 16:9 cinematic shot in a high-end modern clinic. On the **right side**, a compassionate doctor in a crisp white coat is consulting with a patient, holding a stethoscope and listening intently. Clean clinical background with soft blue and white tones, 8k, ultra-realistic, premium healthcare aesthetic. The left side is beautifully blurred for text clearance.
+1. **Active Doctor-Patient Narrative**
+   - **Prompt:** An expansive 16:9 cinematic shot of a professional modern clinic. The **right side** of the frame features a compassionate doctor in a white coat treating a patient with a stethoscope. The **left side** continues the clinical scene with softly blurred medical equipment and high-end glass partitions, creating a rich atmospheric background. Soft emerald green and white lighting, 8k, ultra-realistic, premium healthcare aesthetic.
 
-2. **Clinical Essentials & Treatment Setup**
-   - **Prompt:** A high-quality 16:9 close-up on a clean, white medical desk. The **right side** features a professional stethoscope, a high-tech digital thermometer, a premium syrup bottle, and a few medical tablets arranged artistically. Bright, airy clinic environment with soft natural lighting, sharp focus, 8k resolution. Large clear space on the left for marketing copy.
+2. **Clinical Tools & Essentials Showcase**
+   - **Prompt:** A professional 16:9 wide-angle shot of a medical desk. On the **right side**, a professional stethoscope, syrup bottles, and an injection are in sharp focus. The **left side** shows a beautifully blurred, deep-field view of a clean clinic hallway with soft lighting, ensuring the entire frame feels full and detailed while maintaining room for text. 8k, realistic commercial photography style.
 
-3. **Professional Medical Procedure & Gear**
-   - **Prompt:** A professional 16:9 shot in an advanced treatment room. On the **right side**, a healthcare professional is preparing a high-quality medical injection and some essential syrups. Sharp focus on the medical tools and hands, clinical lighting, ultra-sharp textures, 8k. The left side is strategically empty and clean for high-impact branding text.
+3. **Modern Treatment & Care Environment**
+   - **Prompt:** A full 16:9 cinematic clinic environment. The **right side** focuses on a doctor’s hands preparing a medical treatment with a syringe and vials in sharp detail. The **left side** captures the rest of the professional medical room in a soft, ethereal bokeh blur, maintaining a complete and immersive visual experience with high-end medical aesthetics. Professional studio lighting, 8k, sharp textures.
 
-4. **Hands-On Clinical Care & Diagnostic**
-   - **Prompt:** A cinematic 16:9 shot focusing on active care. On the **right side**, a doctor’s hands are visible using a stethoscope to check a patient's health. A medical tray with a syrup bottle and tablets is placed nearby in sharp focus. Trustworthy and professional clinical atmosphere, realistic lighting, 8k. The left side is blurred, providing a perfect area for headlines.
+4. **Clinical Consultation & Diagnostic Atmosphere**
+   - **Prompt:** A cinematic 16:9 healthcare narrative shot. On the **right side**, a doctor is checking a patient's vitals with a stethoscope. The **left side** of the image features a softly out-of-focus clinic interior with professional medical monitors and emerald green accents, making the entire frame feel rich and detailed without distracting from future overlay text. Trustworthy vibe, 8k, ultra-realistic.
 
-5. **Advanced Diagnostic & Medicine Mix**
-   - **Prompt:** A sleek 16:9 clinical shot. The **right side** features a sophisticated mix of a digital stethoscope, a medical injection, and premium medical syrup and tablet packaging on a high-tech clinical surface. Emerald green accents, sharp focus, cinematic professional look, 8k. The left side is clean, open, and ready for text.
+5. **Advanced Medical Tech & Medicine Mix**
+   - **Prompt:** A wide 16:9 premium clinical shot. The **right side** features a sophisticated arrangement of a digital stethoscope, syrup packaging, and tablets in sharp focus. The **left side** showcases a softly blurred, high-tech diagnostic lab environment, creating a full and balanced composition that feels professional and state-of-the-art. Cinematic professional look, 8k, realistic lighting.
