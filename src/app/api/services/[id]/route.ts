@@ -26,7 +26,7 @@ export async function DELETE(
     if (!deleted) return NextResponse.json({ message: 'Not found' }, { status: 404 });
     return NextResponse.json({ message: 'Deleted' });
   } catch (error: any) {
-    console.error(`Error deleting service ${id}:`, error);
+    console.error(`Error deleting service:`, error);
     return NextResponse.json({ message: 'Error' }, { status: 500 });
   }
 }
