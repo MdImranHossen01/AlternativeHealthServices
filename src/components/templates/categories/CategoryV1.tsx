@@ -129,6 +129,5 @@ export default function CategoryV1({ categories }: CategoryShowcaseProps) {
       </div>
     </section>
   );
-  );
 }
 
