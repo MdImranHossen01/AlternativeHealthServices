@@ -5,20 +5,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
-import { 
-  Search, 
-  ShoppingCart, 
-  User, 
-  Menu, 
-  X, 
-  Heart, 
-  LogOut, 
-  LayoutDashboard, 
-  Settings, 
-  Truck, 
-  Mic, 
-  MicOff, 
-  Package 
+import {
+  Search,
+  ShoppingCart,
+  User,
+  Menu,
+  X,
+  Heart,
+  LogOut,
+  LayoutDashboard,
+  Settings,
+  Truck,
+  Mic,
+  MicOff,
+  Package
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/store/hooks';
@@ -41,7 +41,7 @@ import {
 import Swal from 'sweetalert2';
 
 import { CategoryNav } from '@/components/layout/CategoryNav';
-import { 
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -61,7 +61,7 @@ export default function NavbarV2() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const settings = useSettings();
-  
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isListening, setIsListening] = useState(false);
@@ -150,198 +150,197 @@ export default function NavbarV2() {
         ${isHomePage && !isScrolled ? 'lg:bg-transparent lg:border-none lg:shadow-none lg:py-4' : ''}
         ${isHomePage && isScrolled ? 'lg:bg-background/80 lg:backdrop-blur-md lg:shadow-md lg:py-2' : ''}
       `}>
-      <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-        
-        {/* Left: Logo & Mobile Menu */}
-        <div className="flex items-center gap-2">
-          <MobileMenu 
-            navItems={navItems} 
-            categories={categories} 
-            session={session} 
-            triggerClassName={!isHomePage || isScrolled ? 'text-foreground hover:text-primary' : 'text-white hover:text-white/70'}
-          />
+        <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
 
-          <Link href="/" className={`text-2xl md:text-3xl font-black tracking-tighter hover:scale-105 transition-all flex items-center gap-1 group ${!isHomePage || isScrolled ? 'text-foreground' : 'text-white'}`}>
-            {settings?.brandName || 'Store'}<span className="text-primary group-hover:animate-ping">.</span>
-          </Link>
-        </div>
-
-        {/* Center: Search Bar (Desktop) */}
-        <div className="hidden lg:flex flex-1 max-w-md mx-8">
-          <form className="relative w-full group" onSubmit={handleSearch}>
-            <input 
-              type="text" 
-              placeholder={isListening ? 'Listening...' : 'Search sneakers...'} 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={`w-full border border-transparent focus:border-primary/50 px-10 py-2.5 rounded-full text-sm transition-all outline-none ${!isHomePage || isScrolled ? 'bg-muted/50 focus:bg-background text-foreground' : 'bg-white/10 focus:bg-white/20 text-white placeholder:text-white/60'}`}
+          {/* Left: Logo & Mobile Menu */}
+          <div className="flex items-center gap-2">
+            <MobileMenu
+              navItems={navItems}
+              categories={categories}
+              session={session}
+              triggerClassName={!isHomePage || isScrolled ? 'text-foreground hover:text-primary' : 'text-white hover:text-white/70'}
             />
-            <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${!isHomePage || isScrolled ? 'text-muted-foreground group-focus-within:text-primary' : 'text-white/70 group-focus-within:text-white'}`} />
-            <button
-              type="button"
-              onClick={handleVoiceSearch}
-              className={`absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : ( (!isHomePage || isScrolled) ? 'text-muted-foreground hover:text-primary' : 'text-white/70 hover:text-white')}`}
-            >
-              {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-            </button>
-          </form>
-        </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2 md:gap-4">
-          <ul className="hidden lg:flex items-center gap-6 mr-4">
-            {navItems.map((item, index) => (
-              <React.Fragment key={item.label}>
-                <li>
-                  <Link 
-                    href={item.href} 
-                    className={`text-xs font-bold uppercase tracking-widest relative group transition-colors ${
-                      (!isHomePage || isScrolled) 
-                        ? (pathname === item.href ? 'text-foreground' : 'text-foreground/70 hover:text-primary') 
-                        : (pathname === item.href ? 'text-white' : 'text-white/80 hover:text-white')
-                    }`}
-                  >
-                    {item.label}
-                    <span className={`absolute -bottom-1 left-0 h-[2px] transition-all duration-300 ${
-                      (!isHomePage || isScrolled) ? 'bg-foreground' : 'bg-white'
-                    } ${pathname === item.href ? 'w-full' : 'w-0 group-hover:w-full'}`} />
-                  </Link>
-                </li>
-                {index === 0 && (
-                  <li>
-                    <CategoryNav isScrolled={!isHomePage || isScrolled} />
-                  </li>
-                )}
-              </React.Fragment>
-            ))}
-          </ul>
-
-          <div className="flex items-center gap-1 md:gap-3">
-            <div className="hidden sm:flex items-center gap-2">
-              <ModeToggle />
-              {settings?.aiConfig?.openRouterApiKey && <AIChatbot />}
-            </div>
-
-            <Link href="/dashboard/wishlist">
-              <Button variant="ghost" size="icon" className={`rounded-full relative group ${!isHomePage || isScrolled ? 'text-foreground hover:bg-muted' : 'text-white hover:bg-white/10'}`}>
-                <Heart className={`h-5 w-5 transition-all ${wishlistCount > 0 ? 'fill-primary text-primary' : ( (!isHomePage || isScrolled) ? 'group-hover:text-primary' : 'group-hover:text-white')}`} />
-                {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 bg-primary text-[9px] font-black text-white rounded-full flex items-center justify-center animate-in zoom-in">
-                    {wishlistCount}
-                  </span>
-                )}
-              </Button>
+            <Link href="/" className={`text-2xl md:text-3xl font-black tracking-tighter hover:scale-105 transition-all flex items-center gap-2 group ${!isHomePage || isScrolled ? 'text-foreground' : 'text-white'}`}>
+              <Image src="/logo.png" width={40} height={40} alt="AHS Logo" className="object-contain" />
+              AHS<span className="text-primary group-hover:animate-ping">.</span>
             </Link>
+          </div>
 
-            <CartDrawer>
-              <div className="relative group cursor-pointer">
-                <Button variant="ghost" size="icon" className={`rounded-full relative pointer-events-none ${!isHomePage || isScrolled ? 'text-foreground hover:bg-muted' : 'text-white hover:bg-white/10'}`}>
-                  <ShoppingCart className={`h-5 w-5 transition-all ${(!isHomePage || isScrolled) ? 'group-hover:text-primary' : 'group-hover:text-white'}`} />
-                  {cartCount > 0 && (
+          {/* Center: Search Bar (Desktop) */}
+          <div className="hidden lg:flex flex-1 max-w-md mx-8">
+            <form className="relative w-full group" onSubmit={handleSearch}>
+              <input
+                type="text"
+                placeholder={isListening ? 'Listening...' : 'Search...'}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`w-full border border-transparent focus:border-primary/50 px-10 py-2.5 rounded-full text-sm transition-all outline-none ${!isHomePage || isScrolled ? 'bg-muted/50 focus:bg-background text-foreground' : 'bg-white/10 focus:bg-white/20 text-white placeholder:text-white/60'}`}
+              />
+              <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${!isHomePage || isScrolled ? 'text-muted-foreground group-focus-within:text-primary' : 'text-white/70 group-focus-within:text-white'}`} />
+              <button
+                type="button"
+                onClick={handleVoiceSearch}
+                className={`absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : ((!isHomePage || isScrolled) ? 'text-muted-foreground hover:text-primary' : 'text-white/70 hover:text-white')}`}
+              >
+                {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+              </button>
+            </form>
+          </div>
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-2 md:gap-4">
+            <ul className="hidden lg:flex items-center gap-6 mr-4">
+              {navItems.map((item, index) => (
+                <React.Fragment key={item.label}>
+                  <li>
+                    <Link
+                      href={item.href}
+                      className={`text-xs font-bold uppercase tracking-widest relative group transition-colors ${(!isHomePage || isScrolled)
+                          ? (pathname === item.href ? 'text-foreground' : 'text-foreground/70 hover:text-primary')
+                          : (pathname === item.href ? 'text-white' : 'text-white/80 hover:text-white')
+                        }`}
+                    >
+                      {item.label}
+                      <span className={`absolute -bottom-1 left-0 h-[2px] transition-all duration-300 ${(!isHomePage || isScrolled) ? 'bg-foreground' : 'bg-white'
+                        } ${pathname === item.href ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                    </Link>
+                  </li>
+                  {index === 0 && (
+                    <li>
+                      <CategoryNav isScrolled={!isHomePage || isScrolled} />
+                    </li>
+                  )}
+                </React.Fragment>
+              ))}
+            </ul>
+
+            <div className="flex items-center gap-1 md:gap-3">
+              <div className="hidden sm:flex items-center gap-2">
+                <ModeToggle />
+                {settings?.aiConfig?.openRouterApiKey && <AIChatbot />}
+              </div>
+
+              <Link href="/dashboard/wishlist">
+                <Button variant="ghost" size="icon" className={`rounded-full relative group ${!isHomePage || isScrolled ? 'text-foreground hover:bg-muted' : 'text-white hover:bg-white/10'}`}>
+                  <Heart className={`h-5 w-5 transition-all ${wishlistCount > 0 ? 'fill-primary text-primary' : ((!isHomePage || isScrolled) ? 'group-hover:text-primary' : 'group-hover:text-white')}`} />
+                  {wishlistCount > 0 && (
                     <span className="absolute -top-1 -right-1 h-4 w-4 bg-primary text-[9px] font-black text-white rounded-full flex items-center justify-center animate-in zoom-in">
-                      {cartCount}
+                      {wishlistCount}
                     </span>
                   )}
                 </Button>
-                <div className="hidden xl:block absolute -bottom-8 right-0 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">৳{totalAmount.toLocaleString()}</span>
-                </div>
-              </div>
-            </CartDrawer>
-
-            <div className="hidden md:block h-6 w-[1px] bg-muted mx-1" />
-
-            {status === 'authenticated' && session?.user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 group cursor-pointer outline-none">
-                    <div className="h-9 w-9 rounded-full border-2 border-primary/50 overflow-hidden group-hover:scale-110 transition-transform">
-                      <img 
-                        src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || '')}`} 
-                        alt={session.user?.name || 'User'} 
-                        className="h-full w-full object-cover" 
-                      />
-                    </div>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 mt-2">
-                  <DropdownMenuGroup>
-                    <DropdownMenuLabel className="font-serif">
-                      <div className="flex flex-col">
-                        <span>{session.user?.name}</span>
-                        <span className="text-xs font-normal text-muted-foreground truncate">{session.user?.email}</span>
-                        {profile && (
-                          <div className="mt-1.5 flex items-center gap-1.5 bg-primary/10 px-2 py-0.5 rounded-full w-fit border border-primary/20">
-                            <Package className="h-3 w-3 text-primary" />
-                            <span className="text-[10px] font-bold text-primary">৳{profile.walletBalance || 0} Tokens</span>
-                          </div>
-                        )}
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-
-                    {/* Role Based Navigation */}
-                    {(session.user as any)?.role === 'super_admin' && (
-                      <>
-                        <DropdownMenuItem asChild>
-                          <Link href="/admin/dashboard" className="cursor-pointer">
-                            <LayoutDashboard className="mr-2 h-4 w-4" /> Admin Dashboard
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href="/admin/system-design" className="cursor-pointer">
-                            <Settings className="mr-2 h-4 w-4" /> Infrastructure & Marketing
-                          </Link>
-                        </DropdownMenuItem>
-                      </>
-                    )}
-
-                    {(session.user as any)?.role === 'admin' && (
-                      <>
-                        <DropdownMenuItem asChild>
-                          <Link href="/admin/dashboard" className="cursor-pointer">
-                            <LayoutDashboard className="mr-2 h-4 w-4" /> Admin Dashboard
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href="/admin/orders" className="cursor-pointer">
-                            <Truck className="mr-2 h-4 w-4" /> Manage Orders
-                          </Link>
-                        </DropdownMenuItem>
-                      </>
-                    )}
-
-                    {(session.user as any)?.role === 'user' && (
-                      <>
-                        <DropdownMenuItem asChild>
-                          <Link href="/dashboard" className="cursor-pointer">
-                            <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href="/track-order" className="cursor-pointer">
-                            <Truck className="mr-2 h-4 w-4" /> Track Order
-                          </Link>
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut({ callbackUrl: window.location.origin })} className="text-destructive cursor-pointer">
-                    <LogOut className="mr-2 h-4 w-4" /> Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Link href="/login">
-                <Button className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-black text-[10px] uppercase tracking-widest px-6 h-10 shadow-lg shadow-primary/20">
-                  Login
-                </Button>
               </Link>
-            )}
+
+              <CartDrawer>
+                <div className="relative group cursor-pointer">
+                  <Button variant="ghost" size="icon" className={`rounded-full relative pointer-events-none ${!isHomePage || isScrolled ? 'text-foreground hover:bg-muted' : 'text-white hover:bg-white/10'}`}>
+                    <ShoppingCart className={`h-5 w-5 transition-all ${(!isHomePage || isScrolled) ? 'group-hover:text-primary' : 'group-hover:text-white'}`} />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-1 -right-1 h-4 w-4 bg-primary text-[9px] font-black text-white rounded-full flex items-center justify-center animate-in zoom-in">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Button>
+                  <div className="hidden xl:block absolute -bottom-8 right-0 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <span className="text-[10px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full">৳{totalAmount.toLocaleString()}</span>
+                  </div>
+                </div>
+              </CartDrawer>
+
+              <div className="hidden md:block h-6 w-[1px] bg-muted mx-1" />
+
+              {status === 'authenticated' && session?.user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 group cursor-pointer outline-none">
+                      <div className="h-9 w-9 rounded-full border-2 border-primary/50 overflow-hidden group-hover:scale-110 transition-transform">
+                        <img
+                          src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || '')}`}
+                          alt={session.user?.name || 'User'}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 mt-2">
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel className="font-serif">
+                        <div className="flex flex-col">
+                          <span>{session.user?.name}</span>
+                          <span className="text-xs font-normal text-muted-foreground truncate">{session.user?.email}</span>
+                          {profile && (
+                            <div className="mt-1.5 flex items-center gap-1.5 bg-primary/10 px-2 py-0.5 rounded-full w-fit border border-primary/20">
+                              <Package className="h-3 w-3 text-primary" />
+                              <span className="text-[10px] font-bold text-primary">৳{profile.walletBalance || 0} Tokens</span>
+                            </div>
+                          )}
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+
+                      {/* Role Based Navigation */}
+                      {(session.user as any)?.role === 'super_admin' && (
+                        <>
+                          <DropdownMenuItem asChild>
+                            <Link href="/admin/dashboard" className="cursor-pointer">
+                              <LayoutDashboard className="mr-2 h-4 w-4" /> Admin Dashboard
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link href="/admin/system-design" className="cursor-pointer">
+                              <Settings className="mr-2 h-4 w-4" /> Infrastructure & Marketing
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
+                      )}
+
+                      {(session.user as any)?.role === 'admin' && (
+                        <>
+                          <DropdownMenuItem asChild>
+                            <Link href="/admin/dashboard" className="cursor-pointer">
+                              <LayoutDashboard className="mr-2 h-4 w-4" /> Admin Dashboard
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link href="/admin/orders" className="cursor-pointer">
+                              <Truck className="mr-2 h-4 w-4" /> Manage Orders
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
+                      )}
+
+                      {(session.user as any)?.role === 'user' && (
+                        <>
+                          <DropdownMenuItem asChild>
+                            <Link href="/dashboard" className="cursor-pointer">
+                              <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link href="/track-order" className="cursor-pointer">
+                              <Truck className="mr-2 h-4 w-4" /> Track Order
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => signOut({ callbackUrl: window.location.origin })} className="text-destructive cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link href="/login">
+                  <Button className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-black text-[10px] uppercase tracking-widest px-6 h-10 shadow-lg shadow-primary/20">
+                    Login
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
       </nav>
     </>

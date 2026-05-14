@@ -43,8 +43,9 @@ export default function FooterV2() {
           
           {/* Brand Essence */}
           <div className="lg:col-span-4 space-y-6 flex flex-col items-center lg:items-start">
-            <Link href="/" className="text-4xl font-black tracking-tighter hover:text-primary transition-all inline-block italic uppercase">
-              {settings?.brandName || 'Alternative Health Services'}<span className="text-primary">.</span>
+            <Link href="/" className="flex items-center gap-2 text-4xl font-black tracking-tighter hover:text-primary transition-all inline-block uppercase">
+              <img src="/logo.png" alt="AHS Logo" className="h-10 w-10 object-contain" />
+              AHS<span className="text-primary">.</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm leading-relaxed font-medium">
               Pushing the boundaries of design. Born in the heart of Dhaka, engineering for the world.
@@ -107,7 +108,7 @@ export default function FooterV2() {
 
         {/* Bottom Bar - Reduced Padding & Smart Layout */}
         <div className="pt-6 border-t border-muted flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-           <p className="text-center md:text-left">© {currentYear} {settings?.brandName || 'Alternative Health Services'} CO. ALL RIGHTS RESERVED.</p>
+           <p className="text-center md:text-left">© {currentYear} AHS CO. ALL RIGHTS RESERVED.</p>
            <div className="flex items-center gap-4">
              <DeveloperLogo className="opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all scale-90 md:scale-100" />
            </div>
