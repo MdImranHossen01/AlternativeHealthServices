@@ -15,7 +15,7 @@ const PrintableInvoice: React.FC<InvoiceProps> = ({ order }) => {
       {/* Header */}
       <div className="flex justify-between items-start border-b pb-8 mb-8">
         <div>
-          <h1 className="text-4xl font-black tracking-tighter text-primary mb-2">ELYJEN<span className="text-orange-500">SHOP</span></h1>
+          <h1 className="text-4xl font-black tracking-tighter text-primary mb-2">Alternative Health Services<span className="text-orange-500">SHOP</span></h1>
           <div className="text-sm text-gray-500 space-y-1">
             <p>House: 12, Road: 05, Sector: 10</p>
             <p>Uttara, Dhaka-1230, Bangladesh</p>

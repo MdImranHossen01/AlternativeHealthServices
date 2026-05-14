@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     console.log('Bridge: Decoding token...');
     // Use the hub's salt (always 'authjs.session-token' on hub in prod = '__Secure-authjs.session-token')
     // Hub encoded the token with its own salt, so we must decode with the same.
-    // Hub is always elyjen.shop (production), so its cookie name is __Secure-authjs.session-token
+    // Hub is always alternativehsbd.com (production), so its cookie name is __Secure-authjs.session-token
     const hubSalt = isProd ? '__Secure-authjs.session-token' : 'authjs.session-token';
     const decoded = await decode({
       token,
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
 
     // Re-encode the token for a long-term session (30 days)
     const { encode } = await import('next-auth/jwt');
-    // Re-encode with THIS tenant's salt (cookie name) so Auth.js on elyjen.shop can read it
+    // Re-encode with THIS tenant's salt (cookie name) so Auth.js on alternativehsbd.com can read it
     const sessionToken = await encode({
       token: {
         id: decoded.id,

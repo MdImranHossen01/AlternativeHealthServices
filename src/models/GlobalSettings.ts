@@ -135,7 +135,7 @@ const GlobalSettingsSchema: Schema<IGlobalSettings> = new Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      default: 'elyjen.shop'
+      default: 'alternativehsbd.com'
     },
     storeId: { type: String, required: false, unique: false }, // Will be set to required: true, unique: true after migration
     paymentConfig: { type: Object, default: { activeMethod: 'none' } },

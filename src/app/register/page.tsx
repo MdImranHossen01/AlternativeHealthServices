@@ -133,7 +133,7 @@ export default function RegisterPage() {
         className="fixed inset-y-0 left-0 hidden w-1/2 bg-muted lg:block"
       >
         <Image
-          src="/assets/register_banner_v2.jpg"
+          src="/assets/register_banner_v2.webp"
           alt="Register Banner"
           fill
           priority

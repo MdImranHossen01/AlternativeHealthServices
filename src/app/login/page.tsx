@@ -42,14 +42,14 @@ export default function LoginPage() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const remoteTenant = searchParams.get('remote_tenant');
-  const hubDomain = process.env.NEXT_PUBLIC_HUB_DOMAIN || 'www.elyjen.shop';
+  const hubDomain = process.env.NEXT_PUBLIC_HUB_DOMAIN || 'www.alternativehsbd.com';
 
   // Force WWW in production for consistency and to avoid Auth mismatch
   useEffect(() => {
     if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
       const host = window.location.host;
-      if (host === 'elyjen.shop') {
-        window.location.href = `https://www.elyjen.shop${window.location.pathname}${window.location.search}`;
+      if (host === 'alternativehsbd.com') {
+        window.location.href = `https://www.alternativehsbd.com${window.location.pathname}${window.location.search}`;
       }
     }
   }, []);
@@ -82,8 +82,8 @@ export default function LoginPage() {
     try {
       const host = window.location.host;
       const currentHost = window.location.hostname.replace(/^www\./, '');
-      const isHub = currentHost === 'elyjen.shop' ||
-        currentHost.endsWith('.elyjen.shop') ||
+      const isHub = currentHost === 'alternativehsbd.com' ||
+        currentHost.endsWith('.alternativehsbd.com') ||
         currentHost === 'localhost';
 
       if (!isHub) {
@@ -158,7 +158,7 @@ export default function LoginPage() {
         className="fixed inset-y-0 left-0 hidden w-1/2 bg-muted lg:block"
       >
         <Image
-          src="/assets/login_banner_v2.jpg"
+          src="/assets/login_banner_v2.webp"
           alt="Login Banner"
           fill
           priority
@@ -173,7 +173,7 @@ export default function LoginPage() {
           >
             <h2 className="text-4xl font-bold text-white mb-4 font-serif">Discover the Best Deals</h2>
             <p className="text-lg text-white/80 max-w-md">
-              Join ELYJEN today and get access to exclusive offers, personalized recommendations, and a seamless shopping experience.
+              Join Alternative Health Services today and get access to exclusive offers, personalized recommendations, and a seamless shopping experience.
             </p>
           </motion.div>
         </div>

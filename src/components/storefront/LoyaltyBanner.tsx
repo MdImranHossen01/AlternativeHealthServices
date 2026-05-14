@@ -87,7 +87,7 @@ export function LoyaltyBanner({ settings }: LoyaltyBannerProps) {
               Lifetime Rewards
             </div>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-none">
-              JOIN THE <span className="text-primary">ELYJEN</span> <br />
+              JOIN THE <span className="text-primary">Alternative Health Services</span> <br />
               LOYALTY CLUB
             </h2>
             <p className="text-gray-400 text-lg max-w-md">

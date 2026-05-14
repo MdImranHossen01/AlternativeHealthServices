@@ -292,7 +292,7 @@ export default function ResetPasswordPage() {
         </motion.div>
 
         <div className="mt-auto pt-6 text-center text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} ELYJEN. All rights reserved.
+          &copy; {new Date().getFullYear()} Alternative Health Services. All rights reserved.
         </div>
       </div>
     </div>

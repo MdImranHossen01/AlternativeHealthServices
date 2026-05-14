@@ -12,8 +12,8 @@ export const proxy = auth(async (req) => {
   // Host detection
   const host = req.headers.get("host") || "";
   const hostname = host.split(':')[0].replace(/^www\./, '');
-  const isHub = hostname === 'elyjen.shop' || 
-                hostname.endsWith('.elyjen.shop') || 
+  const isHub = hostname === 'alternativehsbd.com' || 
+                hostname.endsWith('.alternativehsbd.com') || 
                 hostname === 'localhost';
 
   const isAdminRoute = nextUrl.pathname.startsWith("/admin");

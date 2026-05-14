@@ -95,7 +95,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         
         try {
           await connectToDatabase();
-          const hubDomain = process.env.NEXT_PUBLIC_HUB_DOMAIN || 'elyjen.shop';
+          const hubDomain = process.env.NEXT_PUBLIC_HUB_DOMAIN || 'alternativehsbd.com';
           const domain = hubDomain.replace('www.', '');
 
           const savedUser = await User.findOneAndUpdate(

@@ -46,7 +46,7 @@ export async function GET() {
     const settings = await GlobalSettings.findOne({ domain }).sort({ updatedAt: -1 });
     if (!settings) {
       return NextResponse.json({
-        brandName: process.env.NEXT_PUBLIC_STORE_NAME || "ELYJEN",
+        brandName: process.env.NEXT_PUBLIC_STORE_NAME || "Alternative Health Services",
         contact: {
           email: "support@bddukan.shop",
           phone: "+8801234567890",
@@ -61,8 +61,8 @@ export async function GET() {
           tiktok: '',
           whatsapp: ''
         },
-        marqueeText: "Welcome to ELYJEN!",
-        metaTitle: process.env.NEXT_PUBLIC_STORE_NAME || "ELYJEN",
+        marqueeText: "Welcome to Alternative Health Services!",
+        metaTitle: process.env.NEXT_PUBLIC_STORE_NAME || "Alternative Health Services",
         metaDescription: "The most popular online shop in Bangladesh.",
         logoUrl: "/logo.png",
         freeDeliveryThreshold: 0,

@@ -34,7 +34,7 @@ const BlogSchema: Schema = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'elyjen.shop' // Safe default for existing docs
+      default: 'alternativehsbd.com' // Safe default for existing docs
     },
     metaTitle: { 
       type: String, 

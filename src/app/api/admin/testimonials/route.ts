@@ -6,7 +6,7 @@ import GlobalSettings from '@/models/GlobalSettings';
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'elyjen.shop';
+    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
     const settings = await GlobalSettings.findOne({ domain });
     
     return NextResponse.json(settings?.testimonials || []);
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     }
 
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'elyjen.shop';
+    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
     const body = await req.json();
     
     const settings = await GlobalSettings.findOneAndUpdate(
@@ -46,7 +46,7 @@ export async function PUT(req: NextRequest) {
     }
 
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'elyjen.shop';
+    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
     const body = await req.json();
     const { id, ...updateData } = body;
 
@@ -70,7 +70,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'elyjen.shop';
+    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
     const { id } = await req.json();
 
     const settings = await GlobalSettings.findOneAndUpdate(

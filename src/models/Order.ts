@@ -112,7 +112,7 @@ const OrderSchema: Schema<IOrder> = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'elyjen.shop'
+      default: 'alternativehsbd.com'
     },
     isSalesCounted: { type: Boolean, default: false },
     manualPaymentDetails: {

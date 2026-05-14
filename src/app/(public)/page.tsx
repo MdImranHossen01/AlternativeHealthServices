@@ -53,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
     getCachedBanners(domain)
   ]);
 
-  const brandName = settings?.brandName || 'ELYJEN';
+  const brandName = settings?.brandName || 'Alternative Health Services';
   const metaTitle = settings?.metaTitle || brandName;
   const description = settings?.metaDescription || settings?.siteDescription || 'Your ultimate destination for quality products.';
   const ogImage = banners?.[0]?.image || settings?.logoUrl || '';

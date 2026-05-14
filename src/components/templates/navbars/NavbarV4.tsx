@@ -101,7 +101,7 @@ export default function NavbarV4() {
 
         {/* Branding */}
         <Link href="/" className="text-2xl md:text-3xl font-black text-white shrink-0 tracking-tighter flex items-center gap-1">
-          ELYJEN<span className="text-primary italic">SHOP</span>
+          Alternative Health Services<span className="text-primary italic">SHOP</span>
         </Link>
 
         {/* Professional Search System */}

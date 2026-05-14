@@ -190,8 +190,8 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       metadataBase: new URL(baseUrl),
       title: {
-        default: settings.metaTitle || settings.brandName || "ELYJEN",
-        template: `%s | ${settings.brandName || "ELYJEN"}`,
+        default: settings.metaTitle || settings.brandName || "Alternative Health Services",
+        template: `%s | ${settings.brandName || "Alternative Health Services"}`,
       },
       description: settings.metaDescription || settings.brandName || "Your ultimate destination for quality products.",
       manifest: '/manifest.json',
@@ -203,21 +203,21 @@ export async function generateMetadata(): Promise<Metadata> {
       appleWebApp: {
         capable: true,
         statusBarStyle: 'default',
-        title: settings.brandName || "ELYJEN",
+        title: settings.brandName || "Alternative Health Services",
       },
       formatDetection: {
         telephone: false,
       },
       openGraph: {
-        title: settings.metaTitle || settings.brandName || "ELYJEN",
+        title: settings.metaTitle || settings.brandName || "Alternative Health Services",
         description: settings.metaDescription || settings.brandName || "Your ultimate destination for quality products.",
         url: baseUrl,
-        siteName: settings.brandName || "ELYJEN",
+        siteName: settings.brandName || "Alternative Health Services",
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
-        title: settings.metaTitle || settings.brandName || "ELYJEN",
+        title: settings.metaTitle || settings.brandName || "Alternative Health Services",
         description: settings.metaDescription || settings.brandName || "Your ultimate destination for quality products.",
       },
       verification: {
@@ -234,7 +234,7 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch (error) {
     return {
-      title: "ELYJEN",
+      title: "Alternative Health Services",
       description: "Your ultimate destination for quality products.",
     };
   }
@@ -266,13 +266,13 @@ export default async function RootLayout({
 
   // Allow admin and auth routes to bypass blocker so admin can login and fix the subscription
   const isAdminRoute = pathname.toLowerCase().startsWith('/admin');
-  const isAuthRoute = 
-    pathname.toLowerCase().includes('/login') || 
-    pathname.toLowerCase().includes('/register') || 
+  const isAuthRoute =
+    pathname.toLowerCase().includes('/login') ||
+    pathname.toLowerCase().includes('/register') ||
     pathname.toLowerCase().includes('/api/auth') ||
     pathname.toLowerCase().includes('/forgot-password') ||
     pathname.toLowerCase().includes('/reset-password');
-  
+
   const isBypassRoute = isAdminRoute || isAuthRoute || pathname.toLowerCase().includes('system-design');
 
   const showBlocker = isExpired && !isBypassRoute;
@@ -293,8 +293,8 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${poppins.variable} ${roboto.variable} ${montserrat.variable} ${playfair.variable} ${outfit.variable} ${lora.variable} ${manrope.variable} ${urbanist.variable} ${orbitron.variable} ${openSans.variable} ${lato.variable} ${oswald.variable} ${raleway.variable} ${nunito.variable} ${ubuntu.variable} ${merriweather.variable} ${kanit.variable} ${quicksand.variable} ${josefinSans.variable} ${syne.variable} ${spaceGrotesk.variable} ${jost.variable} ${themeClass} ${fontClass} ${logoFontClass}`} suppressHydrationWarning>
       <head>
-        <link rel="preload" as="image" href="/assets/login_banner_v2.jpg" />
-        <link rel="preload" as="image" href="/assets/register_banner_v2.jpg" />
+        <link rel="preload" as="image" href="/assets/login_banner_v2.webp" />
+        <link rel="preload" as="image" href="/assets/register_banner_v2.webp" />
         <link rel="preload" as="image" href="/assets/forgetpassrod.webp" />
       </head>
       <body

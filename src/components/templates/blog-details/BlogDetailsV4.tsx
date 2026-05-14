@@ -143,10 +143,10 @@ export default function BlogDetailsV4({ blog, readingTime }: BlogDetailsV4Props)
             <footer className="mt-40 pt-20 border-t border-neutral-100 dark:border-neutral-900 flex flex-col items-center gap-12">
                <div className="flex items-center gap-4">
                   <div className="h-16 w-16 rounded-full bg-neutral-100 dark:bg-neutral-900 p-1">
-                     <img src={blog.author?.avatar || `https://ui-avatars.com/api/?name=${blog.author?.name || 'ELYJEN'}`} alt="Author" className="h-full w-full rounded-full object-cover" />
+                     <img src={blog.author?.avatar || `https://ui-avatars.com/api/?name=${blog.author?.name || 'Alternative Health Services'}`} alt="Author" className="h-full w-full rounded-full object-cover" />
                   </div>
                   <div className="flex flex-col">
-                     <span className="text-xs font-black uppercase tracking-widest">{blog.author?.name || 'ELYJEN Curators'}</span>
+                     <span className="text-xs font-black uppercase tracking-widest">{blog.author?.name || 'Alternative Health Services Curators'}</span>
                      <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Design Narrative Expert</span>
                   </div>
                </div>

@@ -5,8 +5,8 @@ import { Separator } from '@/components/ui/separator';
 import { FileText, ShoppingBag, Truck, UserCheck, Scale, HelpCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | ELYJEN',
-  description: 'Understand the terms and conditions for shopping at ELYJEN.',
+  title: 'Terms & Conditions | Alternative Health Services',
+  description: 'Understand the terms and conditions for shopping at Alternative Health Services.',
 };
 
 async function getSettings() {
@@ -17,7 +17,7 @@ async function getSettings() {
     const settings = await GlobalSettings.findOne({ domain }).lean();
     if (!settings) {
       return {
-        brandName: "ELYJEN",
+        brandName: "Alternative Health Services",
         contact: {
           email: "support@bddukan.shop",
           phone: "+8801234567890"
@@ -39,7 +39,7 @@ async function getSettings() {
 
 export default async function TermsPage() {
   const settings = await getSettings();
-  const brandName = settings.brandName || "ELYJEN";
+  const brandName = settings.brandName || "Alternative Health Services";
   const contactEmail = settings.contact?.email || "support@bddukan.shop";
   const lastUpdated = "April 04, 2026";
 

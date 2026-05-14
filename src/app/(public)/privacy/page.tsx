@@ -5,8 +5,8 @@ import { Separator } from '@/components/ui/separator';
 import { ShieldCheck, Info, Share2, Lock, Eye, Bell } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | ELYJEN',
-  description: 'Learn how ELYJEN collects, uses, and protects your personal information.',
+  title: 'Privacy Policy | Alternative Health Services',
+  description: 'Learn how Alternative Health Services collects, uses, and protects your personal information.',
 };
 
 async function getSettings() {
@@ -17,7 +17,7 @@ async function getSettings() {
     const settings = await GlobalSettings.findOne({ domain }).lean();
     if (!settings) {
       return {
-        brandName: "ELYJEN",
+        brandName: "Alternative Health Services",
         contact: {
           email: "support@bddukan.shop"
         }
@@ -37,7 +37,7 @@ async function getSettings() {
 
 export default async function PrivacyPage() {
   const settings = await getSettings();
-  const brandName = settings.brandName || "ELYJEN";
+  const brandName = settings.brandName || "Alternative Health Services";
   const contactEmail = settings.contact?.email || "support@bddukan.shop";
   const lastUpdated = "April 04, 2026";
 

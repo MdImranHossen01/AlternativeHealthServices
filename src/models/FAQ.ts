@@ -21,7 +21,7 @@ const FAQSchema: Schema<IFAQ> = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'elyjen.shop'
+      default: 'alternativehsbd.com'
     },
     isActive: { type: Boolean, default: true },
   },

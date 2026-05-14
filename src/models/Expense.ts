@@ -29,7 +29,7 @@ const ExpenseSchema: Schema<IExpense> = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'elyjen.shop'
+      default: 'alternativehsbd.com'
     },
   },
   { timestamps: true }

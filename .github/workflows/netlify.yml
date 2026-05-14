@@ -1,0 +1,34 @@
+name: Netlify Deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build and Deploy to Netlify
+        run: |
+          npx netlify-cli build
+          npx netlify-cli deploy --prod --dir=.next
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          # If your build needs DB or other env vars, add them here:
+          # MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          # NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}

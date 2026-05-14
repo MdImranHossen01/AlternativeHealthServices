@@ -25,7 +25,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const domain = await getTenantDomain();
   const settings = await getCachedSettings(domain);
 
-  const brandName = settings?.brandName || 'ELYJEN';
+  const brandName = settings?.brandName || 'Alternative Health Services';
   const themeName = settings?.uiTemplates?.theme?.toLowerCase() || 'default';
   const themeColor = THEME_COLORS[themeName] || THEME_COLORS.default;
 
