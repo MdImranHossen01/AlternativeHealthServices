@@ -19,7 +19,7 @@ interface LogoProps {
 export function Logo({ className, imageClassName, textClassName, showText = true, onClick, sizes, src }: LogoProps) {
   const { brandName, logoUrl } = useSettings();
   
-  const finalBrandName = brandName || "Alternative Health Services";
+  const finalBrandName = "AHS"; // Shortened for cleaner UI
   const finalLogoUrl = src || logoUrl || "/logo.png";
   
   return (
