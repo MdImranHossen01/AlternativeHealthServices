@@ -34,7 +34,7 @@ const WalletTransactionSchema: Schema<IWalletTransaction> = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'alternativehsbd.com'
+      default: 'alternativehsbd.com' // NOTE: This default applies ONLY to new documents. Existing documents must be migrated.
     },
   },
   { timestamps: true }

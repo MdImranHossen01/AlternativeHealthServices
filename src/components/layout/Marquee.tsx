@@ -21,7 +21,7 @@ export function Marquee({ marqueeText: initialText }: { marqueeText?: string }) 
       } catch (error: any) {
         if (error.name !== 'AbortError') {
           console.error('Error fetching marquee text:', error);
-          setMarqueeText('Welcome to Alternative Health Services!');
+          setMarqueeText('Welcome to Alternative Health Services! Free shipping on orders over ৳500.');
         }
       }
     }

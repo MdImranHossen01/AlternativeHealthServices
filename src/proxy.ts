@@ -9,12 +9,18 @@ export const proxy = auth(async (req) => {
   const isLoggedIn = !!req.auth;
   const role = (req.auth?.user as any)?.role as string | undefined;
   
-  // Host detection
-  const host = req.headers.get("host") || "";
+  // Safe Host detection
+  const forwardedHost = req.headers.get("x-forwarded-host");
+  const host = (forwardedHost || req.headers.get("host") || "").trim();
   const hostname = host.split(':')[0].replace(/^www\./, '');
-  const isHub = hostname === 'alternativehsbd.com' || 
-                hostname.endsWith('.alternativehsbd.com') || 
-                hostname === 'localhost';
+
+  // Dynamic Hub check from env
+  const hubDomainsEnv = process.env.HUB_DOMAINS || process.env.NEXT_PUBLIC_HUB_DOMAIN || 'alternativehsbd.com';
+  const hubDomains = hubDomainsEnv.split(',').map(d => d.trim().replace(/^www\./, ''));
+  
+  const isHub = hubDomains.some(domain => 
+    hostname === domain || hostname.endsWith('.' + domain)
+  ) || (process.env.NODE_ENV === 'development' && hostname === 'localhost');
 
   const isAdminRoute = nextUrl.pathname.startsWith("/admin");
   const isAuthRoute = nextUrl.pathname.startsWith("/login") || nextUrl.pathname.startsWith("/register");

@@ -20,7 +20,7 @@ const PrintableInvoice: React.FC<InvoiceProps> = ({ order }) => {
             <p>House: 12, Road: 05, Sector: 10</p>
             <p>Uttara, Dhaka-1230, Bangladesh</p>
             <p>Phone: +880 1234 567890</p>
-            <p>Email: support@bddukan.shop</p>
+            <p>Email: support@alternativehsbd.com</p>
           </div>
         </div>
         <div className="text-right">
@@ -107,7 +107,7 @@ const PrintableInvoice: React.FC<InvoiceProps> = ({ order }) => {
       <div className="mt-24 border-t pt-8 text-center text-xs text-gray-400">
         <p className="mb-2 font-bold text-gray-600">THANK YOU FOR YOUR BUSINESS!</p>
         <p>This is a computer generated invoice and does not require a signature.</p>
-        <p>Visit us at: www.bddukan.shop</p>
+        <p>Visit us at: www.alternativehsbd.com</p>
       </div>
       
       {/* Page break for bulk printing */}

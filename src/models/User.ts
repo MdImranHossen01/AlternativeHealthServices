@@ -54,7 +54,7 @@ const UserSchema: Schema<IUser> = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'alternativehsbd.com'
+      default: process.env.NEXT_PUBLIC_HUB_DOMAIN || 'alternativehsbd.com' // NOTE: Applies only to new documents. Existing documents must be migrated.
     },
     password: { type: String, select: false },
     role: { type: String, enum: ['super_admin', 'admin', 'user'], default: 'user' },

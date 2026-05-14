@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import { auth } from '@/auth';
 import dbConnect from '@/lib/db';
 import GlobalSettings from '@/models/GlobalSettings';
 
+const DEFAULT_DOMAIN = process.env.NEXT_PUBLIC_HUB_DOMAIN || 'alternativehsbd.com';
+
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
+    const domain = req.headers.get('x-tenant-domain') || DEFAULT_DOMAIN;
     const settings = await GlobalSettings.findOne({ domain });
     
     return NextResponse.json(settings?.testimonials || []);
@@ -23,7 +26,7 @@ export async function POST(req: NextRequest) {
     }
 
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
+    const domain = req.headers.get('x-tenant-domain') || DEFAULT_DOMAIN;
     const body = await req.json();
     
     const settings = await GlobalSettings.findOneAndUpdate(
@@ -46,9 +49,13 @@ export async function PUT(req: NextRequest) {
     }
 
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
+    const domain = req.headers.get('x-tenant-domain') || DEFAULT_DOMAIN;
     const body = await req.json();
     const { id, ...updateData } = body;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
+    }
 
     const settings = await GlobalSettings.findOneAndUpdate(
       { domain, 'testimonials._id': id },
@@ -70,8 +77,12 @@ export async function DELETE(req: NextRequest) {
     }
 
     await dbConnect();
-    const domain = req.headers.get('x-tenant-domain') || 'alternativehsbd.com';
+    const domain = req.headers.get('x-tenant-domain') || DEFAULT_DOMAIN;
     const { id } = await req.json();
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
+    }
 
     const settings = await GlobalSettings.findOneAndUpdate(
       { domain },

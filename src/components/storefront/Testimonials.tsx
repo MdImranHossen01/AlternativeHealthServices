@@ -16,7 +16,7 @@ const fallbackReviews = [
   {
     name: "Ariful Islam",
     role: "Verified Buyer",
-    content: "The quality of the products is amazing. I was skeptical about ordering online, but Alternative Health Services proved me wrong. Delivery was super fast too!",
+    content: "The quality of the products is amazing. I was skeptical about ordering online, but this shop proved me wrong. Delivery was super fast too!",
     image: "https://i.pravatar.cc/150?u=1",
     rating: 5
   },

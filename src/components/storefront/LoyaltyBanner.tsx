@@ -86,7 +86,7 @@ export function LoyaltyBanner({ settings }: LoyaltyBannerProps) {
               <Sparkles className="h-3 w-3" />
               Lifetime Rewards
             </div>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-none">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight md:tracking-tighter leading-tight md:leading-none break-words">
               JOIN THE <span className="text-primary">Alternative Health Services</span> <br />
               LOYALTY CLUB
             </h2>

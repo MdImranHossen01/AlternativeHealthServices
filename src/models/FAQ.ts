@@ -21,7 +21,7 @@ const FAQSchema: Schema<IFAQ> = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'alternativehsbd.com'
+      default: 'alternativehsbd.com' // NOTE: Applies only to new documents. Existing documents must be migrated.
     },
     isActive: { type: Boolean, default: true },
   },

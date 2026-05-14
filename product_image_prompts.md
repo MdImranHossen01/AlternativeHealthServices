@@ -1,6 +1,6 @@
-# ELYJEN Product & Branding Image Prompts
+# Alternative Health Services Product & Branding Image Prompts
 
-This document contains professional prompts for generating high-quality images for the ELYJEN Sneakers platform. Use these prompts in Midjourney, DALL-E, or any AI image generator.
+This document contains professional prompts for generating high-quality images for the Alternative Health Services platform. Use these prompts in Midjourney, DALL-E, or any AI image generator.
 
 ---
 

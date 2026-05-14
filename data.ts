@@ -1,5 +1,5 @@
 export const productTitles = [
-  "ELYJEN Air-Stride Pro",
+  "AHS Wellness Pro",
   "Urban Velocity Sneakers",
   "CloudWalk Elite Performance",
   "Stealth Neo-Classic Lows",

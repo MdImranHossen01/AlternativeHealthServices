@@ -34,7 +34,7 @@ const BlogSchema: Schema = new Schema(
       index: true,
       trim: true,
       lowercase: true,
-      default: 'alternativehsbd.com' // Safe default for existing docs
+      default: 'alternativehsbd.com' // NOTE: This default applies ONLY to new documents. Existing documents must be migrated. // Safe default for existing docs
     },
     metaTitle: { 
       type: String, 
