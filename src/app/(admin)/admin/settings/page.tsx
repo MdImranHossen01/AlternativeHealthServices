@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import {
   Form,
   FormControl,
@@ -89,6 +90,12 @@ const settingsSchema = z.object({
     bodyFont: z.string().default('inter'),
     layout: z.string().default('v1'),
   }).optional(),
+  manualPaymentConfig: z.object({
+    bkash: z.object({
+      number: z.string().regex(/^01\d{9}$/, 'Invalid bKash number format').or(z.literal('')),
+      active: z.boolean().default(true),
+    }).optional(),
+  }).optional(),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
@@ -127,6 +134,12 @@ export default function SettingsPage() {
         logoFont: 'orbitron',
         bodyFont: 'inter',
         layout: 'v1',
+      },
+      manualPaymentConfig: {
+        bkash: {
+          number: '',
+          active: true,
+        },
       },
     },
   });
@@ -176,6 +189,12 @@ export default function SettingsPage() {
                     bodyFont: result.data.uiTemplates?.bodyFont || 'inter',
                     layout: result.data.uiTemplates?.layout || 'v1',
                   },
+                manualPaymentConfig: {
+                  bkash: {
+                    number: result.data.manualPaymentConfig?.bkash?.number || '',
+                    active: result.data.manualPaymentConfig?.bkash?.active ?? true,
+                  },
+                },
               };
               form.reset(sanitizedData);
             }
@@ -252,6 +271,7 @@ export default function SettingsPage() {
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="social">Social</TabsTrigger>
               <TabsTrigger value="loyalty">Loyalty</TabsTrigger>
+              <TabsTrigger value="payment">Payment</TabsTrigger>
               <TabsTrigger value="appearance">Appearance</TabsTrigger>
             </TabsList>
 
@@ -558,6 +578,57 @@ export default function SettingsPage() {
                       <li>Active users earn <strong>{form.watch('subscriptionConfig.rewardPercentage')}%</strong> of every purchase as wallet tokens.</li>
                       <li>Tokens can be used for discounts on any future purchase.</li>
                     </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="payment" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Manual Payment Methods</CardTitle>
+                  <CardDescription>Configure manual payment options like bKash for your customers.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-bold flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-pink-500" /> bKash Personal
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="manualPaymentConfig.bkash.number"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>bKash Personal Number</FormLabel>
+                              <FormControl>
+                                <Input placeholder="01XXXXXXXXX" {...field} />
+                              </FormControl>
+                              <FormDescription>The number where customers will send money.</FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="manualPaymentConfig.bkash.active"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-2xl border p-4 shadow-sm">
+                              <div className="space-y-0.5">
+                                <FormLabel>Status</FormLabel>
+                                <FormDescription>Enable or disable bKash as a payment option.</FormDescription>
+                              </div>
+                              <FormControl>
+                                <Switch
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                    </div>
                   </div>
                 </CardContent>
               </Card>

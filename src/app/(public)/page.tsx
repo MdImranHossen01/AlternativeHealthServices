@@ -34,7 +34,9 @@ import {
   getCachedBlogs,
   getCachedFAQs,
   getCachedSettings,
-  getCachedActiveCoupon
+  getCachedActiveCoupon,
+  getCachedServices,
+  getCachedCourses
 } from '@/lib/data-fetching';
 import { generateOrganizationSchema } from '@/lib/seo';
 import Script from 'next/script';
@@ -122,6 +124,9 @@ const NewsletterV2 = dynamic(() => import('@/components/storefront/NewsletterV2'
   loading: () => <BannerSkeleton />
 });
 
+const ServiceCarouselSection = dynamic(() => import('@/components/storefront/ServiceCarouselSection').then(mod => mod.ServiceCarouselSection));
+const CourseRecent = dynamic(() => import('@/components/storefront/CourseRecent').then(mod => mod.CourseRecent));
+
 async function getHomeData() {
   try {
     const domain = await getTenantDomain();
@@ -138,7 +143,9 @@ async function getHomeData() {
       blogs,
       faqs,
       settings,
-      activeCoupon
+      activeCoupon,
+      services,
+      courses
     ] = await Promise.all([
       getCachedBanners(domain),
       getCachedCategories(domain),
@@ -149,7 +156,9 @@ async function getHomeData() {
       getCachedBlogs(domain, 1),
       getCachedFAQs(domain),
       getCachedSettings(hostname),
-      getCachedActiveCoupon(domain)
+      getCachedActiveCoupon(domain),
+      getCachedServices(domain, 6),
+      getCachedCourses(domain, 6)
     ]);
 
     return {
@@ -162,7 +171,9 @@ async function getHomeData() {
       blogs,
       faqs: faqs && faqs.length > 0 ? faqs : [],
       settings,
-      activeCoupon
+      activeCoupon,
+      services,
+      courses
     };
   } catch (error) {
     console.error("Error fetching home data via cache:", error);
@@ -203,6 +214,17 @@ export default async function Home() {
 
       {/* 1. Hero Section */}
       <HeroSlider banners={data.banners} style={ui.hero} />
+
+      {/* 12. Specialized Services Section (Repositioned under Hero) */}
+      {data.services?.length > 0 && (
+        <ServiceCarouselSection 
+          title="Medical Services"
+          description="Advanced healthcare solutions by professional practitioners"
+          services={data.services}
+          viewAllLink="/services"
+          bgColor="bg-background"
+        />
+      )}
 
       {/* 4. Categories Showcase */}
       <CategoryShowcase categories={data.categories} style={ui.categories} />
@@ -249,6 +271,11 @@ export default async function Home() {
         />
       )}
 
+      {/* 13. Training Courses Section (Refactored to match Blog Recent style) */}
+      {data.courses?.length > 0 && (
+        <CourseRecent courses={data.courses} />
+      )}
+
       {/* 9. Recent Blogs section */}
       <BlogRecent blogs={data.blogs} />
 
@@ -279,4 +306,5 @@ export default async function Home() {
     </div>
   );
 }
+
 

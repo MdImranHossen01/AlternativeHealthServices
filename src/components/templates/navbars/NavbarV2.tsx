@@ -51,9 +51,10 @@ import { MobileMenu } from '@/components/layout/MobileMenu';
 
 const navItems = [
   { href: '/', label: 'Home' },
+  { href: '/services', label: 'Service' },
+  { href: '/courses', label: 'Course' },
   { href: '/shop', label: 'Shop' },
   { href: '/blog', label: 'Blogs' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 export default function NavbarV2() {

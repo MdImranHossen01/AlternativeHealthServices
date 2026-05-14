@@ -282,3 +282,38 @@ export const generateHtml = (json: any) => {
     }
 }
 
+export const generatePlainText = (json: any): string => {
+    if (!json) return '';
+    try {
+        let content = json;
+        if (typeof content === 'string') {
+            try {
+                content = JSON.parse(content);
+            } catch (e) {
+                return content; // Already plain text
+            }
+        }
+
+        const extractText = (node: any): string => {
+            if (!node) return '';
+            if (node.type === 'text') return node.text || '';
+            if (node.content && Array.isArray(node.content)) {
+                return node.content.map(extractText).join(' ');
+            }
+            return '';
+        };
+
+        if (content && typeof content === 'object') {
+            if (content.type === 'doc' && content.content) {
+                return content.content.map(extractText).join(' ').trim().replace(/\s+/g, ' ');
+            }
+            if (Array.isArray(content)) {
+                return content.map(extractText).join(' ').trim().replace(/\s+/g, ' ');
+            }
+        }
+        
+        return String(content);
+    } catch (e) {
+        return '';
+    }
+}

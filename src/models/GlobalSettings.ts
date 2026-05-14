@@ -95,13 +95,14 @@ export interface IGlobalSettings extends Document {
     label: string;
     href: string;
   }[];
-  testimonials?: {
-    name: string;
-    role: string;
-    content: string;
-    image: string;
     rating: number;
   }[];
+  academyConfig?: {
+    foundingYear?: number;
+    studentCount?: string;
+    currentBatch?: string;
+    academyTitle?: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -167,6 +168,7 @@ const GlobalSettingsSchema: Schema<IGlobalSettings> = new Schema(
         rating: { type: Number, default: 5 },
       }
     ],
+    academyConfig: { type: Object, default: {} },
   },
   {
     timestamps: true,

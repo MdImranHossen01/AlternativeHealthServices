@@ -8,6 +8,8 @@ import FAQ from '@/models/FAQ';
 import GlobalSettings from '@/models/GlobalSettings';
 import Coupon from '@/models/Coupon';
 import Order from '@/models/Order';
+import Service from '@/models/Service';
+import Course from '@/models/Course';
 
 // Helper to serialize MongoDB data
 const serialize = (data: any) => JSON.parse(JSON.stringify(data));
@@ -23,6 +25,8 @@ export const CACHE_TAGS = {
   faqs: 'faqs',
   settings: 'settings',
   coupons: 'coupons',
+  services: 'services',
+  courses: 'courses',
 };
 
 // --- PRODUCTS ---
@@ -269,3 +273,62 @@ export const getCachedActiveCoupon = (domain: string) => {
   )();
 };
 
+// --- SERVICES ---
+
+export const getCachedServices = (domain: string, limit = 10, skip = 0) => {
+  return unstable_cache(
+    async () => {
+      await connectToDatabase();
+      const services = await Service.find({ isPublished: true, domain })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean();
+      return serialize(services);
+    },
+    ['services-list', domain, limit.toString(), skip.toString()],
+    { revalidate: 31536000, tags: [CACHE_TAGS.services] }
+  )();
+};
+
+export const getCachedServiceBySlug = (domain: string, slug: string) => {
+  return unstable_cache(
+    async () => {
+      await connectToDatabase();
+      const service = await Service.findOne({ slug, isPublished: true, domain }).lean();
+      return serialize(service);
+    },
+    ['service-detail', domain, slug],
+    { revalidate: 31536000, tags: [CACHE_TAGS.services] }
+  )();
+};
+
+// --- COURSES ---
+
+export const getCachedCourses = (domain: string, limit = 10, skip = 0) => {
+  return unstable_cache(
+    async () => {
+      await connectToDatabase();
+      const courses = await Course.find({ isPublished: true, domain })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean();
+      return serialize(courses);
+    },
+    ['courses-list', domain, limit.toString(), skip.toString()],
+    { revalidate: 31536000, tags: [CACHE_TAGS.courses] }
+  )();
+};
+
+export const getCachedCourseBySlug = (domain: string, slug: string) => {
+  return unstable_cache(
+    async () => {
+      await connectToDatabase();
+      const course = await Course.findOne({ slug, isPublished: true, domain }).lean();
+      return serialize(course);
+    },
+    ['course-detail', domain, slug],
+    { revalidate: 31536000, tags: [CACHE_TAGS.courses] }
+  )();
+};

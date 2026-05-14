@@ -14,7 +14,9 @@ import {
   Settings,
   Megaphone,
   Store,
-  Mail
+  Mail,
+  Stethoscope,
+  GraduationCap
 } from "lucide-react"
 import { Logo } from "@/components/ui/logo"
 
@@ -96,6 +98,36 @@ const data = {
         {
           title: "All Users",
           url: "/admin/users",
+        },
+      ],
+    },
+    {
+      title: "Health Services",
+      url: "#",
+      icon: Stethoscope,
+      items: [
+        {
+          title: "All Services",
+          url: "/admin/services",
+        },
+        {
+          title: "Appointments",
+          url: "/admin/appointments",
+        },
+      ],
+    },
+    {
+      title: "Training Academy",
+      url: "#",
+      icon: GraduationCap,
+      items: [
+        {
+          title: "All Courses",
+          url: "/admin/courses",
+        },
+        {
+          title: "Enrollments",
+          url: "/admin/enrollments",
         },
       ],
     },
