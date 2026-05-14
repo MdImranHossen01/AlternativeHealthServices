@@ -31,7 +31,7 @@ export async function PATCH(
     if (!updated) return NextResponse.json({ message: 'Not found' }, { status: 404 });
     return NextResponse.json(updated);
   } catch (error: any) {
-    console.error(`Error updating enrollment ${id}:`, error);
+    console.error(`Error updating enrollment:`, error);
     return NextResponse.json({ message: 'Error' }, { status: 500 });
   }
 }
