@@ -33,7 +33,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
           
           {/* Left: Content */}
           <div className="flex flex-col">
-            <div className="relative aspect-[1200/630] rounded-none overflow-hidden mb-12 shadow-2xl group">
+            <div className="relative aspect-square rounded-none overflow-hidden mb-12 shadow-2xl group">
               <img
                 src={service.image}
                 alt={service.name}

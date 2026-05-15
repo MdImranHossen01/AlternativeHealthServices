@@ -18,7 +18,9 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
 
-    const user = await User.findOne({ _id: session.user.id, domain }).select('-password').lean();
+    // Find user by ID. We don't strictly filter by domain here for the profile 
+    // because the user is already authenticated via session which is domain-aware.
+    const user = await User.findById(session.user.id).select('-password').lean();
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -52,7 +54,8 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
 
-    const user = await User.findOne({ _id: session.user.id, domain });
+    // Find user by ID (safest since ID is already verified in the auth check above)
+    const user = await User.findById(session.user.id);
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });

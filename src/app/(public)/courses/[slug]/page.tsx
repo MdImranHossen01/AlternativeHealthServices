@@ -40,7 +40,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
           
           {/* Left: Content */}
           <div className="flex flex-col">
-            <div className="relative aspect-[1200/630] rounded-none overflow-hidden mb-12 shadow-2xl group">
+            <div className="relative aspect-square rounded-none overflow-hidden mb-12 shadow-2xl group">
               <img
                 src={course.image}
                 alt={course.name}
