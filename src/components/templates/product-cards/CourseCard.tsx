@@ -61,7 +61,7 @@ export default function CourseCard({ course }: CourseCardProps) {
         </div>
         
         <div className="h-14 mb-4">
-          <h3 className="text-xl font-black leading-tight group-hover:text-primary transition-colors line-clamp-2 uppercase">
+          <h3 className="text-xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-2 uppercase">
             {course.name}
           </h3>
         </div>
@@ -72,10 +72,10 @@ export default function CourseCard({ course }: CourseCardProps) {
           </p>
         </div>
 
-        <div className="pt-4 border-t border-border/50 flex items-center justify-between">
-          <span className="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
-            ভর্তি হোন <ArrowRight className="h-3 w-3" />
-          </span>
+        <div className="pt-4 border-t border-border/50">
+          <div className="w-full h-10 flex items-center justify-center rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 group-hover:bg-slate-900 transition-colors transition-all duration-300">
+            ভর্তি হোন <ArrowRight className="ml-2 h-3 w-3" />
+          </div>
         </div>
       </div>
     </Link>
