@@ -11,12 +11,12 @@ export default {
   callbacks: {
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id as string;
-        (session.user as any).role = token.role ?? 'user';
-        (session.user as any).domain = token.domain as string;
-        (session.user as any).phone = token.phone as string;
+        session.user.id = token.id;
+        session.user.role = token.role ?? 'user';
+        session.user.domain = token.domain;
+        session.user.phone = token.phone;
         if (token.image) {
-          session.user.image = token.image as string;
+          session.user.image = token.image;
         }
       }
       return session;
