@@ -96,7 +96,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           await connectToDatabase();
           const hubDomain = process.env.NEXT_PUBLIC_HUB_DOMAIN || 'alternativehsbd.com';
-          const domain = hubDomain.replace('www.', '');
+          let domain = hubDomain.split(':')[0].toLowerCase();
+          if (domain.startsWith('www.')) {
+            domain = domain.replace('www.', '');
+          }
 
           const savedUser = await User.findOneAndUpdate(
             { email: user.email, domain },

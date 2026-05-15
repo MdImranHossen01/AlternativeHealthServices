@@ -18,7 +18,7 @@ export async function GET() {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
     
-    const user = await User.findOne({ email: session.user.email.trim(), domain });
+    const user = await User.findOne({ email: session.user.email.trim().toLowerCase(), domain });
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });

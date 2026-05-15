@@ -79,6 +79,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <ShoppingBag className="mr-3 h-4 w-4" /> My Orders
                 </Link>
                 <Link 
+                  href="/dashboard/courses" 
+                  className={cn(
+                    buttonVariants({ variant: 'ghost' }),
+                    "justify-start px-6 h-12 rounded-none border-l-4 w-full",
+                    pathname === '/dashboard/courses' ? 'border-primary bg-muted/50' : 'border-transparent'
+                  )}
+                >
+                  <GraduationCap className="mr-3 h-4 w-4" /> My Courses
+                </Link>
+                <Link 
+                  href="/dashboard/appointments" 
+                  className={cn(
+                    buttonVariants({ variant: 'ghost' }),
+                    "justify-start px-6 h-12 rounded-none border-l-4 w-full",
+                    pathname === '/dashboard/appointments' ? 'border-primary bg-muted/50' : 'border-transparent'
+                  )}
+                >
+                  <Calendar className="mr-3 h-4 w-4" /> Appointments
+                </Link>
+                <Link 
                   href="/dashboard/wishlist" 
                   className={cn(
                     buttonVariants({ variant: 'ghost' }),

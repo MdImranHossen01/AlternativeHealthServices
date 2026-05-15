@@ -18,9 +18,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
 
-    // Find user by ID. We don't strictly filter by domain here for the profile 
-    // because the user is already authenticated via session which is domain-aware.
-    const user = await User.findById(session.user.id).select('-password').lean();
+    // Find user by ID first, then fallback to email+domain if ID is not found
+    // This handles cases where the user ID might have changed during domain normalization/migration
+    let user = await User.findById(session.user.id).select('-password').lean();
+    
+    if (!user && session.user.email) {
+      user = await User.findOne({ email: session.user.email, domain }).select('-password').lean();
+    }
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });

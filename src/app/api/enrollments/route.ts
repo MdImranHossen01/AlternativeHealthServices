@@ -15,13 +15,26 @@ const enrollmentSchema = z.object({
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
-    if (!session || !['admin', 'super_admin'].includes((session.user as any)?.role)) {
+    if (!session || !session.user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     await connectToDatabase();
     const domain = await getTenantDomain();
-    const enrollments = await Enrollment.find({ domain }).populate('courseId').sort({ createdAt: -1 });
+    
+    const isAdmin = ['admin', 'super_admin'].includes((session.user as any)?.role);
+    let query: any = { domain };
+
+    if (!isAdmin) {
+      // Find the user to get their phone number
+      const user = await (await import('@/models/User')).default.findById(session.user.id);
+      if (!user || !user.phone) {
+        return NextResponse.json([]); // No phone, no enrollments
+      }
+      query.phone = user.phone;
+    }
+
+    const enrollments = await Enrollment.find(query).populate('courseId').sort({ createdAt: -1 });
     return NextResponse.json(enrollments);
   } catch (error) {
     console.error('Error fetching enrollments:', error);

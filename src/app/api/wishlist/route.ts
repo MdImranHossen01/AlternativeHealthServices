@@ -18,7 +18,8 @@ export async function GET() {
     if (!domain) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
-    const user = await User.findOne({ email: session.user.email, domain }).populate('wishlist');
+    const normalizedEmail = session.user.email?.toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail, domain }).populate('wishlist');
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
@@ -49,7 +50,8 @@ export async function POST(req: NextRequest) {
     if (!domain) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
-    const user = await User.findOne({ email: session.user.email, domain });
+    const normalizedEmail = session.user.email?.toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail, domain });
     
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });

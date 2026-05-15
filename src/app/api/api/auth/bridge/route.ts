@@ -35,7 +35,11 @@ export async function GET(req: NextRequest) {
     // Connect to DB to sync user for this tenant
     const { headers } = await import('next/headers');
     const headersList = await headers();
-    const domain = headersList.get('host') || 'unknown';
+    const host = headersList.get('host') || 'unknown';
+    let domain = host.split(':')[0].toLowerCase();
+    if (domain.startsWith('www.')) {
+      domain = domain.replace('www.', '');
+    }
 
     const connectToDatabase = (await import('@/lib/db')).default;
     const User = (await import('@/models/User')).default;
