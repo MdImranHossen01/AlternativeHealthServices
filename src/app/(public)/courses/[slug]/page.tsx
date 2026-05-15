@@ -36,11 +36,11 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
   return (
     <main className="min-h-screen py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8">
           
           {/* Left: Content */}
           <div className="flex flex-col">
-            <div className="relative aspect-video rounded-[2.5rem] overflow-hidden mb-12 shadow-2xl group">
+            <div className="relative aspect-[1200/630] rounded-none overflow-hidden mb-12 shadow-2xl group">
               <img
                 src={course.image}
                 alt={course.name}
@@ -49,27 +49,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
             </div>
             
             <div className="space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-none">
-                  {course.name}
-                </h1>
-                <div className="h-2 w-24 bg-primary rounded-full" />
-              </div>
 
-              <div className="flex flex-wrap gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-                <div className="flex items-center gap-2">
-                   <GraduationCap className="h-4 w-4 text-primary" />
-                   Instructor: {course.instructor || 'Academy Expert'}
-                </div>
-                <div className="flex items-center gap-2">
-                   <Clock className="h-4 w-4 text-primary" />
-                   Duration: {course.duration || '2 Days'}
-                </div>
-                <div className="flex items-center gap-2">
-                   <MapPin className="h-4 w-4 text-primary" />
-                   Location: {course.location || 'Gazipur'}
-                </div>
-              </div>
               
               <div className="prose prose-neutral dark:prose-invert max-w-none">
                 <div 
@@ -82,39 +62,51 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
 
           {/* Right: Enrollment Action Sidebar */}
           <div className="lg:sticky lg:top-24 h-fit">
-            <div className="bg-slate-900 text-white p-10 rounded-[3rem] shadow-2xl relative overflow-hidden">
-              {/* Decorative Glow */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 blur-[80px] rounded-full" />
-              
+            <div className="p-10 rounded-none">
               <div className="relative z-10">
-                <div className="mb-10 space-y-4 text-center md:text-left">
-                  <h2 className="text-4xl font-black tracking-tighter uppercase leading-tight">ভর্তির জন্য <br /><span className="text-primary italic">প্রস্তুত তো?</span></h2>
-                  <p className="text-sm text-slate-400 font-medium uppercase tracking-widest leading-loose">
-                    আমাদের ৩৬৫তম ব্যাচে ভর্তি চলছে। সীমিত সিট, তাই আজই আপনার সিটটি নিশ্চিত করুন।
+                <div className="mb-8 space-y-4">
+                  <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{course.name}</h2>
+                  <p className="text-sm text-muted-foreground font-medium leading-loose">
+                    আমাদের স্পেশাল কোর্সে ভর্তি চলছে। আপনার ক্যারিয়ারের নতুন যাত্রা শুরু করুন আজই।
                   </p>
+                </div>
+
+                <div className="space-y-3 py-6 border-y border-muted/50 my-6">
+                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-muted-foreground">
+                    <GraduationCap className="h-4 w-4 text-primary" />
+                    প্রশিক্ষক: {course.instructor || 'Expert MBBS Doctor'}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-muted-foreground">
+                    <Clock className="h-4 w-4 text-primary" />
+                    মেয়াদ: {course.duration || '২ দিন'}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-muted-foreground">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    স্থান: {course.location || 'বোর্ড বাজার, গাজীপুর'}
+                  </div>
                 </div>
                 
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between p-6 bg-white/5 rounded-2xl border border-white/10">
-                    <span className="text-xs font-black uppercase tracking-widest text-slate-400">কোর্স ফি</span>
+                  <div className="flex items-center justify-between p-6 bg-muted/30 border border-muted/50 rounded-none">
+                    <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">কোর্স ফি</span>
                     <span className="text-3xl font-black text-primary">
                       {course.price ? `৳${course.price}` : 'FREE'}
                     </span>
                   </div>
 
                   <Link href={`/courses/${slug}/enroll`} className="block">
-                    <Button className="w-full h-20 rounded-2xl bg-primary hover:bg-white hover:text-black transition-all duration-500 font-black uppercase tracking-[0.2em] text-lg shadow-2xl shadow-primary/40 group">
+                    <Button className="w-full h-20 rounded-none bg-primary hover:bg-slate-900 text-white transition-all duration-500 font-black uppercase tracking-[0.2em] text-lg shadow-2xl shadow-primary/20 group">
                       ভর্তি হোন
                       <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />
                     </Button>
                   </Link>
 
-                  <div className="pt-6 border-t border-white/10">
+                  <div className="pt-6 border-t border-muted/50">
                     <SocialShare title={course.name} />
                   </div>
                   
-                  <p className="text-[10px] text-center text-slate-500 font-bold uppercase tracking-widest">
-                    নিরাপদ পেমেন্ট ও ইনস্ট্যান্ট কনফার্মেশন
+                  <p className="text-[10px] text-center text-muted-foreground font-bold uppercase tracking-widest">
+                    নিরাপদ পেমেন্ট ও তাৎক্ষণিক নিশ্চিতকরণ
                   </p>
                 </div>
               </div>
