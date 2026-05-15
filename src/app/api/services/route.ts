@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
       slug: uniqueSlug,
       description,
       image,
-      price,
+      price: price ?? undefined,
       isPublished,
       domain,
     });
