@@ -72,7 +72,7 @@ export function AdminActions({ type, slug, name, id }: AdminActionsProps) {
     }
   };
 
-  const editPath = type === 'service' ? `/admin/services/${slug}` : `/admin/courses/${slug}`;
+  const editPath = type === 'service' ? `/admin/services/${id}/edit` : `/admin/courses/${id}/edit`;
   const managePath = type === 'service' ? '/admin/services' : '/admin/courses';
   const createPath = type === 'service' ? '/admin/services/new' : '/admin/courses/new';
 

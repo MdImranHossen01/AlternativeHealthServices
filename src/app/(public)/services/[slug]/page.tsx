@@ -60,7 +60,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
               <div className="mb-10 space-y-4">
                 <div className="flex items-center justify-between gap-4">
                   <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{service.name}</h2>
-                  <AdminActions type="service" slug={service.slug} name={service.name} />
+                  <AdminActions type="service" slug={service.slug} name={service.name} id={service._id.toString()} />
                 </div>
                 <p className="text-sm text-muted-foreground font-medium leading-loose">
                   আমাদের বিশেষজ্ঞগণ প্রতিদিন সকাল <span className="text-foreground font-black">৯টা থেকে রাত ১০টা</span> পর্যন্ত সেবা দিচ্ছেন। আপনার স্লট এখনই নিশ্চিত করুন।
