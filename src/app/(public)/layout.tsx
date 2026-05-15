@@ -5,10 +5,14 @@ import { getCachedSettings } from '@/lib/data-fetching';
 import { headers } from 'next/headers';
 import { ScrollToTop } from '@/components/layout/ScrollToTop';
 import { MobileBottomNavbar } from '@/components/layout/MobileBottomNavbar';
+import SubscriptionBlocker from '../components/SubscriptionBlocker';
+import { auth } from '@/auth';
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const headersList = await headers();
   const hostname = headersList.get('host') || 'localhost';
+  const session = await auth();
+  const isSuperAdmin = session?.user?.role === 'super_admin';
   
   let settings = null;
   try {
@@ -16,6 +20,14 @@ export default async function PublicLayout({ children }: { children: React.React
   } catch (error) {
     console.error('Failed to fetch settings:', error);
   }
+
+  // Subscription Enforcement Logic
+  const sub = settings?.saasSubscription;
+  // If sub is missing, default to not expired (allow access by default)
+  const isExpired = sub ? (sub.status !== 'Active' || (sub.expiryDate && new Date(sub.expiryDate).getTime() < new Date().getTime())) : false;
+  
+  // Only show blocker if expired and NOT a super admin
+  const showBlocker = isExpired && !isSuperAdmin;
 
   const marqueeText = settings?.marqueeText || 'Welcome to Alternative Health Services! Free shipping on orders over $500.';
   const ui = {
@@ -26,6 +38,7 @@ export default async function PublicLayout({ children }: { children: React.React
 
   return (
     <>
+      {showBlocker && <SubscriptionBlocker brandName={settings?.brandName || 'Store'} />}
       {ui.layout !== 'v2' && <Marquee marqueeText={marqueeText} />}
       <Navbar style={ui.navbar} />
       <main className="flex-1 pb-16 md:pb-0">{children}</main>

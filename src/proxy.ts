@@ -61,12 +61,26 @@ export const proxy = auth(async (req) => {
     }
   }
 
-  const response = NextResponse.next();
+  req.headers.set('x-pathname', nextUrl.pathname);
+  const response = NextResponse.next({
+    request: {
+      headers: req.headers,
+    },
+  });
   response.headers.set('x-pathname', nextUrl.pathname);
   return response;
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/login", "/register"],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+  ],
 };
 
