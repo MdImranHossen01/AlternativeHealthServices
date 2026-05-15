@@ -52,13 +52,13 @@ export default async function CoursesPage({
   const academyTitle = academyConfig.academyTitle || 'Training Academy';
 
   return (
-    <main className="min-h-screen py-24 bg-slate-950 text-white">
+    <main className="min-h-screen py-24 bg-background">
       <div className="container mx-auto px-4">
         <header className="max-w-3xl mb-20">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 uppercase">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 uppercase text-foreground">
             Medical <span className="text-primary italic">{academyTitle}</span>
           </h1>
-          <p className="text-slate-400 text-lg">
+          <p className="text-muted-foreground text-lg">
             Since {foundingYear}, we have trained over {studentCount} students. Join our {currentBatch} batch and become 
             a skilled healthcare provider with government-approved certifications.
           </p>
@@ -73,7 +73,7 @@ export default async function CoursesPage({
         {courses.length > 0 && courses.length === limit && (
           <div className="mt-16 flex justify-center">
             <Link href={`/courses?limit=${limit + 12}`} scroll={false}>
-              <Button variant="outline" className="rounded-full px-12 border-white/20 hover:bg-white/10 text-white h-14 font-bold uppercase tracking-widest text-xs">
+              <Button variant="outline" className="rounded-full px-12 h-14 font-black uppercase tracking-widest text-xs border-primary/20 text-primary hover:bg-primary/5">
                 Load More Courses
               </Button>
             </Link>
@@ -81,8 +81,8 @@ export default async function CoursesPage({
         )}
 
         {courses.length === 0 && (
-          <div className="text-center py-20 border-2 border-dashed border-white/10 rounded-3xl">
-            <p className="text-slate-500 font-bold">New batches are coming soon. Stay tuned!</p>
+          <div className="text-center py-20 border-2 border-dashed border-muted rounded-none">
+            <p className="text-muted-foreground font-bold">New batches are coming soon. Stay tuned!</p>
           </div>
         )}
       </div>
