@@ -81,7 +81,7 @@ export default function MyCoursesPage() {
                    </Badge>
                 </div>
                 <CardTitle className="text-lg mt-4 line-clamp-1">
-                  {enrollment.courseId?.title || 'Unknown Course'}
+                  {enrollment.courseId?.name || 'Unknown Course'}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">

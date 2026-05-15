@@ -82,7 +82,7 @@ export default function MyAppointmentsPage() {
                    </Badge>
                 </div>
                 <CardTitle className="text-lg mt-4 line-clamp-1">
-                  {appointment.serviceId?.title || 'Unknown Service'}
+                  {appointment.serviceId?.name || 'Unknown Service'}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
