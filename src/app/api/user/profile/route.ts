@@ -18,15 +18,19 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
 
-    // Find user by ID first, then fallback to email+domain if ID is not found
-    // This handles cases where the user ID might have changed during domain normalization/migration
+    const normalizedEmail = session.user.email?.toLowerCase().trim();
+    console.log(`Profile GET: User ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
+
+    // Find user by ID first
     let user = await User.findById(session.user.id).select('-password').lean();
     
-    if (!user && session.user.email) {
-      user = await User.findOne({ email: session.user.email, domain }).select('-password').lean();
+    if (!user && normalizedEmail) {
+      console.log(`Profile GET: User not found by ID, falling back to email+domain`);
+      user = await User.findOne({ email: normalizedEmail, domain }).select('-password').lean();
     }
 
     if (!user) {
+      console.error(`Profile GET: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 

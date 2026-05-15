@@ -215,7 +215,6 @@ export default async function Home() {
       {data.services?.length > 0 && (
         <ServiceCarouselSection
           title="Medical Services"
-          description="Advanced healthcare solutions by professional practitioners"
           services={data.services}
           viewAllLink="/services"
           bgColor="bg-background"

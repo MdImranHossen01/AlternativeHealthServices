@@ -58,9 +58,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
         <div className="mt-auto pt-4 border-t border-border/50">
           <Link href={`/services/${service.slug}`}>
-            <Button className="w-full rounded-none h-10 gap-2 font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-primary/10">
-              <Calendar className="h-3.5 w-3.5" />
-              Book Appointment
+            <Button className="w-full rounded-full h-11 sm:h-10 gap-2 font-bold uppercase text-[10px] sm:text-xs shadow-lg shadow-primary/10">
+              <Calendar className="h-3.5 w-3.5 hidden sm:block" />
+              <span className="hidden sm:inline">Book </span>
+              Appointment
             </Button>
           </Link>
         </div>

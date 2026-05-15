@@ -18,9 +18,18 @@ export async function GET() {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
     
-    const user = await User.findOne({ email: session.user.email.trim().toLowerCase(), domain });
+    const normalizedEmail = session.user.email?.toLowerCase().trim();
+    
+    // Find user by ID first (most reliable if session is active)
+    let user = await User.findById(session.user.id);
+    
+    if (!user && normalizedEmail) {
+      console.log(`Cart GET: User not found by ID (${session.user.id}), falling back to email+domain`);
+      user = await User.findOne({ email: normalizedEmail, domain });
+    }
     
     if (!user) {
+      console.error(`Cart GET: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 

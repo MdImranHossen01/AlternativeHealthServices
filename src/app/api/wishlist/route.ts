@@ -19,9 +19,17 @@ export async function GET() {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
     const normalizedEmail = session.user.email?.toLowerCase().trim();
-    const user = await User.findOne({ email: normalizedEmail, domain }).populate('wishlist');
+    
+    // Find user by ID first
+    let user = await User.findById(session.user.id).populate('wishlist');
+    
+    if (!user && normalizedEmail) {
+      console.log(`Wishlist GET: User not found by ID (${session.user.id}), falling back to email+domain`);
+      user = await User.findOne({ email: normalizedEmail, domain }).populate('wishlist');
+    }
     
     if (!user) {
+      console.error(`Wishlist GET: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
@@ -51,9 +59,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
     const normalizedEmail = session.user.email?.toLowerCase().trim();
-    const user = await User.findOne({ email: normalizedEmail, domain });
+    
+    // Find user by ID first
+    let user = await User.findById(session.user.id);
+    
+    if (!user && normalizedEmail) {
+      console.log(`Wishlist POST: User not found by ID (${session.user.id}), falling back to email+domain`);
+      user = await User.findOne({ email: normalizedEmail, domain });
+    }
     
     if (!user) {
+      console.error(`Wishlist POST: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 

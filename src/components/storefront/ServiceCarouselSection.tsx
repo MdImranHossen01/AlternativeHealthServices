@@ -54,30 +54,20 @@ export function ServiceCarouselSection({
   const selectedBg = bgClassMap[bgColor as keyof typeof bgClassMap] || "bg-background";
 
   return (
-    <section className={`py-12 md:py-24 ${selectedBg} overflow-hidden border-b border-muted/20`}>
+    <section className={`py-8 md:py-12 ${selectedBg} overflow-hidden border-b border-muted/20`}>
       <div className="container mx-auto px-4 md:px-0">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-12 gap-6 px-4 md:px-0">
-          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Stethoscope className="h-6 w-6 text-primary" />
-              </div>
-              <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase">
-                {title}
-              </h2>
-            </div>
-            {description && (
-              <p className="text-muted-foreground max-w-xl font-medium uppercase text-[10px] md:text-xs tracking-widest">
-                {description}
-              </p>
-            )}
+        <div className="flex flex-row items-center justify-between mb-8 md:mb-10 gap-4 px-4 md:px-0">
+          <div className="flex flex-col items-start space-y-2">
+            <h2 className="text-2xl font-black tracking-tighter md:text-4xl text-foreground">
+              {title}
+            </h2>
           </div>
 
-          <Button asChild variant="default" className="rounded-full font-black uppercase text-[10px] tracking-widest px-8 group h-12 shadow-xl shadow-primary/20">
+          <Button asChild variant="default" className="rounded-full font-bold group">
             <Link href={viewAllLink}>
-              Browse All Services
+              View All
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>

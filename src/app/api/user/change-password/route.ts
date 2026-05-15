@@ -35,9 +35,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
 
-    const user = await User.findOne({ email: session.user.email, domain }).select('+password');
-
+    const normalizedEmail = session.user.email?.toLowerCase().trim();
+    
+    // Find user by ID first
+    let user = await User.findById(session.user.id).select('+password');
+    
+    if (!user && normalizedEmail) {
+      console.log(`ChangePassword POST: User not found by ID (${session.user.id}), falling back to email+domain`);
+      user = await User.findOne({ email: normalizedEmail, domain }).select('+password');
+    }
+    
     if (!user) {
+      console.error(`ChangePassword POST: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
       return NextResponse.json({ message: 'User not found.' }, { status: 404 });
     }
     

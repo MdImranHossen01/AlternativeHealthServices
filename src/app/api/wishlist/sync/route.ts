@@ -45,10 +45,18 @@ export async function POST(req: NextRequest) {
     }
     console.log(`[Wishlist Sync] Database connected and domain fetched in ${Date.now() - startTime}ms`);
 
-    const user = await User.findOne({ email: session.user.email, domain });
+    const normalizedEmail = session.user.email?.toLowerCase().trim();
+    
+    // Find user by ID first
+    let user = await User.findById(session.user.id);
+    
+    if (!user && normalizedEmail) {
+      console.log(`[Wishlist Sync] User not found by ID (${session.user.id}), falling back to email+domain`);
+      user = await User.findOne({ email: normalizedEmail, domain });
+    }
     
     if (!user) {
-      console.warn('[Wishlist Sync] User not found for session');
+      console.warn(`[Wishlist Sync] User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
