@@ -100,7 +100,7 @@ export function CourseRecent({ courses }: CourseRecentProps) {
                 buttonVariants({ size: 'default', variant: 'default' }),
                 "rounded-full font-bold group/btn inline-flex items-center gap-2 pointer-events-none"
               )}>
-                Enroll Now
+                ভর্তি হোন
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </span>
             </div>
