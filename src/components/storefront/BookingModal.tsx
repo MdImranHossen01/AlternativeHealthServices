@@ -33,18 +33,17 @@ export function BookingModal({ serviceId, serviceName, price }: BookingModalProp
         <div className="bg-primary p-8 text-white relative">
           <DialogHeader>
             <DialogTitle className="text-3xl font-black uppercase tracking-tighter leading-tight">
-              Schedule Your <br />
-              <span className="opacity-70">{serviceName}</span>
+              {serviceName}
             </DialogTitle>
           </DialogHeader>
           <div className="mt-4 flex items-center gap-4 text-xs font-bold uppercase tracking-widest opacity-80">
             <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> 9 AM - 10 PM</span>
             {price && <span className="flex items-center gap-1.5">৳{price}</span>}
           </div>
-          
+
           {/* Close Button handled by DialogContent but we can style the top part */}
         </div>
-        
+
         <div className="p-8 bg-background">
           <BookingForm serviceId={serviceId} serviceName={serviceName} />
           <p className="mt-6 text-[10px] text-center text-muted-foreground uppercase tracking-widest font-bold">

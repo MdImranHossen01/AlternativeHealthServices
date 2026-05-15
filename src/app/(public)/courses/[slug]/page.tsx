@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { ArrowRight, GraduationCap, MapPin, Clock } from 'lucide-react';
 import { SocialShare } from '@/components/storefront/SocialShare';
 import { generateHtml, generatePlainText } from '@/lib/server-html';
+import { AdminActions } from '@/components/common/AdminActions';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -65,7 +66,10 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
             <div className="p-10 rounded-none">
               <div className="relative z-10">
                 <div className="mb-8 space-y-4">
-                  <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{course.name}</h2>
+                  <div className="flex items-center justify-between gap-4">
+                    <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{course.name}</h2>
+                    <AdminActions type="course" slug={course.slug} name={course.name} />
+                  </div>
                   <p className="text-sm text-muted-foreground font-medium leading-loose">
                     আমাদের স্পেশাল কোর্সে ভর্তি চলছে। আপনার ক্যারিয়ারের নতুন যাত্রা শুরু করুন আজই।
                   </p>

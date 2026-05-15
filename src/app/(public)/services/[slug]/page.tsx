@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import { BookingModal } from '@/components/storefront/BookingModal';
 import { SocialShare } from '@/components/storefront/SocialShare';
 import { generateHtml, generatePlainText } from '@/lib/server-html';
+import { AdminActions } from '@/components/common/AdminActions';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -57,7 +58,10 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
           <div className="lg:sticky lg:top-24 h-fit">
             <div className="p-10 rounded-none">
               <div className="mb-10 space-y-4">
-                <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{service.name}</h2>
+                <div className="flex items-center justify-between gap-4">
+                  <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{service.name}</h2>
+                  <AdminActions type="service" slug={service.slug} name={service.name} />
+                </div>
                 <p className="text-sm text-muted-foreground font-medium leading-loose">
                   আমাদের বিশেষজ্ঞগণ প্রতিদিন সকাল <span className="text-foreground font-black">৯টা থেকে রাত ১০টা</span> পর্যন্ত সেবা দিচ্ছেন। আপনার স্লট এখনই নিশ্চিত করুন।
                 </p>
