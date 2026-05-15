@@ -52,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user, trigger, session }) {
       // 1. First, apply base logic from authConfig
       if (user) {
-        token.id = user.id;
+        token.id = user.id as string;
         token.role = (user as any).role ?? 'user';
         token.image = user.image || token.picture;
       }
@@ -67,10 +67,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const dbUser = await User.findById(user.id);
             if (dbUser) {
               token.id = dbUser._id.toString();
-              token.role = dbUser.role ?? 'user';
-              token.domain = dbUser.domain;
-              token.phone = dbUser.phone;
-              token.image = dbUser.image || user.image || token.picture;
+              token.role = (dbUser.role as string) ?? 'user';
+              token.domain = dbUser.domain as string;
+              token.phone = dbUser.phone as string;
+              token.image = (dbUser.image || user.image || token.picture) as string;
             }
           }
         } catch (error) {
