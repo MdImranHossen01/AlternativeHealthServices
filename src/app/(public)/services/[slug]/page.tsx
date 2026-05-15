@@ -29,11 +29,11 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
   return (
     <main className="min-h-screen py-16 md:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8">
           
           {/* Left: Content */}
           <div className="flex flex-col">
-            <div className="relative aspect-[1200/630] rounded-[2rem] overflow-hidden mb-12 shadow-2xl group">
+            <div className="relative aspect-[1200/630] rounded-none overflow-hidden mb-12 shadow-2xl group">
               <img
                 src={service.image}
                 alt={service.name}
@@ -42,12 +42,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
             </div>
             
             <div className="space-y-8">
-              <div className="space-y-4">
-                <h1 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-none">
-                  {service.name}
-                </h1>
-                <div className="h-2 w-24 bg-primary rounded-full" />
-              </div>
+
               
               <div className="prose prose-neutral dark:prose-invert max-w-none">
               <div 
@@ -60,11 +55,11 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
 
           {/* Right: Booking Action Sidebar */}
           <div className="lg:sticky lg:top-24 h-fit">
-            <div className="bg-muted/30 border border-muted/50 p-10 rounded-[2rem] shadow-2xl backdrop-blur-sm">
+            <div className="p-10 rounded-none">
               <div className="mb-10 space-y-4">
                 <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{service.name}</h2>
-                <p className="text-sm text-muted-foreground font-medium uppercase tracking-widest leading-loose">
-                  Our specialists are available everyday from <span className="text-foreground font-black">9:00 AM to 10:00 PM</span>. Secure your slot now.
+                <p className="text-sm text-muted-foreground font-medium leading-loose">
+                  আমাদের বিশেষজ্ঞগণ প্রতিদিন সকাল <span className="text-foreground font-black">৯টা থেকে রাত ১০টা</span> পর্যন্ত সেবা দিচ্ছেন। আপনার স্লট এখনই নিশ্চিত করুন।
                 </p>
               </div>
               
@@ -82,7 +77,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
                 </div>
                 
                 <p className="text-[10px] text-center text-muted-foreground font-bold uppercase tracking-widest">
-                  Instant confirmation via WhatsApp or Phone Call
+                  হোয়াটসঅ্যাপ বা ফোন কলের মাধ্যমে তাৎক্ষণিক নিশ্চিতকরণ
                 </p>
               </div>
             </div>

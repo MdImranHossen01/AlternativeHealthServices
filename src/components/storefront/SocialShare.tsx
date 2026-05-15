@@ -93,7 +93,7 @@ export function SocialShare({ title, url }: SocialShareProps) {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className={`h-10 w-10 flex items-center justify-center rounded-full border border-muted/50 bg-background transition-all duration-300 ${link.color} hover:scale-110 hover:shadow-lg`}
+            className={`h-10 w-10 flex items-center justify-center rounded-none border border-muted/50 bg-background transition-all duration-300 ${link.color} hover:scale-110 hover:shadow-lg`}
             title={`Share on ${link.name}`}
           >
             {link.icon}
@@ -101,7 +101,7 @@ export function SocialShare({ title, url }: SocialShareProps) {
         ))}
         <button
           onClick={copyToClipboard}
-          className={`h-10 w-10 flex items-center justify-center rounded-full border border-muted/50 bg-background transition-all duration-300 hover:bg-slate-900 hover:text-white hover:scale-110 hover:shadow-lg ${copied ? 'bg-emerald-500 text-white border-emerald-500' : ''}`}
+          className={`h-10 w-10 flex items-center justify-center rounded-none border border-muted/50 bg-background transition-all duration-300 hover:bg-slate-900 hover:text-white hover:scale-110 hover:shadow-lg ${copied ? 'bg-emerald-500 text-white border-emerald-500' : ''}`}
           title="Copy Link"
         >
           {copied ? <Check className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />}

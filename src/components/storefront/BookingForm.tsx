@@ -112,7 +112,7 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
                 <User className="h-3 w-3" /> Full Name
               </FormLabel>
               <FormControl>
-                <Input placeholder="your name" {...field} className="rounded-xl bg-background border-muted" />
+                <Input placeholder="your name" {...field} className="rounded-none bg-background border-muted" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,7 +128,7 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
                 <Phone className="h-3 w-3" /> Phone Number
               </FormLabel>
               <FormControl>
-                <Input placeholder="017XXXXXXXX" {...field} className="rounded-xl bg-background border-muted" />
+                <Input placeholder="017XXXXXXXX" {...field} className="rounded-none bg-background border-muted" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -149,7 +149,7 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
                     type="date"
                     min={new Date().toISOString().split('T')[0]}
                     {...field}
-                    className="rounded-xl bg-background border-muted"
+                    className="rounded-none bg-background border-muted"
                   />
                 </FormControl>
                 <FormMessage />
@@ -166,7 +166,7 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
                   <Clock className="h-3 w-3" /> Time
                 </FormLabel>
                 <FormControl>
-                  <Input type="time" {...field} className="rounded-xl bg-background border-muted" />
+                  <Input type="time" {...field} className="rounded-none bg-background border-muted" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -177,7 +177,7 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full h-14 rounded-2xl bg-primary hover:scale-[1.02] transition-all font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20"
+          className="w-full h-14 rounded-none bg-primary hover:scale-[1.02] transition-all font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20"
         >
           {isSubmitting ? 'Processing...' : 'Confirm Appointment'}
         </Button>
