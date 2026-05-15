@@ -31,18 +31,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           className="object-cover transition-all duration-700 group-hover:scale-110"
         />
         
-        {/* Badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-2">
-          {service.price !== undefined && service.price !== null ? (
-            <Badge variant="default" className="bg-primary text-primary-foreground font-black uppercase text-[10px]">
-              ৳{service.price}
-            </Badge>
-          ) : (
-            <Badge variant="secondary" className="bg-emerald-500 hover:bg-emerald-600 text-white border-none font-black uppercase text-[10px]">
-              FREE
-            </Badge>
-          )}
-        </div>
+
 
         {/* Hover Action Overlay */}
         <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-black/5">
