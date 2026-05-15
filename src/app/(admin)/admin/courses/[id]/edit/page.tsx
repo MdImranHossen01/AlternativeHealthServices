@@ -184,10 +184,10 @@ export default function EditCoursePage({ params }: { params: Promise<{ id: strin
   }
 
   return (
-    <div className="max-w-5xl mx-auto py-10 px-6 space-y-6">
+    <div className="max-w-4xl mx-auto py-10 space-y-6">
       <div className="flex items-center justify-between">
         <Link href="/admin/courses">
-          <Button variant="ghost" className="gap-2 rounded-xl">
+          <Button variant="ghost" className="gap-2">
             <ArrowLeft className="h-4 w-4" /> Back to Courses
           </Button>
         </Link>
@@ -198,176 +198,171 @@ export default function EditCoursePage({ params }: { params: Promise<{ id: strin
       </div>
 
       <form onSubmit={onSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/30">
-                <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <Type className="h-4 w-4 text-primary" /> Basic Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6 space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Course Title *</label>
+        <div className="space-y-6">
+          <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50 bg-slate-50/30">
+              <CardTitle className="text-sm font-bold flex items-center gap-2 text-black">
+                  <Type className="h-4 w-4 text-primary" /> Basic Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-bold">Course Title *</label>
+                <Input
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Basic Medical Training"
+                  required
+                  className="h-12 text-lg font-bold"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold">Slug / URL Path *</label>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">alternativehsbd.com/courses/</span>
                   <Input
-                    name="name"
-                    value={formData.name}
+                    name="slug"
+                    value={formData.slug}
                     onChange={handleChange}
-                    placeholder="e.g. Basic Medical Training"
+                    placeholder="course-url-slug"
                     required
-                    className="h-12 rounded-2xl border-slate-200 focus:ring-primary focus:border-primary text-lg font-bold"
+                    className="font-mono text-xs"
                   />
                 </div>
+              </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Slug / URL Path *</label>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-400 font-mono hidden sm:inline">/courses/</span>
-                    <Input
-                      name="slug"
-                      value={formData.slug}
-                      onChange={handleChange}
-                      placeholder="course-url-slug"
-                      required
-                      className="h-10 rounded-xl border-slate-200 font-mono text-xs"
-                    />
-                  </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold">Course Description *</label>
+                <div className="border border-slate-200 rounded-xl overflow-hidden min-h-[400px] focus-within:ring-2 focus-within:ring-primary/20 transition-all text-black">
+                  <NovelEditor 
+                      initialValue={parseEditorInitialValue(formData.description)}
+                      onChange={(val) => setFormData(prev => ({ ...prev, description: val }))} 
+                  />
                 </div>
+              </div>
+            </CardContent>
+          </Card>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Course Description *</label>
-                  <div className="border border-slate-200 rounded-2xl overflow-hidden min-h-[400px] focus-within:ring-2 focus-within:ring-primary/20 transition-all text-black">
-                    <NovelEditor 
-                        initialValue={parseEditorInitialValue(formData.description)}
-                        onChange={(val) => setFormData(prev => ({ ...prev, description: val }))} 
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-                <CardHeader className="border-b border-slate-50 bg-slate-50/30">
-                    <CardTitle className="text-sm font-bold flex items-center gap-2">
-                        <FileSearch className="h-4 w-4 text-primary" /> Course Details
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-1.5">
-                                <User className="h-3 w-3" /> Instructor
-                            </label>
-                            <Input
-                                name="instructor"
-                                value={formData.instructor}
-                                onChange={handleChange}
-                                placeholder="Dr. Name"
-                                className="h-12 rounded-2xl border-slate-200"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-1.5">
-                                <Banknote className="h-3 w-3" /> Course Fee (৳)
-                            </label>
-                            <Input
-                                name="price"
-                                type="number"
-                                min={0}
-                                value={formData.price}
-                                onChange={handleChange}
-                                placeholder="0"
-                                className="h-12 rounded-2xl border-slate-200"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-1.5">
-                                <Clock className="h-3 w-3" /> Duration
-                            </label>
-                            <Input
-                                name="duration"
-                                value={formData.duration}
-                                onChange={handleChange}
-                                placeholder="e.g. 2 Days / 3 Months"
-                                className="h-12 rounded-2xl border-slate-200"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-1.5">
-                                <MapPin className="h-3 w-3" /> Location
-                            </label>
-                            <Input
-                                name="location"
-                                value={formData.location}
-                                onChange={handleChange}
-                                placeholder="e.g. Online / Gazipur"
-                                className="h-12 rounded-2xl border-slate-200"
-                            />
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-          </div>
-
-          <div className="space-y-6">
-            <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
+          <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
               <CardHeader className="border-b border-slate-50 bg-slate-50/30">
-                <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <ImageIcon className="h-4 w-4 text-primary" /> Media
-                </CardTitle>
+                  <CardTitle className="text-sm font-bold flex items-center gap-2 text-black">
+                      <FileSearch className="h-4 w-4 text-primary" /> Course Details
+                  </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                          <label className="text-sm font-bold flex items-center gap-1.5">
+                              <User className="h-3 w-3" /> Instructor
+                          </label>
+                          <Input
+                              name="instructor"
+                              value={formData.instructor}
+                              onChange={handleChange}
+                              placeholder="Dr. Name"
+                              className="h-12 rounded-xl"
+                          />
+                      </div>
+                      <div className="space-y-2">
+                          <label className="text-sm font-bold flex items-center gap-1.5">
+                              <Banknote className="h-3 w-3" /> Course Fee (৳)
+                          </label>
+                          <Input
+                              name="price"
+                              type="number"
+                              min={0}
+                              value={formData.price}
+                              onChange={handleChange}
+                              placeholder="0"
+                              className="h-12 rounded-xl"
+                          />
+                      </div>
+                      <div className="space-y-2">
+                          <label className="text-sm font-bold flex items-center gap-1.5">
+                              <Clock className="h-3 w-3" /> Duration
+                          </label>
+                          <Input
+                              name="duration"
+                              value={formData.duration}
+                              onChange={handleChange}
+                              placeholder="e.g. 2 Days / 3 Months"
+                              className="h-12 rounded-xl"
+                          />
+                      </div>
+                      <div className="space-y-2">
+                          <label className="text-sm font-bold flex items-center gap-1.5">
+                              <MapPin className="h-3 w-3" /> Location
+                          </label>
+                          <Input
+                              name="location"
+                              value={formData.location}
+                              onChange={handleChange}
+                              placeholder="e.g. Online / Gazipur"
+                              className="h-12 rounded-xl"
+                          />
+                      </div>
+                  </div>
+              </CardContent>
+          </Card>
+
+          <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50 bg-slate-50/30">
+              <CardTitle className="text-sm font-bold flex items-center gap-2 text-black">
+                  <ImageIcon className="h-4 w-4 text-primary" /> Media
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold">Course Thumbnail</label>
                 <ImageUpload 
                   value={formData.image}
                   onUpload={(url) => setFormData(prev => ({ ...prev, image: url }))}
-                  label="Course Thumbnail"
-                  aspect="video"
                 />
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/30">
-                <CardTitle className="text-sm font-bold">Status & Visibility</CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <label className="flex items-center gap-3 text-sm font-bold cursor-pointer group">
-                  <Checkbox
-                    checked={formData.isPublished}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({ ...prev, isPublished: Boolean(checked) }))
-                    }
-                    className="rounded-lg h-5 w-5 border-slate-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                  />
-                  <span className="group-hover:text-primary transition-colors">Published</span>
-                </label>
-                <p className="mt-2 text-[10px] text-slate-400 font-medium leading-relaxed">
-                    Uncheck to set as a draft. Draft courses will not be visible on the public academy page.
-                </p>
-              </CardContent>
-            </Card>
+          <Card className="border-0 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50 bg-slate-50/30">
+              <CardTitle className="text-sm font-bold text-black">Status & Visibility</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <label className="flex items-center gap-3 text-sm font-bold cursor-pointer group text-black">
+                <Checkbox
+                  checked={formData.isPublished}
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, isPublished: Boolean(checked) }))
+                  }
+                  className="rounded-lg h-5 w-5 border-slate-300 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                />
+                <span className="group-hover:text-primary transition-colors">Published</span>
+              </label>
+            </CardContent>
+          </Card>
 
-            <Button 
-                type="submit" 
-                disabled={saving} 
-                className="w-full h-16 rounded-3xl bg-slate-900 hover:bg-primary text-white font-black uppercase text-lg gap-3 transition-all active:scale-95 shadow-xl shadow-slate-200"
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="h-6 w-6 animate-spin" />
-                  Updating...
-                </>
-              ) : (
-                <>
-                  <Save className="h-6 w-6" />
-                  Update Course
-                </>
-              )}
-            </Button>
-          </div>
+          <Button 
+              type="submit" 
+              disabled={saving} 
+              className="w-full h-16 rounded-2xl bg-slate-900 hover:bg-primary text-white font-black uppercase text-lg gap-3 transition-all active:scale-95 shadow-xl shadow-slate-200"
+          >
+            {saving ? (
+              <>
+                <Loader2 className="h-6 w-6 animate-spin" />
+                Updating...
+              </>
+            ) : (
+              <>
+                <Save className="h-6 w-6" />
+                Update Course
+              </>
+            )}
+          </Button>
         </div>
       </form>
     </div>
   );
 }
+
 
