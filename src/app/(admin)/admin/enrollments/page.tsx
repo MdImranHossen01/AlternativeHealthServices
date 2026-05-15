@@ -9,9 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet } from 'lucide-react';
+import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet, Calendar, Clock } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { format, isValid } from 'date-fns';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 
@@ -120,6 +121,7 @@ function EnrollmentsContent() {
               <TableHead className="font-black uppercase text-[10px] tracking-widest">Student</TableHead>
               <TableHead className="font-black uppercase text-[10px] tracking-widest">Course</TableHead>
               <TableHead className="font-black uppercase text-[10px] tracking-widest">Payment Details</TableHead>
+              <TableHead className="font-black uppercase text-[10px] tracking-widest">Registered</TableHead>
               <TableHead className="font-black uppercase text-[10px] tracking-widest">Status</TableHead>
               <TableHead className="text-right font-black uppercase text-[10px] tracking-widest">Actions</TableHead>
             </TableRow>
@@ -161,6 +163,18 @@ function EnrollmentsContent() {
                     ) : (
                       <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Free Course</Badge>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col text-[11px] font-medium">
+                      <span className="flex items-center gap-1.5 text-foreground whitespace-nowrap">
+                        <Calendar className="h-3 w-3 text-primary" /> 
+                        {isValid(new Date(enroll.createdAt)) ? format(new Date(enroll.createdAt), 'MMM dd, yyyy') : 'Invalid Date'}
+                      </span>
+                      <span className="flex items-center gap-1.5 text-muted-foreground">
+                        <Clock className="h-3 w-3" /> 
+                        {isValid(new Date(enroll.createdAt)) ? format(new Date(enroll.createdAt), 'hh:mm a') : '--:--'}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Badge className={`rounded-md ${

@@ -40,6 +40,7 @@ const courses = [
     duration: '২ দিন',
     location: 'বোর্ড বাজার, গাজীপুর',
     price: 5000, // Example price
+    isPublished: true,
     domain: DOMAIN,
   }
 ];
@@ -51,6 +52,7 @@ const services = [
     description: 'আধুনিক ডিভাইস ও কসমেটিক পদ্ধতিতে ব্যথামুক্ত খৎনা সেবা। দ্রুত নিরাময় ও সর্বোচ্চ সতর্কতা নিশ্চিত করা হয়।',
     image: '/assets/images/service and course/media__1778769248923.webp',
     price: 0,
+    isPublished: true,
     domain: DOMAIN,
   },
   {
@@ -59,6 +61,7 @@ const services = [
     description: 'নাকের পলিপাস ও সাইনুসাইটিসের উন্নত ও কার্যকরী চিকিৎসা। আধুনিক পদ্ধতিতে সেবা প্রদান করা হয়।',
     image: '/assets/images/service and course/naturopathy_consultation_banner_1778772103614.webp',
     price: 0,
+    isPublished: true,
     domain: DOMAIN,
   },
   {
@@ -67,6 +70,7 @@ const services = [
     description: 'পাইলস, অর্শ ও গ্যাজ রোগের নিরাপদ ও দীর্ঘস্থায়ী চিকিৎসা। কোনো অপারেশন ছাড়াই সুস্থ হওয়ার সুযোগ।',
     image: '/assets/images/service and course/herbal_medicine_service_banner_1778772194389.webp',
     price: 0,
+    isPublished: true,
     domain: DOMAIN,
   },
   {
@@ -75,6 +79,7 @@ const services = [
     description: 'সুন্নত ভিত্তিক হিজামা বা কাপিং থেরাপি। রক্ত পরিশোধন ও শারীরিক ব্যথামুক্তিতে অত্যন্ত কার্যকরী।',
     image: '/assets/images/service and course/hijama_therapy_service_1778772084293.webp',
     price: 0,
+    isPublished: true,
     domain: DOMAIN,
   },
   {
@@ -83,6 +88,7 @@ const services = [
     description: 'টনসিল, টিউমার ও আঁচিলের কাটা-ছেঁড়া বিহীন আধুনিক চিকিৎসা।',
     image: '/assets/images/service and course/chiropractic_adjustment_service_1778772140197.webp',
     price: 0,
+    isPublished: true,
     domain: DOMAIN,
   },
   {
@@ -91,6 +97,7 @@ const services = [
     description: 'হরমোনাল সমস্যা, চর্ম রোগ, যৌন সমস্যা ও থাইরয়েডের বিশেষজ্ঞ পরামর্শ ও চিকিৎসা।',
     image: '/assets/images/service and course/wellness_stress_management_service_1778772244797.webp',
     price: 0,
+    isPublished: true,
     domain: DOMAIN,
   }
 ];

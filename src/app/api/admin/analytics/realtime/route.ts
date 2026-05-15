@@ -73,33 +73,24 @@ export async function GET() {
     return NextResponse.json({ activeUsersNow });
 
   } catch (error: any) {
-    console.error('Realtime Analytics API Error Details:', {
-      message: error.message,
-      code: error.code,
-      status: error.status,
-      details: error.details
-    });
+    console.error('Realtime Analytics API Error Details:', error);
     
     // Robust error message extraction
     let errorMsg = 'Unknown Error';
-    try {
-      errorMsg = error?.message || error?.statusText || (typeof error === 'string' ? error : JSON.stringify(error));
-    } catch (e) {
-      errorMsg = String(error);
-    }
-
-    // Extract all keys from error for debugging
-    const errorDebug: any = {};
     if (error && typeof error === 'object') {
-      Object.getOwnPropertyNames(error).forEach(key => {
-        errorDebug[key] = error[key];
-      });
+      errorMsg = error.message || error.statusText || JSON.stringify(error);
+    } else if (typeof error === 'string') {
+      errorMsg = error;
     }
 
     return NextResponse.json({ 
       activeUsersNow: 0, 
       message: `Failed to fetch realtime data: ${errorMsg}`,
-      debug: errorDebug
+      debug: {
+        message: error?.message,
+        code: error?.code,
+        status: error?.status,
+      }
     }, { status: 500 });
   }
 }

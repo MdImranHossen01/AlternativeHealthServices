@@ -39,7 +39,7 @@ function ServicesContent() {
       const response = await fetch('/api/services');
       if (!response.ok) throw new Error('Failed to fetch services');
       const data = await response.json();
-      setServices(data);
+      setServices(data.services || []);
     } catch (error) {
       toast.error('Failed to load services');
     } finally {

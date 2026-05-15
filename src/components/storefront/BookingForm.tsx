@@ -86,8 +86,8 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
           Thank you, <strong>{form.getValues('name')}</strong>. <br />
           Your appointment is scheduled for {form.getValues('date')} at {form.getValues('time')}.
         </p>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => {
             form.reset();
             setIsSuccess(false);
@@ -112,7 +112,7 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
                 <User className="h-3 w-3" /> Full Name
               </FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" {...field} className="rounded-xl bg-background border-muted" />
+                <Input placeholder="your name" {...field} className="rounded-xl bg-background border-muted" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -145,11 +145,11 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
                   <CalendarIcon className="h-3 w-3" /> Date
                 </FormLabel>
                 <FormControl>
-                  <Input 
-                    type="date" 
-                    min={new Date().toISOString().split('T')[0]} 
-                    {...field} 
-                    className="rounded-xl bg-background border-muted" 
+                  <Input
+                    type="date"
+                    min={new Date().toISOString().split('T')[0]}
+                    {...field}
+                    className="rounded-xl bg-background border-muted"
                   />
                 </FormControl>
                 <FormMessage />
@@ -174,8 +174,8 @@ export default function BookingForm({ serviceId, serviceName }: { serviceId: str
           />
         </div>
 
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           disabled={isSubmitting}
           className="w-full h-14 rounded-2xl bg-primary hover:scale-[1.02] transition-all font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20"
         >

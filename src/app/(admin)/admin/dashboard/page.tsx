@@ -28,7 +28,9 @@ import {
   Star,
   UserPlus,
   Target,
-  BarChart3
+  BarChart3,
+  Calendar,
+  GraduationCap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -262,29 +264,33 @@ export default function AdminDashboard() {
           </Card>
         </Link>
 
-        {/* ROAS Card (NEW) */}
-        <Card className="bg-purple-500/5 border-purple-500/20 relative overflow-hidden group">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ad ROI (ROAS)</CardTitle>
-            <Target className="h-4 w-4 text-purple-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-purple-700">{stats?.roas ? `${stats.roas}x` : '—'}</div>
-            <p className="text-xs text-muted-foreground">Revenue per ৳1 Ad Spend</p>
-          </CardContent>
-        </Card>
+        {/* Upcoming Appointments Card */}
+        <Link href="/admin/appointments" className="block transition-transform hover:scale-[1.02] active:scale-95">
+          <Card className="bg-emerald-500/5 border-emerald-500/20 relative overflow-hidden group h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Upcoming Appointments</CardTitle>
+              <Calendar className="h-4 w-4 text-emerald-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-emerald-700">{stats?.upcomingAppointmentsCount || 0}</div>
+              <p className="text-xs text-muted-foreground">Confirmed bookings</p>
+            </CardContent>
+          </Card>
+        </Link>
 
-        {/* Forecast Card (NEW) */}
-        <Card className="bg-orange-500/5 border-orange-500/20 relative overflow-hidden group border-dashed">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sales Forecast</CardTitle>
-            <LineChartIcon className="h-4 w-4 text-orange-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-700">৳{Math.round(stats?.projectedMonthlyRevenue || 0).toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Projected next 30 days</p>
-          </CardContent>
-        </Card>
+        {/* Pending Enrollments Card */}
+        <Link href="/admin/enrollments" className="block transition-transform hover:scale-[1.02] active:scale-95">
+          <Card className="bg-amber-500/5 border-amber-500/20 relative overflow-hidden group h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Pending Enrollments</CardTitle>
+              <GraduationCap className="h-4 w-4 text-amber-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-amber-700">{stats?.pendingEnrollmentsCount || 0}</div>
+              <p className="text-xs text-muted-foreground">Waiting for approval</p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       <div className="grid gap-4 grid-cols-1">

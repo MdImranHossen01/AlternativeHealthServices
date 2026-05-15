@@ -70,14 +70,14 @@ export function ProfileForm() {
   });
 
   const selectedDivision = form.watch('address.division');
-  const availableDistricts = selectedDivision && bdDivisions[selectedDivision] 
-                            ? bdDivisions[selectedDivision] 
-                            : [];
+  const availableDistricts = selectedDivision && bdDivisions[selectedDivision]
+    ? bdDivisions[selectedDivision]
+    : [];
 
   const selectedDistrict = form.watch('address.city');
-  const availableThanas = selectedDistrict && bdLocations[selectedDistrict] 
-                            ? bdLocations[selectedDistrict] 
-                            : (bdLocations['Others'] || []);
+  const availableThanas = selectedDistrict && bdLocations[selectedDistrict]
+    ? bdLocations[selectedDistrict]
+    : (bdLocations['Others'] || []);
 
   useEffect(() => {
     let isMounted = true;
@@ -90,7 +90,7 @@ export function ProfileForm() {
           throw new Error('Failed to fetch profile');
         }
         const data = await res.json();
-        
+
         if (isMounted) {
           form.reset({
             name: data.name || '',
@@ -169,213 +169,213 @@ export function ProfileForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            
+
             <div className="space-y-4">
               <h3 className="text-lg font-medium border-b pb-2">Basic Info</h3>
               <div className="flex flex-col md:flex-row gap-6">
-                 <div className="w-full md:w-1/3">
-                    <FormField
-                      control={form.control}
-                      name="image"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Profile Picture</FormLabel>
-                          <FormControl>
-                            <ImageUpload 
-                                value={field.value || ''} 
-                                onUpload={(url) => field.onChange(url)} 
-                                aspect="square"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                 </div>
-                 <div className="w-full md:w-2/3 space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="John Doe" {...field} disabled={isSubmitting} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <Input placeholder="you@example.com" {...field} disabled={true} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Mobile Number</FormLabel>
-                          <FormControl>
-                            <Input placeholder="+8801XXXXXXXXX" {...field} disabled={isSubmitting} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                 </div>
+                <div className="w-full md:w-1/3">
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Profile Picture</FormLabel>
+                        <FormControl>
+                          <ImageUpload
+                            value={field.value || ''}
+                            onUpload={(url) => field.onChange(url)}
+                            aspect="square"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="w-full md:w-2/3 space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="your name" {...field} disabled={isSubmitting} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Address</FormLabel>
+                        <FormControl>
+                          <Input placeholder="you@example.com" {...field} disabled={true} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mobile Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="+8801XXXXXXXXX" {...field} disabled={isSubmitting} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 
             <div className="space-y-4 pt-4">
               <h3 className="text-lg font-medium border-b pb-2">Default Shipping Address</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                      <FormField
-                        control={form.control}
-                        name="address.street"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Street Address</FormLabel>
-                            <FormControl>
-                              <Input placeholder="123 Main St, Apt 4B" {...field} disabled={isSubmitting} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                  </div>
+                <div className="md:col-span-2">
                   <FormField
                     control={form.control}
-                    name="address.division"
+                    name="address.street"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Division</FormLabel>
-                        <Select
-                          disabled={isSubmitting}
-                          onValueChange={(val) => {
-                             field.onChange(val);
-                             // Reset District and Thana when Division changes
-                             form.setValue('address.city', '');
-                             form.setValue('address.state', '');
-                          }}
-                          value={field.value}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a Division" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {divisions.map((division) => (
-                              <SelectItem key={division} value={division}>
-                                {division}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="address.city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>District</FormLabel>
-                        <Select
-                          disabled={isSubmitting || !selectedDivision}
-                          onValueChange={(val) => {
-                             field.onChange(val);
-                             // Reset Thana when District changes
-                             form.setValue('address.state', '');
-                          }}
-                          value={field.value}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a District" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {availableDistricts.map((district) => (
-                              <SelectItem key={district} value={district}>
-                                {district}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="address.state"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Thana / Upazila</FormLabel>
-                        <Select
-                          disabled={isSubmitting || !selectedDistrict}
-                          onValueChange={field.onChange}
-                          value={field.value}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a Thana" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {availableThanas.map((thana) => (
-                              <SelectItem key={thana} value={thana}>
-                                {thana}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="address.zipCode"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Post Office / ZIP Code</FormLabel>
+                        <FormLabel>Street Address</FormLabel>
                         <FormControl>
-                          <Input placeholder="1200" {...field} disabled={isSubmitting} />
+                          <Input placeholder="123 Main St, Apt 4B" {...field} disabled={isSubmitting} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="address.country"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Country</FormLabel>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="address.division"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Division</FormLabel>
+                      <Select
+                        disabled={isSubmitting}
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          // Reset District and Thana when Division changes
+                          form.setValue('address.city', '');
+                          form.setValue('address.state', '');
+                        }}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
-                          <Input placeholder="Bangladesh" {...field} disabled={isSubmitting} />
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a Division" />
+                          </SelectTrigger>
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                        <SelectContent>
+                          {divisions.map((division) => (
+                            <SelectItem key={division} value={division}>
+                              {division}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="address.city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>District</FormLabel>
+                      <Select
+                        disabled={isSubmitting || !selectedDivision}
+                        onValueChange={(val) => {
+                          field.onChange(val);
+                          // Reset Thana when District changes
+                          form.setValue('address.state', '');
+                        }}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a District" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {availableDistricts.map((district) => (
+                            <SelectItem key={district} value={district}>
+                              {district}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="address.state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Thana / Upazila</FormLabel>
+                      <Select
+                        disabled={isSubmitting || !selectedDistrict}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a Thana" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {availableThanas.map((thana) => (
+                            <SelectItem key={thana} value={thana}>
+                              {thana}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="address.zipCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Post Office / ZIP Code</FormLabel>
+                      <FormControl>
+                        <Input placeholder="1200" {...field} disabled={isSubmitting} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="address.country"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Bangladesh" {...field} disabled={isSubmitting} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
 

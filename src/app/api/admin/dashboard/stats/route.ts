@@ -5,6 +5,8 @@ import Order from '@/models/Order';
 import User from '@/models/User';
 import Product from '@/models/Product';
 import Expense from '@/models/Expense';
+import Appointment from '@/models/Appointment';
+import Enrollment from '@/models/Enrollment';
 import { getTenantDomain } from '@/lib/tenant';
 
 export async function GET(req: NextRequest) {
@@ -181,15 +183,20 @@ export async function GET(req: NextRequest) {
       }
     ]);
 
-    // 12. Ad ROI (ROAS)
-    const adExpenses = await Expense.aggregate([
-      { $match: { domain, category: 'Ads', date: { $gte: startDate, $lte: endDate } } },
-      { $group: { _id: null, total: { $sum: '$amount' } } }
-    ]);
-    const totalAdSpend = adExpenses[0]?.total || 0;
-    const roas = totalAdSpend > 0 ? Number((totalRevenue / totalAdSpend).toFixed(2)) : 0;
+    // 12. Upcoming Appointments (Confirmed and date >= today)
+    const upcomingAppointmentsCount = await Appointment.countDocuments({ 
+      domain, 
+      status: 'Confirmed', 
+      date: { $gte: new Date().toISOString().split('T')[0] } 
+    });
 
-    // 13. New vs Returning (Sample simplified logic)
+    // 13. Pending Enrollments (Waiting for approval)
+    const pendingEnrollmentsCount = await Enrollment.countDocuments({ 
+      domain, 
+      status: 'Pending' 
+    });
+
+    // 14. New vs Returning (Sample simplified logic)
     const allUsersWithOrders = await Order.aggregate([
       { 
         $match: { 
@@ -246,11 +253,6 @@ export async function GET(req: NextRequest) {
       { $sort: { date: 1 } }
     ]);
 
-    // Simple Forecasting: Average Daily Revenue * 30
-    const daysInRange = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) || 1;
-    const avgDailyRevenue = totalRevenue / daysInRange;
-    const projectedMonthlyRevenue = avgDailyRevenue * 30;
-
     return NextResponse.json({
       stats: {
         totalRevenue,
@@ -263,11 +265,10 @@ export async function GET(req: NextRequest) {
         totalExpenses,
         grossProfit,
         netProfit,
-        roas,
-        totalAdSpend,
+        upcomingAppointmentsCount,
+        pendingEnrollmentsCount,
         newUsersCount,
-        returningUsersCount,
-        projectedMonthlyRevenue
+        returningUsersCount
       },
       recentOrders,
       lowStockProducts,

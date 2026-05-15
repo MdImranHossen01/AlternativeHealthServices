@@ -220,7 +220,7 @@ export default function RegisterPage() {
                         <FormItem>
                           <FormLabel>Full Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="John Doe" {...field} disabled={isLoading} className="h-11 focus-visible:ring-primary/20" />
+                            <Input placeholder="Your Name" {...field} disabled={isLoading} className="h-11 focus-visible:ring-primary/20" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

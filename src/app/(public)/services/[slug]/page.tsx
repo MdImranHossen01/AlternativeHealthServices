@@ -33,7 +33,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
           
           {/* Left: Content */}
           <div className="flex flex-col">
-            <div className="relative aspect-video rounded-[2.5rem] overflow-hidden mb-12 shadow-2xl group">
+            <div className="relative aspect-[1200/630] rounded-[2rem] overflow-hidden mb-12 shadow-2xl group">
               <img
                 src={service.image}
                 alt={service.name}
@@ -60,21 +60,16 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
 
           {/* Right: Booking Action Sidebar */}
           <div className="lg:sticky lg:top-24 h-fit">
-            <div className="bg-muted/30 border border-muted/50 p-10 rounded-[3rem] shadow-2xl backdrop-blur-sm">
+            <div className="bg-muted/30 border border-muted/50 p-10 rounded-[2rem] shadow-2xl backdrop-blur-sm">
               <div className="mb-10 space-y-4">
-                <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">Ready to start <br /><span className="text-primary italic">your treatment?</span></h2>
+                <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{service.name}</h2>
                 <p className="text-sm text-muted-foreground font-medium uppercase tracking-widest leading-loose">
                   Our specialists are available everyday from <span className="text-foreground font-black">9:00 AM to 10:00 PM</span>. Secure your slot now.
                 </p>
               </div>
               
               <div className="space-y-6">
-                <div className="flex items-center justify-between p-6 bg-background rounded-2xl border border-muted/50">
-                  <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">Service Fee</span>
-                  <span className="text-2xl font-black text-primary">
-                    {service.price ? `৳${service.price}` : 'FREE'}
-                  </span>
-                </div>
+
 
                 <BookingModal 
                   serviceId={service._id.toString()} 

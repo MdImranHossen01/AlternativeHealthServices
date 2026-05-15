@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { User, Phone, Wallet, CheckCircle2, Info, ArrowRight, Smartphone } from 'lucide-react';
+import { User, Phone, Wallet, CheckCircle2, Info, ArrowRight, Smartphone, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -113,8 +113,28 @@ export default function EnrollmentFormV2({ courseId, courseName, price, bkashNum
             <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-black shrink-0">২</div>
             <div>
               <p className="font-black uppercase text-xs tracking-wider mb-1 text-primary">ধাপ ২ (বিকাশ নাম্বার)</p>
-              <p className="text-lg font-black text-slate-900 tracking-widest">{bkashNumber}</p>
-              <p className="text-xs text-slate-500 font-bold uppercase mt-1">Personal bKash Number</p>
+              <div 
+                className="flex items-center gap-2 cursor-pointer group" 
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(bkashNumber);
+                    toast.success('bKash Number Copied!', {
+                      description: bkashNumber,
+                      icon: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
+                    });
+                  } catch (err) {
+                    toast.error('Failed to copy', {
+                      description: 'Please copy the number manually.',
+                    });
+                  }
+                }}
+              >
+                <p className="text-lg font-black text-slate-900 tracking-widest group-hover:text-primary transition-colors">{bkashNumber}</p>
+                <div className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-primary/10 text-slate-400 group-hover:text-primary transition-all">
+                  <Copy className="h-4 w-4" />
+                </div>
+              </div>
+              <p className="text-xs text-slate-500 font-bold uppercase mt-1">Personal bKash Number (Click to Copy)</p>
             </div>
           </div>
 

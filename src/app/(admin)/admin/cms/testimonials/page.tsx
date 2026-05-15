@@ -10,11 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { 
-  Plus, 
-  Edit, 
-  Trash, 
-  Loader2, 
+import {
+  Plus,
+  Edit,
+  Trash,
+  Loader2,
   Star,
   User as UserIcon,
   MessageSquare
@@ -111,7 +111,7 @@ export default function TestimonialsPage() {
       });
 
       if (!response.ok) throw new Error('Failed to save testimonial');
-      
+
       toast.success(editingId ? 'Testimonial updated' : 'Testimonial added');
       setIsDialogOpen(false);
       fetchTestimonials();
@@ -148,7 +148,7 @@ export default function TestimonialsPage() {
         });
 
         if (!response.ok) throw new Error('Failed to delete');
-        
+
         toast.success('Deleted successfully');
         fetchTestimonials();
       } catch (error: any) {
@@ -227,18 +227,18 @@ export default function TestimonialsPage() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         className="h-8 w-8 hover:text-primary hover:bg-primary/10"
                         onClick={() => openEditDialog(t)}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                         onClick={() => handleDelete(t._id, t.name)}
                       >
                         <Trash className="h-4 w-4" />
@@ -265,29 +265,29 @@ export default function TestimonialsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Customer Name</Label>
-                  <Input 
-                    id="name" 
-                    value={formData.name} 
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="e.g. John Doe"
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Your Name"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="role">Role / Label</Label>
-                  <Input 
-                    id="role" 
-                    value={formData.role} 
-                    onChange={(e) => setFormData({...formData, role: e.target.value})}
+                  <Input
+                    id="role"
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     placeholder="e.g. Verified Buyer"
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="content">Testimonial Content</Label>
-                <Textarea 
-                  id="content" 
-                  value={formData.content} 
-                  onChange={(e) => setFormData({...formData, content: e.target.value})}
+                <Textarea
+                  id="content"
+                  value={formData.content}
+                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                   placeholder="What did the customer say?"
                   className="min-h-[100px]"
                 />
@@ -295,20 +295,20 @@ export default function TestimonialsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="rating">Rating (1-5)</Label>
-                  <Input 
-                    id="rating" 
+                  <Input
+                    id="rating"
                     type="number"
                     min="1"
                     max="5"
-                    value={formData.rating} 
-                    onChange={(e) => setFormData({...formData, rating: parseInt(e.target.value)})}
+                    value={formData.rating}
+                    onChange={(e) => setFormData({ ...formData, rating: parseInt(e.target.value) })}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label>Customer Image (Optional)</Label>
-                  <ImageUpload 
+                  <ImageUpload
                     value={formData.image}
-                    onUpload={(url) => setFormData({...formData, image: url})}
+                    onUpload={(url) => setFormData({ ...formData, image: url })}
                     className="h-24"
                   />
                 </div>

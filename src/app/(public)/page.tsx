@@ -59,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const metaTitle = settings?.metaTitle || brandName;
   const description = settings?.metaDescription || settings?.siteDescription || 'Your ultimate destination for quality products.';
   const ogImage = banners?.[0]?.image || settings?.logoUrl || '';
-  
+
   const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
   const baseUrl = `${protocol}://${hostname}`;
 
@@ -88,9 +88,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Lazy load components below the fold
-const CategoryShowcase = dynamic(() => import('@/components/storefront/CategoryShowcase').then(mod => mod.CategoryShowcase), {
-  loading: () => <CategoryShowcaseSkeleton />
-});
+
 
 const ProductCarouselSection = dynamic(() => import('@/components/storefront/ProductCarouselSection').then(mod => mod.ProductCarouselSection), {
   loading: () => <SectionSkeleton />
@@ -163,7 +161,6 @@ async function getHomeData() {
 
     return {
       banners,
-      categories,
       featuredProducts,
       newArrivals,
       flashSale,
@@ -194,7 +191,6 @@ export default async function Home() {
   const data = await getHomeData();
   const ui = {
     hero: data.settings?.uiTemplates?.hero || 'v1',
-    categories: data.settings?.uiTemplates?.categories || 'v1',
     productCard: data.settings?.uiTemplates?.productCard || 'v1'
   };
 
@@ -217,7 +213,7 @@ export default async function Home() {
 
       {/* 12. Specialized Services Section (Repositioned under Hero) */}
       {data.services?.length > 0 && (
-        <ServiceCarouselSection 
+        <ServiceCarouselSection
           title="Medical Services"
           description="Advanced healthcare solutions by professional practitioners"
           services={data.services}
@@ -226,8 +222,17 @@ export default async function Home() {
         />
       )}
 
-      {/* 4. Categories Showcase */}
-      <CategoryShowcase categories={data.categories} style={ui.categories} />
+      {/* 5. New Arrivals */}
+      {data.newArrivals.length > 0 && (
+        <ProductCarouselSection
+          title="New Arrivals"
+          description="Discover the latest additions to our collection. Stay ahead of the curve."
+          products={data.newArrivals}
+          viewAllLink="/shop?filter=new"
+          bgColor="bg-background"
+          cardStyle={ui.productCard}
+        />
+      )}
 
       {/* 8. Featured Products */}
       {data.featuredProducts.length > 0 && (
@@ -279,17 +284,7 @@ export default async function Home() {
       {/* 9. Recent Blogs section */}
       <BlogRecent blogs={data.blogs} />
 
-      {/* 5. New Arrivals */}
-      {data.newArrivals.length > 0 && (
-        <ProductCarouselSection
-          title="New Arrivals"
-          description="Discover the latest additions to our collection. Stay ahead of the curve."
-          products={data.newArrivals}
-          viewAllLink="/shop?filter=new"
-          bgColor="bg-background"
-          cardStyle={ui.productCard}
-        />
-      )}
+
 
       {/* 2. Our Features (Trust Badges) */}
       <FeaturesSection />
