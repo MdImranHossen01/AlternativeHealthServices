@@ -50,7 +50,7 @@ export function AdminActions({ type, slug, name, id }: AdminActionsProps) {
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const endpoint = type === 'service' ? `/api/services/${slug}` : `/api/courses/${slug}`;
+      const endpoint = type === 'service' ? `/api/services/${id}` : `/api/courses/${id}`;
       const res = await fetch(endpoint, {
         method: 'DELETE',
       });

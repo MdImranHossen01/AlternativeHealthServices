@@ -68,7 +68,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                 <div className="mb-8 space-y-4">
                   <div className="flex items-center justify-between gap-4">
                     <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{course.name}</h2>
-                    <AdminActions type="course" slug={course.slug} name={course.name} />
+                    <AdminActions type="course" slug={course.slug} name={course.name} id={course._id.toString()} />
                   </div>
                   <p className="text-sm text-muted-foreground font-medium leading-loose">
                     আমাদের স্পেশাল কোর্সে ভর্তি চলছে। আপনার ক্যারিয়ারের নতুন যাত্রা শুরু করুন আজই।
