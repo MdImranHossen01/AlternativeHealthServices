@@ -331,7 +331,7 @@ export function QuickViewModal({ product, isOpen, onClose }: QuickViewModalProps
                 onClick={(e) => handleAddToCart(e, true)}
                 disabled={(activeVariant?.stock ?? product.stock) === 0}
               >
-                Buy Now
+                Order Now
               </Button>
 
               <button 

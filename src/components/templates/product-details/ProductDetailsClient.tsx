@@ -695,7 +695,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
               onClick={handleBuyNow}
               disabled={(displayStock || 0) === 0}
             >
-              Buy Now
+              Order Now
             </Button>
           </div>
 

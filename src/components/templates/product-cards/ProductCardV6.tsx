@@ -258,7 +258,7 @@ export default function ProductCardV6({ product, isFlashSale }: ProductCardProps
             className="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-[10px] sm:text-xs h-11 sm:h-10 shadow-lg shadow-primary/20 transition-all active:scale-95 py-2"
             onClick={handleBuyNow}
           >
-            Buy Now
+            Order Now
           </Button>
         </div>
       </div>
