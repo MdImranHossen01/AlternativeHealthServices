@@ -20,13 +20,22 @@ export async function GET() {
     }
     const normalizedEmail = session.user.email?.toLowerCase().trim();
     
-    // Find user by ID first
-    let user = await User.findById(session.user.id).populate('wishlist');
+    let user = null;
+    const userId = session.user.id;
+    const mongoose = (await import('mongoose')).default;
+
+    // Check if ID is a valid MongoDB ObjectId to prevent CastError
+    if (userId && mongoose.Types.ObjectId.isValid(userId)) {
+      user = await User.findById(userId).populate('wishlist');
+    }
+
+
     
     if (!user && normalizedEmail) {
-      console.log(`Wishlist GET: User not found by ID (${session.user.id}), falling back to email+domain`);
+      console.log(`Wishlist GET: User not found by ID (or invalid ID), searching email+domain: ${normalizedEmail} @ ${domain}`);
       user = await User.findOne({ email: normalizedEmail, domain }).populate('wishlist');
     }
+
     
     if (!user) {
       console.error(`Wishlist GET: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
@@ -60,13 +69,22 @@ export async function POST(req: NextRequest) {
     }
     const normalizedEmail = session.user.email?.toLowerCase().trim();
     
-    // Find user by ID first
-    let user = await User.findById(session.user.id);
+    let user = null;
+    const userId = session.user.id;
+    const mongoose = (await import('mongoose')).default;
+
+    // Check if ID is a valid MongoDB ObjectId to prevent CastError
+    if (userId && mongoose.Types.ObjectId.isValid(userId)) {
+      user = await User.findById(userId);
+    }
+
+
     
     if (!user && normalizedEmail) {
-      console.log(`Wishlist POST: User not found by ID (${session.user.id}), falling back to email+domain`);
+      console.log(`Wishlist POST: User not found by ID (or invalid ID), searching email+domain: ${normalizedEmail} @ ${domain}`);
       user = await User.findOne({ email: normalizedEmail, domain });
     }
+
     
     if (!user) {
       console.error(`Wishlist POST: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);

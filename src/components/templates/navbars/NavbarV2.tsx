@@ -257,14 +257,23 @@ export default function NavbarV2() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-2 group cursor-pointer outline-none">
-                      <div className="h-9 w-9 rounded-full border-2 border-primary/50 overflow-hidden group-hover:scale-110 transition-transform relative">
-                        <Image
-                          src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || '')}`}
-                          alt={session.user?.name || 'User'}
-                          fill
-                          className="h-full w-full object-cover"
-                        />
+                      <div className="h-9 w-9 rounded-full border-2 border-primary/50 overflow-hidden group-hover:scale-110 transition-all relative bg-muted flex items-center justify-center">
+                        {profile?.image || session.user?.image ? (
+                          <img
+                            src={profile?.image || session.user?.image}
+                            alt={session.user?.name || 'User'}
+                            className="h-full w-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || 'U')}&background=random`;
+                            }}
+                          />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center bg-primary/10 text-primary font-bold text-xs">
+                            {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+                          </div>
+                        )}
                       </div>
+
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 mt-2">

@@ -106,9 +106,14 @@ export async function POST(req: NextRequest) {
     session.startTransaction();
 
     let user = null;
-    if (sessionUser?.user?.id) {
+    if (sessionUser?.user?.id && mongoose.Types.ObjectId.isValid(sessionUser.user.id)) {
       user = await User.findOne({ _id: sessionUser.user.id, domain }).session(session);
-    } else {
+    } else if (sessionUser?.user?.email) {
+      // Fallback for Super Admin: find user by email first
+      user = await User.findOne({ email: sessionUser.user.email.toLowerCase(), domain }).session(session);
+    }
+
+    if (!user) {
       // Guest Checkout: Find or Create User by Email within the current domain
       user = await User.findOne({ email: shippingAddress.email.toLowerCase(), domain }).session(session);
 
@@ -155,6 +160,7 @@ export async function POST(req: NextRequest) {
     }
 
     let serverComputedTotal = 0;
+
     const validatedItems: IOrderItem[] = [];
 
     try {
@@ -521,11 +527,24 @@ export async function GET(req: NextRequest) {
     } else {
       // Normal users (or admins without ?all=true) see their own orders on this domain
       const userId = (session.user as any).id;
-      if (!userId) {
-        return NextResponse.json({ message: 'User ID missing from session' }, { status: 400 });
+      const userEmail = session.user.email;
+      
+      if (userId && mongoose.Types.ObjectId.isValid(userId)) {
+        query = { user: userId, domain, deletedAt: null };
+      } else if (userEmail) {
+        // Fallback for Super Admin with non-ObjectId ID: find user by email first
+        const dbUser = await User.findOne({ email: userEmail.toLowerCase(), domain });
+        if (dbUser) {
+          query = { user: dbUser._id, domain, deletedAt: null };
+        } else {
+          // If no user found in DB for this email+domain, return empty list instead of crashing
+          return NextResponse.json([]);
+        }
+      } else {
+        return NextResponse.json({ message: 'User ID or Email missing from session' }, { status: 400 });
       }
-      query = { user: userId, domain, deletedAt: null };
     }
+
 
     const orders = await Order.find(query)
       .sort({ createdAt: -1 })

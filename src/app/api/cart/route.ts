@@ -20,13 +20,22 @@ export async function GET() {
     
     const normalizedEmail = session.user.email?.toLowerCase().trim();
     
-    // Find user by ID first (most reliable if session is active)
-    let user = await User.findById(session.user.id);
+    let user = null;
+    const mongoose = (await import('mongoose')).default;
+
+    const userId = session.user.id;
+    if (userId && mongoose.Types.ObjectId.isValid(userId)) {
+      user = await User.findById(userId);
+    }
+
+
+
     
     if (!user && normalizedEmail) {
-      console.log(`Cart GET: User not found by ID (${session.user.id}), falling back to email+domain`);
+      console.log(`Cart GET: User not found by ID (or invalid ID), searching email+domain: ${normalizedEmail} @ ${domain}`);
       user = await User.findOne({ email: normalizedEmail, domain });
     }
+
     
     if (!user) {
       console.error(`Cart GET: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);

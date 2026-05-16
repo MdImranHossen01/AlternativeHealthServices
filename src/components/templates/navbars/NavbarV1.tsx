@@ -354,16 +354,26 @@ export default function Navbar() {
                       className="flex items-center gap-2 px-2 py-1.5 rounded-xl transition-all cursor-pointer outline-none group hover:scale-110"
                       aria-label="Account menu"
                     >
-                      <div className="h-8 w-8 rounded-full border-2 border-primary/20 overflow-hidden group-hover:border-primary transition-all">
-                        <img
-                          src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || 'U')}`}
-                          alt={session.user?.name || 'User'}
-                          className="h-full w-full object-cover"
-                        />
+                      <div className="h-8 w-8 rounded-full border-2 border-primary/20 overflow-hidden group-hover:border-primary transition-all bg-muted flex items-center justify-center">
+                        {profile?.image || session.user?.image ? (
+                          <img
+                            src={profile?.image || session.user?.image}
+                            alt={session.user?.name || 'User'}
+                            className="h-full w-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || 'U')}&background=random`;
+                            }}
+                          />
+                        ) : (
+                          <div className="h-full w-full flex items-center justify-center bg-primary/10 text-primary font-bold text-xs">
+                            {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+                          </div>
+                        )}
                       </div>
                       <span className="hidden sm:block text-xs font-bold text-gray-700 group-hover:text-primary transition-colors">
                         {session.user?.name?.split(' ')[0]}
                       </span>
+
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56 mt-2">

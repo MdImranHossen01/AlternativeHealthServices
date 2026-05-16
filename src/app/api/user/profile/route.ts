@@ -24,13 +24,22 @@ export async function GET(req: NextRequest) {
     const normalizedEmail = session.user.email?.toLowerCase().trim();
     console.log(`Profile GET: User ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
 
-    // Find user by ID first
-    let user = await User.findById(session.user.id).select('-password').lean();
+    let user = null;
+    const userId = session.user.id;
+    const mongoose = (await import('mongoose')).default;
+
+    // Check if ID is a valid MongoDB ObjectId to prevent CastError
+    if (userId && mongoose.Types.ObjectId.isValid(userId)) {
+      user = await User.findById(userId).select('-password').lean();
+    }
+
+
     
     if (!user && normalizedEmail) {
-      console.log(`Profile GET: User not found by ID, searching email+domain: ${normalizedEmail} @ ${domain}`);
+      console.log(`Profile GET: User not found by ID (or invalid ID), searching email+domain: ${normalizedEmail} @ ${domain}`);
       user = await User.findOne({ email: normalizedEmail, domain }).select('-password').lean();
     }
+
 
     if (!user) {
       console.error(`Profile GET: User NOT FOUND for ID: ${session.user.id}, Email: ${normalizedEmail}, Domain: ${domain}`);
