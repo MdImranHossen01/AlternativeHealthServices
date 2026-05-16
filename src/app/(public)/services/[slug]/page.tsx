@@ -56,7 +56,7 @@ export default async function ServiceDetailsPage({ params }: { params: Promise<{
 
           {/* Right: Booking Action Sidebar */}
           <div className="lg:sticky lg:top-24 h-fit">
-            <div className="p-10 rounded-none">
+            <div className="p-10 lg:pt-0 rounded-none">
               <div className="mb-10 space-y-4">
                 <div className="flex items-center justify-between gap-4">
                   <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{service.name}</h2>

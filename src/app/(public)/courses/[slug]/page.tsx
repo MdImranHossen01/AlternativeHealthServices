@@ -63,7 +63,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
 
           {/* Right: Enrollment Action Sidebar */}
           <div className="lg:sticky lg:top-24 h-fit">
-            <div className="p-10 rounded-none">
+            <div className="p-10 lg:pt-0 rounded-none">
               <div className="relative z-10">
                 <div className="mb-8 space-y-4">
                   <div className="flex items-center justify-between gap-4">

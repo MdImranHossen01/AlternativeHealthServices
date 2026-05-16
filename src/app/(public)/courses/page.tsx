@@ -52,14 +52,14 @@ export default async function CoursesPage({
   const academyTitle = academyConfig.academyTitle || 'Training Academy';
 
   return (
-    <main className="min-h-screen py-24 bg-background">
+    <main className="min-h-screen pt-10 md:pt-16 pb-24 bg-background">
       <div className="container mx-auto px-4">
         <header className="max-w-3xl mb-16 text-center mx-auto">
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-8 uppercase text-foreground">
             Medical <span className="text-primary italic">{academyTitle}</span>
           </h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            আমরা {foundingYear} সাল থেকে প্রায় {studentCount} এরও বেশি শিক্ষার্থীকে পেশাদার প্রশিক্ষণ দিয়েছি। আমাদের {currentBatch} ব্যাচে ভর্তি চলছে—সরকারি অনুমোদিত সার্টিফিকেশনের মাধ্যমে নিজেকে একজন দক্ষ স্বাস্থ্যসেবা প্রদানকারী হিসেবে গড়ে তুলুন।
+            সরকারি অনুমোদিত সার্টিফিকেশনের মাধ্যমে নিজেকে একজন দক্ষ স্বাস্থ্যসেবা প্রদানকারী হিসেবে গড়ে তুলুন।
           </p>
         </header>
 

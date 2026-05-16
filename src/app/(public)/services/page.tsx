@@ -39,14 +39,13 @@ export default async function ServicesPage({
     const services = await getCachedServices(domain, limit) as Service[];
 
     return (
-      <main className="min-h-screen py-20 bg-background">
+      <main className="min-h-screen pt-10 md:pt-16 pb-20 bg-background">
         <div className="container mx-auto px-4">
           <header className="max-w-3xl mb-16 text-center mx-auto">
             <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 uppercase">
               Specialized <span className="text-primary italic">Health Services</span>
             </h1>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              আমরা উন্নত চিকিৎসা সেবা প্রদান করি যা মূলত নন-ইনভ্যাসিভ এবং কসমেটিক হেলথ সলিউশনের ওপর গুরুত্ব দেয়। 
               আমাদের সকল সেবা অভিজ্ঞ চিকিৎসকদের দ্বারা একটি নিরাপদ পরিবেশে সম্পন্ন করা হয়।
             </p>
           </header>

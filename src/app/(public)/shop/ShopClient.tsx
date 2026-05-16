@@ -216,20 +216,6 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
 
   return (
     <div className="container mx-auto px-4 md:px-0 py-10">
-      <div className="mb-10 rounded-3xl border bg-gradient-to-r from-primary/[0.08] via-background to-background p-6 md:p-10">
-        <div className="max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-primary">
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            Smart shopping
-          </div>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tight">
-            Discover Products That Match Your Style
-          </h1>
-          <p className="text-muted-foreground">
-            Filter by category, budget, and latest arrivals to quickly find the right product.
-          </p>
-        </div>
-      </div>
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Desktop Sidebar */}
         <aside className="hidden w-64 shrink-0 md:block sticky top-20 self-start h-fit max-h-[calc(100vh-6rem)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
