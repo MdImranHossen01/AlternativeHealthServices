@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import connectToDatabase from '@/lib/db';
 import Course from '@/models/Course';
 import { auth } from '@/auth';
 import { getTenantDomain } from '@/lib/tenant';
 import { generateUniqueSlug } from '@/lib/slugify-server';
+import { CACHE_TAGS } from '@/lib/data-fetching';
 
 export async function GET(req: NextRequest) {
   try {
@@ -78,6 +80,15 @@ export async function POST(req: NextRequest) {
         console.error('Error in course creation loop:', error);
         throw error;
       }
+    }
+
+    // Revalidate cache
+    try {
+      revalidateTag(CACHE_TAGS.courses);
+      revalidatePath('/courses');
+      revalidatePath('/');
+    } catch (e) {
+      console.error("Revalidation error:", e);
     }
 
     return NextResponse.json(newCourse, { status: 201 });

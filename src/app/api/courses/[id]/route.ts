@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import connectToDatabase from '@/lib/db';
 import Course from '@/models/Course';
 import { auth } from '@/auth';
 import { getTenantDomain } from '@/lib/tenant';
 import mongoose from 'mongoose';
+import { CACHE_TAGS } from '@/lib/data-fetching';
 
 export async function GET(
   req: NextRequest,
@@ -49,6 +51,19 @@ export async function PUT(
     );
 
     if (!updated) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+
+    // Revalidate cache
+    try {
+      revalidateTag(CACHE_TAGS.courses);
+      revalidatePath('/courses');
+      if (updated.slug) {
+        revalidatePath(`/courses/${updated.slug}`);
+      }
+      revalidatePath('/');
+    } catch (e) {
+      console.error("Revalidation error:", e);
+    }
+
     return NextResponse.json(updated);
   } catch (error: any) {
     console.error(`Error updating course:`, error);
@@ -72,6 +87,19 @@ export async function DELETE(
     const deleted = await Course.findOneAndDelete({ _id: id, domain });
 
     if (!deleted) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+
+    // Revalidate cache
+    try {
+      revalidateTag(CACHE_TAGS.courses);
+      revalidatePath('/courses');
+      if (deleted.slug) {
+        revalidatePath(`/courses/${deleted.slug}`);
+      }
+      revalidatePath('/');
+    } catch (e) {
+      console.error("Revalidation error:", e);
+    }
+
     return NextResponse.json({ message: 'Deleted' });
   } catch (error: any) {
     console.error(`Error deleting course:`, error);

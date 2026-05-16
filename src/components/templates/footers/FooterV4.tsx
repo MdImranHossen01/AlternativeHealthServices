@@ -23,6 +23,22 @@ export default function FooterV4() {
   const currentYear = new Date().getFullYear();
   const settings = useSettings();
   const socialLinks = settings?.socialLinks || {};
+
+  const getSafeUrl = (url: string) => {
+    if (!url || url === '#') return '#';
+    const urlStr = url as string;
+    if (urlStr.startsWith('http://') || urlStr.startsWith('https://') || urlStr.startsWith('mailto:') || urlStr.startsWith('tel:')) {
+      return urlStr;
+    }
+    if (urlStr.startsWith('wa.me/')) {
+      return `https://${urlStr}`;
+    }
+    if (urlStr.includes('.') && !urlStr.startsWith('/')) {
+      return `https://${urlStr}`;
+    }
+    return urlStr;
+  };
+
   const hasSocialLinks = Object.values(socialLinks).some(v => v);
 
   return (
@@ -51,16 +67,16 @@ export default function FooterV4() {
                   if (!Icon) return null;
 
                   return (
-                    <Link 
+                    <a 
                       key={platform} 
-                      href={url as string} 
+                      href={getSafeUrl(url as string)} 
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Follow us on ${platform}`}
                       className="text-neutral-400 hover:text-primary transition-colors"
                     >
                         <Icon className="h-5 w-5 stroke-[1.5]" />
-                    </Link>
+                    </a>
                   );
                 })}
               </div>

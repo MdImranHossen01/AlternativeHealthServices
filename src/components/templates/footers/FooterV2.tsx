@@ -36,6 +36,20 @@ export default function FooterV2() {
         { label: 'Contact Support', href: '/contact' }
       ];
 
+  const getSafeUrl = (url: string) => {
+    if (!url || url === '#') return '#';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('mailto:') || url.startsWith('tel:')) {
+      return url;
+    }
+    if (url.startsWith('wa.me/')) {
+      return `https://${url}`;
+    }
+    if (url.includes('.') && !url.startsWith('/')) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
   return (
     <footer className="bg-background border-t border-muted text-foreground pt-16 pb-8 px-6 font-jost">
       <div className="container mx-auto">
@@ -80,16 +94,16 @@ export default function FooterV2() {
                         if (!Icon) return null;
 
                         return (
-                          <Link 
+                          <a 
                             key={platform} 
-                            href={url as string} 
+                            href={getSafeUrl(url as string)} 
                             target="_blank"
                             rel="noopener noreferrer"
                             className="h-10 w-10 rounded-full border border-muted flex items-center justify-center hover:bg-primary hover:border-primary transition-all group"
                             title={platform}
                           >
                               <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary-foreground" />
-                          </Link>
+                          </a>
                         );
                       })
                     ) : (

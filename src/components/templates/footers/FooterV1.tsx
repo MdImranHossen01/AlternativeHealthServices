@@ -68,15 +68,15 @@ export default async function FooterV1() {
 
                 let safeUrl = "#";
                 if (url && url !== '#') {
-                  try {
-                    const parsedUrl = new URL(url as string);
-                    if (['http:', 'https:', 'mailto:'].includes(parsedUrl.protocol)) {
-                      safeUrl = url as string;
-                    }
-                  } catch (e) {
-                    if (typeof url === 'string' && url.startsWith('/')) {
-                      safeUrl = url;
-                    }
+                  const urlStr = url as string;
+                  if (urlStr.startsWith('http://') || urlStr.startsWith('https://') || urlStr.startsWith('mailto:') || urlStr.startsWith('tel:')) {
+                    safeUrl = urlStr;
+                  } else if (urlStr.startsWith('wa.me/')) {
+                    safeUrl = `https://${urlStr}`;
+                  } else if (urlStr.includes('.') && !urlStr.startsWith('/')) {
+                    safeUrl = `https://${urlStr}`;
+                  } else if (urlStr.startsWith('/')) {
+                    safeUrl = urlStr;
                   }
                 }
 

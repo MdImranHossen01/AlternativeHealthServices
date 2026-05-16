@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import connectToDatabase from '@/lib/db';
 import Service from '@/models/Service';
 import { auth } from '@/auth';
 import mongoose from 'mongoose';
 import { getTenantDomain } from '@/lib/tenant';
+import { CACHE_TAGS } from '@/lib/data-fetching';
 
 export async function GET(
   req: NextRequest,
@@ -49,6 +51,19 @@ export async function PUT(
     );
 
     if (!updated) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+
+    // Revalidate cache
+    try {
+      revalidateTag(CACHE_TAGS.services);
+      revalidatePath('/services');
+      if (updated.slug) {
+        revalidatePath(`/services/${updated.slug}`);
+      }
+      revalidatePath('/');
+    } catch (e) {
+      console.error("Revalidation error:", e);
+    }
+
     return NextResponse.json(updated);
   } catch (error: any) {
     console.error(`Error updating service:`, error);
@@ -75,6 +90,19 @@ export async function DELETE(
     const deleted = await Service.findOneAndDelete({ _id: id, domain });
 
     if (!deleted) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+
+    // Revalidate cache
+    try {
+      revalidateTag(CACHE_TAGS.services);
+      revalidatePath('/services');
+      if (deleted.slug) {
+        revalidatePath(`/services/${deleted.slug}`);
+      }
+      revalidatePath('/');
+    } catch (e) {
+      console.error("Revalidation error:", e);
+    }
+
     return NextResponse.json({ message: 'Deleted' });
   } catch (error: any) {
     console.error(`Error deleting service:`, error);

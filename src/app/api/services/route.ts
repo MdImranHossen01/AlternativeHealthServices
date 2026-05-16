@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import connectToDatabase from '@/lib/db';
 import Service from '@/models/Service';
 import { auth } from '@/auth';
 import { getTenantDomain } from '@/lib/tenant';
 import { generateUniqueSlug } from '@/lib/slugify-server';
 import { z } from 'zod';
+import { CACHE_TAGS } from '@/lib/data-fetching';
 
 const serviceSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -85,6 +87,15 @@ export async function POST(req: NextRequest) {
       isPublished,
       domain,
     });
+
+    // Revalidate cache
+    try {
+      revalidateTag(CACHE_TAGS.services);
+      revalidatePath('/services');
+      revalidatePath('/');
+    } catch (e) {
+      console.error("Revalidation error:", e);
+    }
 
     return NextResponse.json(newService, { status: 201 });
   } catch (error) {
