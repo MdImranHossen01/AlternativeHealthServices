@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Facebook, Twitter, Instagram, Youtube } from '@/components/ui/social-icons';
 import { Mail, MapPin, Phone, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -57,8 +58,8 @@ export default function FooterV2() {
           
           {/* Brand Essence */}
           <div className="lg:col-span-4 space-y-6 flex flex-col items-center lg:items-start">
-            <Link href="/" className="flex items-center gap-2 text-4xl font-black tracking-tighter hover:text-primary transition-all uppercase">
-              <img src="/logo.webp" alt="AHS Logo" className="h-10 w-10 object-contain" />
+            <Link href="/" aria-label="AHS Home" className="flex items-center gap-2 text-4xl font-black tracking-tighter hover:text-primary transition-all uppercase">
+              <Image src="/logo.webp" alt="AHS Logo" width={40} height={40} className="object-contain" />
               AHS<span className="text-primary">.</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm leading-relaxed font-medium">
@@ -99,6 +100,7 @@ export default function FooterV2() {
                             href={getSafeUrl(url as string)} 
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label={`Follow us on ${platform}`}
                             className="h-10 w-10 rounded-full border border-muted flex items-center justify-center hover:bg-primary hover:border-primary transition-all group"
                             title={platform}
                           >

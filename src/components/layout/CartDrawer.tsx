@@ -1,20 +1,13 @@
 'use client';
 
-import { 
-    Sheet, 
-    SheetContent, 
-    SheetHeader, 
-    SheetTitle, 
-    SheetTrigger,
-    SheetFooter,
-    SheetClose
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetClose } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Trash, Plus, Minus, ArrowRight, X } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { removeFromCart, addToCart, clearCart } from '@/store/slices/cartSlice';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import Image from 'next/image';
 import { toast } from 'sonner';
 
 export function CartDrawer({ children }: { children: React.ReactElement }) {
@@ -29,8 +22,6 @@ export function CartDrawer({ children }: { children: React.ReactElement }) {
           dispatch(addToCart({ ...item, quantity: delta }));
       }
   };
-
-
 
   return (
     <Sheet>
@@ -62,9 +53,9 @@ export function CartDrawer({ children }: { children: React.ReactElement }) {
           ) : (
             items.map((item, index) => (
               <div key={`${item.productId}-${item.color || ''}-${item.size || ''}-${index}`} className="flex gap-4 group">
-                <div className="h-20 w-20 rounded-md overflow-hidden bg-muted group-hover:scale-105 transition-transform">
+                <div className="h-20 w-20 rounded-md overflow-hidden bg-muted group-hover:scale-105 transition-transform relative">
                   {item.image ? (
-                    <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                    <Image src={item.image} alt={item.name} fill sizes="80px" className="object-cover" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center">
                         <ShoppingCart className="h-6 w-6 text-muted-foreground" />

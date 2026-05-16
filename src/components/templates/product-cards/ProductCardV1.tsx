@@ -236,15 +236,16 @@ export default function ProductCardV1({ product, isFlashSale }: ProductCardProps
         <div className="absolute inset-0 hidden md:flex items-center justify-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-black/5">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="h-10 w-10 rounded-full shadow-lg hover:scale-110 transition-transform bg-white text-gray-900 hover:bg-white"
-                onClick={handleFavorite}
-                disabled={status === 'loading'}
-              >
-                <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-              </Button>
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  aria-label={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
+                  className="h-10 w-10 rounded-full shadow-lg hover:scale-110 transition-transform bg-white text-gray-900 hover:bg-white"
+                  onClick={handleFavorite}
+                  disabled={status === 'loading'}
+                >
+                  <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                </Button>
             </TooltipTrigger>
             <TooltipContent>
               <p>{isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}</p>
@@ -253,14 +254,15 @@ export default function ProductCardV1({ product, isFlashSale }: ProductCardProps
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="secondary"
-                className="h-12 w-12 rounded-full shadow-lg hover:scale-110 transition-transform bg-primary text-white hover:bg-primary/90 border-none"
-                onClick={handleQuickView}
-              >
-                <Search className="h-5 w-5" />
-              </Button>
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  aria-label="Quick view product details"
+                  className="h-12 w-12 rounded-full shadow-lg hover:scale-110 transition-transform bg-primary text-white hover:bg-primary/90 border-none"
+                  onClick={handleQuickView}
+                >
+                  <Search className="h-5 w-5" />
+                </Button>
             </TooltipTrigger>
             <TooltipContent>
               <p>Quick View</p>
@@ -336,14 +338,15 @@ export default function ProductCardV1({ product, isFlashSale }: ProductCardProps
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  size="sm"
-                  className="h-9 w-9 rounded-full p-0 flex items-center justify-center transition-all hover:scale-110 cursor-pointer bg-white border border-gray-100 text-gray-900 hover:bg-gray-50"
-                  disabled={product.stock === 0}
-                  onClick={handleAddToCartClick}
-                >
-                  <ShoppingCart className="h-4 w-4" />
-                </Button>
+                  <Button
+                    size="sm"
+                    aria-label={`Add ${product.name} to cart`}
+                    className="h-9 w-9 rounded-full p-0 flex items-center justify-center transition-all hover:scale-110 cursor-pointer bg-white border border-gray-100 text-gray-900 hover:bg-gray-50"
+                    disabled={product.stock === 0}
+                    onClick={handleAddToCartClick}
+                  >
+                    <ShoppingCart className="h-4 w-4" />
+                  </Button>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Add to cart</p>

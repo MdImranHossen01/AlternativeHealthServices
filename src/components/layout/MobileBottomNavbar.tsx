@@ -45,6 +45,7 @@ export function MobileBottomNavbar() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-label={item.label}
                 className={`flex flex-col items-center justify-center gap-1 min-w-[64px] transition-all ${
                   isActive ? 'text-primary scale-110' : 'text-muted-foreground'
                 }`}
@@ -64,7 +65,11 @@ export function MobileBottomNavbar() {
 
           {/* Cart Item */}
           <CartDrawer>
-            <div className="flex flex-col items-center justify-center gap-1 min-w-[64px] text-muted-foreground relative cursor-pointer active:scale-95 transition-transform">
+            <div 
+              aria-label="Open Shopping Cart"
+              role="button"
+              className="flex flex-col items-center justify-center gap-1 min-w-[64px] text-muted-foreground relative cursor-pointer active:scale-95 transition-transform"
+            >
               <div className="relative">
                 <ShoppingCart className="h-5 w-5 stroke-[1.5]" />
                 {cartCount > 0 && (
@@ -80,6 +85,7 @@ export function MobileBottomNavbar() {
           {/* Search Item */}
           <button
             onClick={() => setIsSearchOpen(true)}
+            aria-label="Open search"
             className="flex flex-col items-center justify-center gap-1 min-w-[64px] text-muted-foreground active:scale-95 transition-transform"
           >
             <Search className="h-5 w-5 stroke-[1.5]" />
@@ -89,6 +95,7 @@ export function MobileBottomNavbar() {
           {/* Account Item */}
           <Link
             href={accountHref}
+            aria-label="Account Dashboard"
             className={`flex flex-col items-center justify-center gap-1 min-w-[64px] transition-all relative ${
               pathname === accountHref ? 'text-primary scale-110' : 'text-muted-foreground'
             } active:scale-95 transition-transform`}

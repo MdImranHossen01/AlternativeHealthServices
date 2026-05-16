@@ -24,11 +24,14 @@ import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/store/hooks';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'sonner';
-import { CartDrawer } from '@/components/layout/CartDrawer';
-import { ModeToggle } from '@/components/mode-toggle';
-import { AIChatbot } from '@/components/layout/AIChatbot';
 import { useSettings } from '@/components/SettingsProvider';
 import { MobileNavbar } from '@/components/layout/MobileNavbar';
+import { ModeToggle } from '@/components/mode-toggle';
+import dynamic from 'next/dynamic';
+
+const AIChatbot = dynamic(() => import('@/components/layout/AIChatbot').then(mod => mod.AIChatbot), { ssr: false });
+const CartDrawer = dynamic(() => import('@/components/layout/CartDrawer').then(mod => mod.CartDrawer), { ssr: false });
+const MobileMenu = dynamic(() => import('@/components/layout/MobileMenu').then(mod => mod.MobileMenu), { ssr: false });
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,7 +50,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { MobileMenu } from '@/components/layout/MobileMenu';
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -162,8 +164,8 @@ export default function NavbarV2() {
               triggerClassName={!isHomePage || isScrolled ? 'text-foreground hover:text-primary' : 'text-white hover:text-white/70'}
             />
 
-            <Link href="/" className={`text-2xl md:text-3xl font-black tracking-tighter hover:scale-105 transition-all flex items-center gap-2 group ${!isHomePage || isScrolled ? 'text-foreground' : 'text-white'}`}>
-              <Image src="/logo.webp" width={40} height={40} alt="AHS Logo" className="object-contain" />
+            <Link href="/" aria-label="AHS Home" className={`text-2xl md:text-3xl font-black tracking-tighter hover:scale-105 transition-all flex items-center gap-2 group ${!isHomePage || isScrolled ? 'text-foreground' : 'text-white'}`}>
+              <Image src="/logo.webp" width={40} height={40} alt="AHS Logo" className="object-contain" priority fetchPriority="high" />
               AHS<span className="text-primary group-hover:animate-ping">.</span>
             </Link>
           </div>
@@ -222,7 +224,7 @@ export default function NavbarV2() {
                 {settings?.aiConfig?.openRouterApiKey && <AIChatbot />}
               </div>
 
-              <Link href="/dashboard/wishlist">
+              <Link href="/dashboard/wishlist" aria-label="View Wishlist">
                 <Button variant="ghost" size="icon" className={`rounded-full relative group ${!isHomePage || isScrolled ? 'text-foreground hover:bg-muted' : 'text-white hover:bg-white/10'}`}>
                   <Heart className={`h-5 w-5 transition-all ${wishlistCount > 0 ? 'fill-primary text-primary' : ((!isHomePage || isScrolled) ? 'group-hover:text-primary' : 'group-hover:text-white')}`} />
                   {wishlistCount > 0 && (
@@ -234,7 +236,7 @@ export default function NavbarV2() {
               </Link>
 
               <CartDrawer>
-                <div className="relative group cursor-pointer">
+                <div className="relative group cursor-pointer" aria-label="Open Shopping Cart">
                   <Button variant="ghost" size="icon" className={`rounded-full relative pointer-events-none ${!isHomePage || isScrolled ? 'text-foreground hover:bg-muted' : 'text-white hover:bg-white/10'}`}>
                     <ShoppingCart className={`h-5 w-5 transition-all ${(!isHomePage || isScrolled) ? 'group-hover:text-primary' : 'group-hover:text-white'}`} />
                     {cartCount > 0 && (
@@ -255,10 +257,11 @@ export default function NavbarV2() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-2 group cursor-pointer outline-none">
-                      <div className="h-9 w-9 rounded-full border-2 border-primary/50 overflow-hidden group-hover:scale-110 transition-transform">
-                        <img
+                      <div className="h-9 w-9 rounded-full border-2 border-primary/50 overflow-hidden group-hover:scale-110 transition-transform relative">
+                        <Image
                           src={session.user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user?.name || '')}`}
                           alt={session.user?.name || 'User'}
+                          fill
                           className="h-full w-full object-cover"
                         />
                       </div>

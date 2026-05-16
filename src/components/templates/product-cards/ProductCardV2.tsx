@@ -186,6 +186,7 @@ export default function ProductCardV2({ product, isFlashSale }: ProductCardProps
             <Button
               size="icon"
               variant="secondary"
+              aria-label={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
               className="h-11 w-11 rounded-full shadow-2xl hover:scale-110 transition-transform bg-white/90 dark:bg-neutral-900/90"
               onClick={handleFavorite}
             >
@@ -202,6 +203,7 @@ export default function ProductCardV2({ product, isFlashSale }: ProductCardProps
             <Button
               size="icon"
               variant="secondary"
+              aria-label="Quick view product details"
               className="h-12 w-12 rounded-full shadow-2xl hover:scale-110 transition-transform bg-[#00a870] text-white hover:bg-[#008f5d] border-none"
               onClick={handleQuickView}
             >
@@ -243,6 +245,7 @@ export default function ProductCardV2({ product, isFlashSale }: ProductCardProps
         <div className={`absolute bottom-0 left-0 right-0 p-4 transition-all duration-500 transform ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
           <Button 
             ref={quickAddRef}
+            aria-label={`Add ${product.name} to cart`}
             className="w-full h-12 rounded-2xl bg-primary text-primary-foreground font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all"
             onClick={handleAddToCartClick}
             disabled={product.stock === 0}
