@@ -64,7 +64,7 @@ export async function GET() {
         marqueeText: "Welcome to Alternative Health Services!",
         metaTitle: process.env.NEXT_PUBLIC_STORE_NAME || "Alternative Health Services",
         metaDescription: "The most popular online shop in Bangladesh.",
-        logoUrl: "/logo.png",
+        logoUrl: "/logo.webp",
         freeDeliveryThreshold: 0,
         deliveryChargeInsideDhaka: 60,
         deliveryChargeOutsideDhaka: 120,

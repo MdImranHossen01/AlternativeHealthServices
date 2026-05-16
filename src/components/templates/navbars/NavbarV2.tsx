@@ -163,7 +163,7 @@ export default function NavbarV2() {
             />
 
             <Link href="/" className={`text-2xl md:text-3xl font-black tracking-tighter hover:scale-105 transition-all flex items-center gap-2 group ${!isHomePage || isScrolled ? 'text-foreground' : 'text-white'}`}>
-              <Image src="/logo.png" width={40} height={40} alt="AHS Logo" className="object-contain" />
+              <Image src="/logo.webp" width={40} height={40} alt="AHS Logo" className="object-contain" />
               AHS<span className="text-primary group-hover:animate-ping">.</span>
             </Link>
           </div>

@@ -118,7 +118,7 @@ const GlobalSettingsSchema: Schema<IGlobalSettings> = new Schema(
   {
     brandName: { type: String },
     contact: { type: Object, default: {} },
-    logoUrl: { type: String, default: '/logo.png' },
+    logoUrl: { type: String, default: '/logo.webp' },
     socialLinks: { type: Object, default: {} },
     marqueeText: { type: String },
     freeDeliveryThreshold: { type: Number, default: 0 },

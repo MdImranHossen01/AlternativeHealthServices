@@ -284,18 +284,66 @@ export default async function RootLayout({
   const theme = settings?.uiTemplates?.theme;
   const themeClass = (theme && theme !== 'default') ? `theme-${theme.toLowerCase()}` : '';
 
-  const bodyFont = settings?.uiTemplates?.bodyFont || 'inter';
-  const logoFont = settings?.uiTemplates?.logoFont || 'orbitron';
+  const bodyFontName = settings?.uiTemplates?.bodyFont || 'inter';
+  const logoFontName = settings?.uiTemplates?.logoFont || 'orbitron';
 
-  const fontClass = `font-${bodyFont}`;
-  const logoFontClass = `logo-font-${logoFont}`;
+  // Font variable mapping
+  const fontMap: Record<string, string> = {
+    'geist-sans': geistSans.variable,
+    'geist-mono': geistMono.variable,
+    'inter': inter.variable,
+    'poppins': poppins.variable,
+    'roboto': roboto.variable,
+    'montserrat': montserrat.variable,
+    'playfair': playfair.variable,
+    'outfit': outfit.variable,
+    'lora': lora.variable,
+    'manrope': manrope.variable,
+    'urbanist': urbanist.variable,
+    'orbitron': orbitron.variable,
+    'open-sans': openSans.variable,
+    'lato': lato.variable,
+    'oswald': oswald.variable,
+    'raleway': raleway.variable,
+    'nunito': nunito.variable,
+    'ubuntu': ubuntu.variable,
+    'merriweather': merriweather.variable,
+    'kanit': kanit.variable,
+    'quicksand': quicksand.variable,
+    'josefin-sans': josefinSans.variable,
+    'syne': syne.variable,
+    'space-grotesk': spaceGrotesk.variable,
+    'jost': jost.variable,
+  };
+
+  // Only load the required font variables
+  const activeBodyFontVar = fontMap[bodyFontName] || inter.variable;
+  const activeLogoFontVar = fontMap[logoFontName] || orbitron.variable;
+  
+  // Base fonts that are always useful (e.g. for fallback or UI)
+  const baseFonts = `${geistSans.variable} ${geistMono.variable}`;
+  
+  const fontClass = `font-${bodyFontName}`;
+  const logoFontClass = `logo-font-${logoFontName}`;
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${poppins.variable} ${roboto.variable} ${montserrat.variable} ${playfair.variable} ${outfit.variable} ${lora.variable} ${manrope.variable} ${urbanist.variable} ${orbitron.variable} ${openSans.variable} ${lato.variable} ${oswald.variable} ${raleway.variable} ${nunito.variable} ${ubuntu.variable} ${merriweather.variable} ${kanit.variable} ${quicksand.variable} ${josefinSans.variable} ${syne.variable} ${spaceGrotesk.variable} ${jost.variable} ${themeClass} ${fontClass} ${logoFontClass}`} suppressHydrationWarning>
+    <html 
+      lang="en" 
+      className={`${baseFonts} ${activeBodyFontVar} ${activeLogoFontVar} ${themeClass} ${fontClass} ${logoFontClass}`} 
+      suppressHydrationWarning
+    >
       <head>
-        <link rel="preload" as="image" href="/assets/login_banner_v2.webp" />
-        <link rel="preload" as="image" href="/assets/register_banner_v2.webp" />
-        <link rel="preload" as="image" href="/assets/forgetpassrod.webp" />
+        {/* Preconnect to important origins */}
+        <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://i.pravatar.cc" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Preload critical LCP assets */}
+        <link rel="preload" as="image" href="/logo.webp" fetchPriority="high" />
+        
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
       <body
         className="antialiased min-h-full flex flex-col overflow-x-hidden font-sans"
@@ -325,12 +373,12 @@ export default async function RootLayout({
             <>
               <Script
                 id="google-analytics"
-                strategy="afterInteractive"
+                strategy="lazyOnload"
                 src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
               />
               <Script
                 id="ga-init"
-                strategy="afterInteractive"
+                strategy="lazyOnload"
                 dangerouslySetInnerHTML={{
                   __html: `
                     window.dataLayer = window.dataLayer || [];

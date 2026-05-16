@@ -122,6 +122,8 @@ export default function HeroV1({ banners }: HeroSliderProps) {
                     fill
                     className={`object-cover object-top transition-transform duration-[8000ms] ease-linear ${isActive ? 'scale-110' : 'scale-100'}`}
                     priority={index === 0}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    loading={index === 0 ? "eager" : "lazy"}
                     sizes="100vw"
                   />
                 </div>

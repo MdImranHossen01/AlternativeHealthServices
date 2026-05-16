@@ -103,6 +103,8 @@ export default function HeroV2({ banners }: HeroSliderProps) {
                     fill
                     className="object-cover"
                     priority={index === 0}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    loading={index === 0 ? "eager" : "lazy"}
                     sizes="100vw"
                   />
                 </motion.div>

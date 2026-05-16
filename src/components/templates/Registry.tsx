@@ -37,12 +37,12 @@ export const HeroSelector = ({ style, banners }: { style: string, banners: any[]
 };
 
 // --- PRODUCT CARDS ---
-import ProductCardV1 from './product-cards/ProductCardV1';
-import ProductCardV2 from './product-cards/ProductCardV2';
-import ProductCardV3 from './product-cards/ProductCardV3';
-import ProductCardV4 from './product-cards/ProductCardV4';
-import ProductCardV5 from './product-cards/ProductCardV5';
-import ProductCardV6 from './product-cards/ProductCardV6';
+const ProductCardV1 = dynamic(() => import('./product-cards/ProductCardV1'));
+const ProductCardV2 = dynamic(() => import('./product-cards/ProductCardV2'));
+const ProductCardV3 = dynamic(() => import('./product-cards/ProductCardV3'));
+const ProductCardV4 = dynamic(() => import('./product-cards/ProductCardV4'));
+const ProductCardV5 = dynamic(() => import('./product-cards/ProductCardV5'));
+const ProductCardV6 = dynamic(() => import('./product-cards/ProductCardV6'));
 
 export const ProductCardSelector = ({ style, product, isFlashSale }: { style: string, product: any, isFlashSale?: boolean }) => {
   switch (style) {

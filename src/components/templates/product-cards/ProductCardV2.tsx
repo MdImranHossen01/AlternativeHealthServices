@@ -156,64 +156,63 @@ export default function ProductCardV2({ product, isFlashSale }: ProductCardProps
       {/* Image Section */}
       <div className="relative aspect-[4/5] overflow-hidden bg-muted/20">
         <Link href={`/product/${product.slug}`} className="block h-full w-full">
-          <Image
-            src={product.images?.[0] || '/placeholder.png'}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-1000 group-hover:scale-110"
-          />
-        </Link>
+        <Image
+          src={product.images?.[0] || '/placeholder.png'}
+          alt={product.name}
+          fill
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+          className="object-cover transition-transform duration-1000 group-hover:scale-110"
+        />
+      </Link>
 
-        {/* Badges Overlay */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
-          {discount > 0 && (
-            <div className="bg-primary text-primary-foreground text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
-              -{discount}%
-            </div>
-          )}
-          {isFlashSale && (
-            <div className="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg animate-pulse">
-              Flash
-            </div>
-          )}
-        </div>
+      {/* Badges Overlay */}
+      <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+        {discount > 0 && (
+          <div className="bg-primary text-primary-foreground text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+            -{discount}%
+          </div>
+        )}
+        {isFlashSale && (
+          <div className="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg animate-pulse">
+            Flash
+          </div>
+        )}
+      </div>
 
-        {/* Floating Actions Overlay */}
-        <div className={`absolute inset-0 bg-black/20 backdrop-blur-[2px] hidden md:flex items-center justify-center gap-3 transition-all duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-11 w-11 rounded-full shadow-2xl hover:scale-110 transition-transform bg-white/90 dark:bg-neutral-900/90"
-                  onClick={handleFavorite}
-                >
-                  <Heart className={`h-5 w-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-foreground'}`} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}</p>
-              </TooltipContent>
-            </Tooltip>
+      {/* Floating Actions Overlay */}
+      <div className={`absolute inset-0 bg-black/20 backdrop-blur-[2px] hidden md:flex items-center justify-center gap-3 transition-all duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="h-11 w-11 rounded-full shadow-2xl hover:scale-110 transition-transform bg-white/90 dark:bg-neutral-900/90"
+              onClick={handleFavorite}
+            >
+              <Heart className={`h-5 w-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-foreground'}`} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}</p>
+          </TooltipContent>
+        </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-12 w-12 rounded-full shadow-2xl hover:scale-110 transition-transform bg-[#00a870] text-white hover:bg-[#008f5d] border-none"
-                  onClick={handleQuickView}
-                >
-                  <Search className="h-5 w-5" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Quick View</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="h-12 w-12 rounded-full shadow-2xl hover:scale-110 transition-transform bg-[#00a870] text-white hover:bg-[#008f5d] border-none"
+              onClick={handleQuickView}
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Quick View</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
 
         {/* Admin Menu */}
         {isAdmin && (

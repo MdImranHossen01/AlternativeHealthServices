@@ -58,7 +58,7 @@ export default function FooterV2() {
           {/* Brand Essence */}
           <div className="lg:col-span-4 space-y-6 flex flex-col items-center lg:items-start">
             <Link href="/" className="flex items-center gap-2 text-4xl font-black tracking-tighter hover:text-primary transition-all uppercase">
-              <img src="/logo.png" alt="AHS Logo" className="h-10 w-10 object-contain" />
+              <img src="/logo.webp" alt="AHS Logo" className="h-10 w-10 object-contain" />
               AHS<span className="text-primary">.</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm leading-relaxed font-medium">

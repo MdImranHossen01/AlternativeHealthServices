@@ -20,7 +20,7 @@ export function Logo({ className, imageClassName, textClassName, showText = true
   const { brandName, logoUrl } = useSettings();
   
   const finalBrandName = "AHS"; // Shortened for cleaner UI
-  const finalLogoUrl = src || logoUrl || "/logo.png";
+  const finalLogoUrl = src || logoUrl || "/logo.webp";
   
   return (
     <Link href="/" className={cn("flex items-center group", className)} onClick={onClick}>
@@ -31,8 +31,9 @@ export function Logo({ className, imageClassName, textClassName, showText = true
           fill
           sizes={sizes || "(max-width: 768px) 40px, 48px"}
           className="object-contain"
-          quality={100}
+          quality={80}
           priority
+          fetchPriority="high"
         />
       </div>
       {showText && (

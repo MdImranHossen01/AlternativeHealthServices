@@ -234,40 +234,38 @@ export default function ProductCardV1({ product, isFlashSale }: ProductCardProps
 
         {/* Hover Actions */}
         <div className="absolute inset-0 hidden md:flex items-center justify-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-black/5">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-10 w-10 rounded-full shadow-lg hover:scale-110 transition-transform bg-white text-gray-900 hover:bg-white"
-                  onClick={handleFavorite}
-                  disabled={status === 'loading'}
-                >
-                  <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}</p>
-              </TooltipContent>
-            </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="secondary"
+                className="h-10 w-10 rounded-full shadow-lg hover:scale-110 transition-transform bg-white text-gray-900 hover:bg-white"
+                onClick={handleFavorite}
+                disabled={status === 'loading'}
+              >
+                <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}</p>
+            </TooltipContent>
+          </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  variant="secondary"
-                  className="h-12 w-12 rounded-full shadow-lg hover:scale-110 transition-transform bg-primary text-white hover:bg-primary/90 border-none"
-                  onClick={handleQuickView}
-                >
-                  <Search className="h-5 w-5" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Quick View</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="secondary"
+                className="h-12 w-12 rounded-full shadow-lg hover:scale-110 transition-transform bg-primary text-white hover:bg-primary/90 border-none"
+                onClick={handleQuickView}
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Quick View</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </Link>
 

@@ -216,6 +216,7 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
 
   return (
     <div className="container mx-auto px-4 md:px-0 py-10">
+      <h1 className="sr-only">Shop Products - {searchTerm || "All Collections"}</h1>
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Desktop Sidebar */}
         <aside className="hidden w-64 shrink-0 md:block sticky top-20 self-start h-fit max-h-[calc(100vh-6rem)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
@@ -232,6 +233,7 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
                 className="pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                aria-label="Search products"
               />
             </div>
 
@@ -254,7 +256,7 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
                 if (val) setSortBy(val);
               }}>
                 <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Sort by" />
+                  <SelectValue placeholder="Sort by" aria-label="Sort products by" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="newest">Newest Arrivals</SelectItem>
