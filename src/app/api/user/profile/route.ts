@@ -9,12 +9,15 @@ export async function GET(req: NextRequest) {
     const session = await auth();
 
     if (!session || !session.user || !session.user.id) {
+      console.log('Profile GET: Unauthorized access attempt');
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
     await connectToDatabase();
     const domain = await getTenantDomain();
+    
     if (!domain) {
+      console.error('Profile GET: Tenant domain missing');
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
 
@@ -25,7 +28,7 @@ export async function GET(req: NextRequest) {
     let user = await User.findById(session.user.id).select('-password').lean();
     
     if (!user && normalizedEmail) {
-      console.log(`Profile GET: User not found by ID, falling back to email+domain`);
+      console.log(`Profile GET: User not found by ID, searching email+domain: ${normalizedEmail} @ ${domain}`);
       user = await User.findOne({ email: normalizedEmail, domain }).select('-password').lean();
     }
 
@@ -35,11 +38,16 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(user, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching profile:', error);
-    return NextResponse.json({ message: 'Failed to fetch profile' }, { status: 500 });
+  } catch (error: any) {
+    console.error('CRITICAL ERROR in Profile GET:', error);
+    return NextResponse.json({ 
+      message: 'Failed to fetch profile', 
+      error: error.message,
+      stack: error.stack 
+    }, { status: 500 });
   }
 }
+
 
 export async function PUT(req: NextRequest) {
   try {
