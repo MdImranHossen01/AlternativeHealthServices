@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = (await auth()) as { user?: { role?: string } } | null;
-    
+
     if (!session) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     }
 
     await connectToDatabase();
-    
+
     let newCourse;
     let attempts = 0;
     const maxAttempts = 3;
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
 
     // Revalidate cache
     try {
-      revalidateTag(CACHE_TAGS.courses);
+      revalidateTag(CACHE_TAGS.courses, 'max');
       revalidatePath('/courses');
       revalidatePath('/');
     } catch (e) {

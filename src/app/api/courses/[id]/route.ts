@@ -54,7 +54,7 @@ export async function PUT(
 
     // Revalidate cache
     try {
-      revalidateTag(CACHE_TAGS.courses);
+      revalidateTag(CACHE_TAGS.courses, 'max');
       revalidatePath('/courses');
       if (updated.slug) {
         revalidatePath(`/courses/${updated.slug}`);
@@ -90,7 +90,7 @@ export async function DELETE(
 
     // Revalidate cache
     try {
-      revalidateTag(CACHE_TAGS.courses);
+      revalidateTag(CACHE_TAGS.courses, 'max');
       revalidatePath('/courses');
       if (deleted.slug) {
         revalidatePath(`/courses/${deleted.slug}`);

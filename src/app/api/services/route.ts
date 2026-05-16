@@ -67,9 +67,9 @@ export async function POST(req: NextRequest) {
 
     const validation = serviceSchema.safeParse(body);
     if (!validation.success) {
-      return NextResponse.json({ 
-        message: 'Validation failed', 
-        errors: validation.error.flatten().fieldErrors 
+      return NextResponse.json({
+        message: 'Validation failed',
+        errors: validation.error.flatten().fieldErrors
       }, { status: 400 });
     }
 
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
 
     // Revalidate cache
     try {
-      revalidateTag(CACHE_TAGS.services);
+      revalidateTag(CACHE_TAGS.services, 'max');
       revalidatePath('/services');
       revalidatePath('/');
     } catch (e) {
