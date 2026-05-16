@@ -31,7 +31,7 @@ export function MobileMenu({ navItems, categories, session, triggerClassName }: 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <button className={`lg:hidden p-2 transition-colors outline-none ${triggerClassName || 'text-foreground hover:text-primary'}`}>
+        <button aria-label="Toggle Menu" className={`lg:hidden p-2 transition-colors outline-none ${triggerClassName || 'text-foreground hover:text-primary'}`}>
           <Menu className="h-6 w-6" />
         </button>
       </SheetTrigger>

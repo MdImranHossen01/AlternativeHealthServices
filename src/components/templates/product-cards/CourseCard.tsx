@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Calendar, ArrowRight, BookOpen, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { generatePlainText } from '@/lib/server-html';
 
 interface CourseCardProps {
   course: {
@@ -31,7 +32,7 @@ export default function CourseCard({ course }: CourseCardProps) {
             src={course.image}
             alt={course.name}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
         ) : (
@@ -68,7 +69,7 @@ export default function CourseCard({ course }: CourseCardProps) {
 
         <div className="h-[4.5rem] mb-6">
           <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed">
-            {course.description}
+            {generatePlainText(course.description)}
           </p>
         </div>
 

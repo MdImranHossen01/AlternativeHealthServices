@@ -38,7 +38,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
     <main className="min-h-screen py-8 md:py-12 bg-background">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8">
-          
+
           {/* Left: Content */}
           <div className="flex flex-col">
             <div className="relative aspect-square rounded-none overflow-hidden mb-12 shadow-2xl group">
@@ -48,12 +48,12 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             </div>
-            
+
             <div className="space-y-8">
 
-              
+
               <div className="prose prose-neutral dark:prose-invert max-w-none">
-                <div 
+                <div
                   className="ProseMirror text-lg md:text-xl text-muted-foreground leading-relaxed whitespace-pre-line font-medium"
                   dangerouslySetInnerHTML={{ __html: generateHtml(course.description) }}
                 />
@@ -70,9 +70,6 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                     <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">{course.name}</h2>
                     <AdminActions type="course" slug={course.slug} name={course.name} id={course._id.toString()} />
                   </div>
-                  <p className="text-sm text-muted-foreground font-medium leading-loose">
-                    আমাদের স্পেশাল কোর্সে ভর্তি চলছে। আপনার ক্যারিয়ারের নতুন যাত্রা শুরু করুন আজই।
-                  </p>
                 </div>
 
                 <div className="space-y-3 py-6 border-y border-muted/50 my-6">
@@ -89,7 +86,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                     স্থান: {course.location || 'বোর্ড বাজার, গাজীপুর'}
                   </div>
                 </div>
-                
+
                 <div className="space-y-6">
                   <div className="flex items-center justify-between p-6 bg-muted/30 border border-muted/50 rounded-none">
                     <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">কোর্স ফি</span>
@@ -108,7 +105,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                   <div className="pt-6 border-t border-muted/50">
                     <SocialShare title={course.name} />
                   </div>
-                  
+
                   <p className="text-[10px] text-center text-muted-foreground font-bold uppercase tracking-widest">
                     নিরাপদ পেমেন্ট ও তাৎক্ষণিক নিশ্চিতকরণ
                   </p>

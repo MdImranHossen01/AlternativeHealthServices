@@ -97,16 +97,17 @@ export default function HeroV2({ banners }: HeroSliderProps) {
                   transition={{ duration: 8, ease: "linear" }}
                   className="h-full w-full relative z-0"
                 >
-                  <Image
-                    src={banner.image || '/placeholder-banner.jpg'}
-                    alt={banner.title || 'Hero Banner'}
-                    fill
-                    className="object-cover"
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? "high" : "auto"}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    sizes="100vw"
-                  />
+                    <Image
+                      src={banner.image || '/placeholder-banner.jpg'}
+                      alt={banner.title || 'Hero Banner'}
+                      fill
+                      className="object-cover"
+                      priority={index === 0}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      sizes="100vw"
+                      quality={60}
+                    />
                 </motion.div>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70 z-10" />
@@ -172,7 +173,7 @@ export default function HeroV2({ banners }: HeroSliderProps) {
           <button
             key={i}
             onClick={() => scrollTo(i)}
-            className={`transition-all duration-300 rounded-full ${i === activeIndex
+            className={`relative after:absolute after:-inset-4 after:content-[''] transition-all duration-300 rounded-full ${i === activeIndex
                 ? "w-8 h-1 sm:w-10 sm:h-1.5 bg-primary shadow-[0_0_10px_rgba(255,0,0,0.5)]"
                 : "w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white/30 hover:bg-white/50"
               }`}

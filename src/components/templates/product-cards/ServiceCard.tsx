@@ -6,6 +6,7 @@ import { Calendar, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
+import { generatePlainText } from '@/lib/server-html';
 
 interface ServiceCardProps {
   service: {
@@ -53,7 +54,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         </div>
 
         <p className="text-muted-foreground text-[10px] md:text-xs line-clamp-2 mb-4 font-medium uppercase tracking-wider">
-          {service.description}
+          {generatePlainText(service.description)}
         </p>
 
         <div className="mt-auto pt-4 border-t border-border/50">
