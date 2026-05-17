@@ -5,6 +5,7 @@ import { BookOpen, ArrowRight, GraduationCap, Calendar } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { generatePlainText } from '@/lib/server-html';
 
 interface Course {
   _id: string;
@@ -92,7 +93,7 @@ export function CourseRecent({ courses }: CourseRecentProps) {
             </h3>
 
             <p className="text-muted-foreground text-base leading-relaxed line-clamp-3">
-              {course.description}
+              {generatePlainText(course.description)}
             </p>
 
             <div className="pt-2">
