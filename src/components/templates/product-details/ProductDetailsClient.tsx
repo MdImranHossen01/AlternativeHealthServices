@@ -451,7 +451,7 @@ export default function ProductDetailsClient({ product }: ProductDetailsClientPr
               <div
                 className="w-full h-full bg-no-repeat"
                 style={{
-                  backgroundImage: `url(${product.images[selectedImage]})`,
+                  backgroundImage: `url('${product.images[selectedImage]}')`,
                   backgroundSize: '300%', // Zoom level
                   backgroundPosition: `${zoomPos.percentageX}% ${zoomPos.percentageY}%`,
                 }}
