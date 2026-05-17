@@ -70,7 +70,7 @@ export default function FooterV2() {
           {/* Dynamic Navigation */}
           <div className="lg:col-span-5 w-full">
              <div className="flex flex-col items-center lg:items-start space-y-6">
-                <h4 className="text-xs font-black uppercase tracking-[0.4em] text-primary">Quick Links</h4>
+                <h2 className="text-xs font-black uppercase tracking-[0.4em] text-primary">Quick Links</h2>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-3 w-full lg:w-auto">
                    {footerNav.map(link => (
                      <li key={link.label}>
@@ -86,7 +86,7 @@ export default function FooterV2() {
           {/* Social Icons & Policy Links */}
           <div className="lg:col-span-3 space-y-6 flex flex-col items-center lg:items-start">
              <div className="space-y-6">
-                <h4 className="text-xs font-black uppercase tracking-[0.4em] text-primary text-center lg:text-left">Connect With Us</h4>
+                <h2 className="text-xs font-black uppercase tracking-[0.4em] text-primary text-center lg:text-left">Connect With Us</h2>
                 <div className="flex flex-wrap justify-center lg:justify-start gap-4">
                     {hasSocialLinks ? (
                       Object.entries(socialLinks).map(([platform, url]) => {

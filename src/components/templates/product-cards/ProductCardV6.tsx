@@ -161,6 +161,7 @@ export default function ProductCardV6({ product, isFlashSale }: ProductCardProps
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            quality={60}
           />
         </Link>
 
@@ -191,6 +192,7 @@ export default function ProductCardV6({ product, isFlashSale }: ProductCardProps
                 <Button
                   size="icon"
                   variant="secondary"
+                  aria-label="Quick View"
                   className="h-12 w-12 rounded-full bg-white text-black hover:bg-primary hover:text-white shadow-xl transition-all hover:scale-110"
                   onClick={(e) => { e.preventDefault(); setShowQuickViewModal(true); }}
                 >
@@ -207,6 +209,7 @@ export default function ProductCardV6({ product, isFlashSale }: ProductCardProps
                 <Button
                   size="icon"
                   variant="secondary"
+                  aria-label={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
                   className={`h-12 w-12 rounded-full bg-white shadow-xl transition-all hover:scale-110 ${isInWishlist ? 'text-primary' : 'text-black hover:bg-primary hover:text-white'}`}
                   onClick={handleWishlist}
                 >

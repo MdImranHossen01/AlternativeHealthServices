@@ -92,10 +92,8 @@ export function MobileMenu({ navItems, categories, session, triggerClassName }: 
           {/* Footer Actions */}
           {!session && (
             <div className="p-6 border-t bg-muted/30">
-              <Link href="/login" onClick={() => setOpen(false)}>
-                <button className="w-full py-4 bg-primary text-white font-black uppercase tracking-[0.2em] rounded-xl text-xs shadow-xl shadow-primary/20">
+              <Link href="/login" onClick={() => setOpen(false)} className="block w-full py-4 bg-primary text-white font-black uppercase tracking-[0.2em] rounded-xl text-xs text-center shadow-xl shadow-primary/20">
                   Access Account
-                </button>
               </Link>
             </div>
           )}

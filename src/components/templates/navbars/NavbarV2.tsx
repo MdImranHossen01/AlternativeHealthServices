@@ -77,8 +77,17 @@ export default function NavbarV2() {
   const wishlistCount = useAppSelector((state) => state.wishlist.items.length);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -183,8 +192,9 @@ export default function NavbarV2() {
               <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors ${!isHomePage || isScrolled ? 'text-muted-foreground group-focus-within:text-primary' : 'text-white/70 group-focus-within:text-white'}`} />
               <button
                 type="button"
+                aria-label="Voice Search"
                 onClick={handleVoiceSearch}
-                className={`absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : ((!isHomePage || isScrolled) ? 'text-muted-foreground hover:text-primary' : 'text-white/70 hover:text-white')}`}
+                className={`absolute right-1.5 p-2 top-1/2 -translate-y-1/2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : ((!isHomePage || isScrolled) ? 'text-muted-foreground hover:text-primary' : 'text-white/70 hover:text-white')}`}
               >
                 {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
               </button>
@@ -345,11 +355,11 @@ export default function NavbarV2() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Link href="/login">
-                  <Button className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-black text-[10px] uppercase tracking-widest px-6 h-10 shadow-lg shadow-primary/20">
+                <Button asChild className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-black text-[10px] uppercase tracking-widest px-6 h-10 shadow-lg shadow-primary/20">
+                  <Link href="/login">
                     Login
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               )}
             </div>
           </div>
