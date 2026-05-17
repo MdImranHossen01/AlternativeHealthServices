@@ -28,8 +28,8 @@ export function Logo({ className, imageClassName, textClassName, showText = true
         <Image
           src={finalLogoUrl}
           alt={`${finalBrandName} Logo`}
-          fill
-          sizes={sizes || "(max-width: 768px) 40px, 48px"}
+          width={64}
+          height={64}
           className="object-contain"
           quality={60}
           priority

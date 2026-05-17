@@ -5,6 +5,7 @@ import { Calendar, ArrowRight, BookOpen } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface Blog {
   _id: string;
@@ -53,10 +54,13 @@ export function BlogRecent({ blogs }: BlogRecentProps) {
           {/* Left — Image */}
           <div className="relative aspect-[4/3] lg:aspect-auto overflow-hidden bg-muted min-h-[300px]">
             {blog.thumbnail ? (
-              <img
+              <Image
                 src={blog.thumbnail}
                 alt={blog.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                quality={60}
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground">

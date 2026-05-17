@@ -29,6 +29,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
           alt={service.name}
           fill
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+          quality={60}
           className="object-cover transition-all duration-700 group-hover:scale-110"
         />
         

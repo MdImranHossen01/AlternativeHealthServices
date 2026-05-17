@@ -336,11 +336,6 @@ export default async function RootLayout({
         {/* Preconnect to important origins */}
         <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://i.pravatar.cc" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
-        {/* Preload critical LCP assets */}
-        <link rel="preload" as="image" href="/logo.webp" fetchPriority="high" />
         
         <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
