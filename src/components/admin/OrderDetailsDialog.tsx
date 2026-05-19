@@ -15,6 +15,7 @@ import { format, isValid } from 'date-fns';
 import { toast } from 'sonner';
 import { generateInvoicePDF } from '@/lib/invoice-generator';
 import Swal from 'sweetalert2';
+import { Button } from '@/components/ui/button';
 
 interface OrderDetailsDialogProps {
   orderId: string | null;
@@ -406,6 +407,80 @@ export default function OrderDetailsDialog({
                 <span className="font-black text-primary">৳{Math.round(Number(order.totalAmount) || 0)}</span>
               </div>
             </div>
+
+            {/* Quick Actions for Manual Payments */}
+            {order.paymentMethod === 'Manual' && order.paymentStatus === 'Pending' && order.status !== 'Cancelled' && (
+              <div className="mt-6 pt-4 border-t flex flex-col sm:flex-row gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={async () => {
+                    const result = await Swal.fire({
+                      title: 'Cancel Order?',
+                      text: "Are you sure you want to cancel this order?",
+                      icon: 'question',
+                      showCancelButton: true,
+                      confirmButtonColor: '#d33',
+                      cancelButtonColor: '#aaa',
+                      confirmButtonText: 'Yes, cancel it!',
+                    });
+                    if (result.isConfirmed) {
+                      try {
+                        const res = await fetch(`/api/orders/${order._id}`, {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ status: 'Cancelled' }),
+                        });
+                        if (res.ok) {
+                          toast.success('Order cancelled successfully');
+                          onUpdate();
+                          onOpenChange(false);
+                        } else {
+                          toast.error('Failed to update order');
+                        }
+                      } catch (e) {
+                        toast.error('Error updating order');
+                      }
+                    }
+                  }}
+                  className="rounded-xl h-11 flex-1 font-bold text-destructive hover:bg-destructive/5"
+                >
+                  Reject & Cancel Order
+                </Button>
+                <Button 
+                  onClick={async () => {
+                    const result = await Swal.fire({
+                      title: 'Approve Payment & Order?',
+                      text: `Confirm manual payment and mark order #${order._id.slice(-8).toUpperCase()} as Confirmed & Paid?`,
+                      icon: 'question',
+                      showCancelButton: true,
+                      confirmButtonColor: '#00D1B2',
+                      confirmButtonText: 'Yes, Approve!'
+                    });
+                    if (result.isConfirmed) {
+                      try {
+                        const res = await fetch(`/api/orders/${order._id}`, {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ status: 'Confirmed', paymentStatus: 'Paid' }),
+                        });
+                        if (res.ok) {
+                          toast.success('Order approved successfully');
+                          onUpdate();
+                          onOpenChange(false);
+                        } else {
+                          toast.error('Failed to approve order');
+                        }
+                      } catch (e) {
+                        toast.error('Error approving order');
+                      }
+                    }
+                  }}
+                  className="rounded-xl h-11 flex-1 font-black uppercase tracking-wider text-xs shadow-md shadow-primary/10"
+                >
+                  Approve Manual Payment
+                </Button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="py-10 text-center text-muted-foreground">

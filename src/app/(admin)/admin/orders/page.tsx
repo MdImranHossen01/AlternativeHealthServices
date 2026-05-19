@@ -667,16 +667,67 @@ export default function OrdersPage() {
                   </TableCell>
                   <TableCell className="font-bold">৳{Math.round(order.totalAmount ?? 0)}</TableCell>
                   <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={order.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700 border-none' : 'bg-yellow-100 text-yellow-700 border-none'}
-                    >
-                      {order.paymentStatus}
-                    </Badge>
+                    <div className="flex flex-col gap-1">
+                      <Badge
+                        variant="outline"
+                        className={order.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700 border-none font-bold' : 'bg-yellow-100 text-yellow-700 border-none font-bold'}
+                      >
+                        {order.paymentStatus}
+                      </Badge>
+                      {order.paymentMethod === 'Manual' && order.manualPaymentDetails && (
+                        <div className="flex flex-col text-[10px] text-muted-foreground bg-slate-50 dark:bg-zinc-900 p-1.5 rounded border border-slate-100 dark:border-zinc-800 font-mono">
+                          <span className="font-bold text-primary uppercase text-[9px]">{order.manualPaymentDetails.methodName}</span>
+                          {order.manualPaymentDetails.senderNumber && (
+                            <span>No: {order.manualPaymentDetails.senderNumber}</span>
+                          )}
+                          {order.manualPaymentDetails.transactionId && (
+                            <span className="truncate max-w-[120px] font-bold text-slate-800 dark:text-zinc-200" title={order.manualPaymentDetails.transactionId}>
+                              TrxID: {order.manualPaymentDetails.transactionId}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>{getStatusBadge(order.status)}</TableCell>
                   <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-1">
+                    <div className="flex items-center justify-end gap-1.5">
+                      {order.paymentMethod === 'Manual' && order.paymentStatus === 'Pending' && order.status !== 'Cancelled' && (
+                        <div className="flex items-center gap-1">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30" 
+                            title="Approve Manual Payment"
+                            onClick={() => {
+                              Swal.fire({
+                                title: 'Approve Payment?',
+                                text: `Are you sure you want to approve manual payment for order #${order._id.slice(-8).toUpperCase()}? This will mark the order as Confirmed & Paid.`,
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: '#00D1B2',
+                                confirmButtonText: 'Yes, Approve!'
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  updateStatus(order._id, 'Confirmed', { paymentStatus: 'Paid' });
+                                }
+                              });
+                            }}
+                          >
+                            <CheckCircle className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-destructive hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30" 
+                            title="Cancel Order"
+                            onClick={() => handleCancelOrder(order._id)}
+                          >
+                            <XCircle className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-primary" onClick={() => openDetails(order._id)}>
                         <Eye className="h-4 w-4" />
                       </Button>

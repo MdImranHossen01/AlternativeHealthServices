@@ -74,6 +74,7 @@ export default function CheckoutPage() {
     senderNumber: '',
     transactionId: ''
   });
+  const [paymentDetailTab, setPaymentDetailTab] = useState<'phone' | 'trx'>('phone');
   const form = useForm<CheckoutValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -421,7 +422,7 @@ export default function CheckoutPage() {
     watchedFields.phone?.trim() && 
     watchedFields.street?.trim() && 
     watchedFields.shippingRegion &&
-    (watchedFields.paymentMethod !== 'Manual' || (selectedMethod?.id && manualDetails.senderNumber && manualDetails.transactionId))
+    (watchedFields.paymentMethod !== 'Manual' || (selectedMethod?.id && (manualDetails.senderNumber?.trim() || manualDetails.transactionId?.trim())))
   );
 
   const potentialReward = (profile?.isSubscriptionActive && settings?.subscriptionConfig)
@@ -800,6 +801,7 @@ export default function CheckoutPage() {
                             key={method} 
                             onClick={() => {
                               setSelectedMethod({ id: method, ...config });
+                              setPaymentDetailTab('phone');
                               setShowPaymentModal(true);
                             }}
                             className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex flex-col items-center gap-2 hover:bg-muted/50 ${
@@ -880,40 +882,42 @@ export default function CheckoutPage() {
 
       {/* Manual Payment Verification Modal */}
       <Dialog open={showPaymentModal} onOpenChange={setShowPaymentModal}>
-        <DialogContent className="sm:max-w-[425px] rounded-3xl p-0 overflow-hidden border-none shadow-2xl">
-          <DialogHeader className="p-8 bg-gradient-to-br from-primary to-primary/80 text-white relative">
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 bg-white rounded-2xl p-2 shadow-lg flex items-center justify-center">
+        <DialogContent className="sm:max-w-[425px] rounded-3xl p-0 overflow-hidden border-none shadow-2xl flex flex-col max-h-[90vh]">
+          <DialogHeader className="py-4 px-6 bg-gradient-to-br from-primary to-primary/80 text-white relative shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 bg-white rounded-xl p-1.5 shadow-md shrink-0 flex items-center justify-center">
                 {selectedMethod?.id === 'banglaQr' ? (
-                  <Globe className="h-10 w-10 text-primary" />
+                  <Globe className="h-6 w-6 text-primary" />
                 ) : (
                   <img src={`/assets/${selectedMethod?.id}logo.webp`} alt={selectedMethod?.id} className="h-full w-auto object-contain" />
                 )}
               </div>
               <div className="text-left">
-                <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
+                <DialogTitle className="text-base md:text-lg font-black uppercase tracking-tight">
                   {selectedMethod?.id === 'banglaQr' ? 'Pay via Bangla QR' : `Pay via ${selectedMethod?.id}`}
                 </DialogTitle>
-                <DialogDescription className="text-white/80 text-xs font-bold">Follow the steps below to complete payment.</DialogDescription>
               </div>
             </div>
           </DialogHeader>
 
-          <div className="p-8 space-y-6">
+          {/* Scrollable Modal Body */}
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 max-h-[60vh] pr-2">
             {/* Payment Info */}
-            <div className="bg-primary/5 rounded-2xl p-6 border-2 border-primary/10 space-y-4">
+            <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10 space-y-3">
               {selectedMethod?.id !== 'banglaQr' && (
                 <>
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-black uppercase tracking-widest opacity-50">Send Money To</span>
-                    <Badge variant="secondary" className="bg-primary/10 text-primary border-none font-bold">Personal Number</Badge>
+                    <span className="text-[9px] font-black uppercase tracking-widest opacity-50">Send Money To</span>
+                    <Badge variant="secondary" className="bg-primary/10 text-primary border-none font-bold text-[9px] py-0.5 px-1.5">Personal Number</Badge>
                   </div>
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="text-2xl font-black tracking-widest text-primary">{selectedMethod?.number}</p>
+                  <div className="flex items-center justify-between gap-3 mt-1">
+                    <p className="text-lg font-black tracking-widest text-slate-900 dark:text-zinc-50 bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-primary/10 flex-1 text-center select-all">
+                      {selectedMethod?.number}
+                    </p>
                     <Button 
-                      variant="ghost" 
+                      variant="outline" 
                       size="sm" 
-                      className="h-8 rounded-full text-[10px] font-bold border-2"
+                      className="h-9 rounded-lg text-[10px] font-bold border hover:bg-primary hover:text-white transition-all shrink-0"
                       onClick={() => {
                         navigator.clipboard.writeText(selectedMethod?.number);
                         toast.success('Number copied to clipboard!');
@@ -926,53 +930,103 @@ export default function CheckoutPage() {
               )}
               
               {(selectedMethod?.qrCode || selectedMethod?.id === 'banglaQr') && (
-                <div className="flex flex-col items-center gap-2 pt-2 border-t border-primary/10">
-                  <p className="text-[10px] font-bold uppercase opacity-40">Scan QR Code to Pay</p>
-                  <div className="p-2 bg-white rounded-xl shadow-sm border border-primary/20">
-                    <img src={selectedMethod?.qrCode || '/assets/placeholder-qr.png'} alt="QR" className="h-48 w-48 object-contain" />
+                <div className="flex flex-col items-center gap-1.5 pt-2 border-t border-primary/10">
+                  <p className="text-[9px] font-bold uppercase opacity-40">Scan QR Code to Pay</p>
+                  <div className="p-1.5 bg-white rounded-lg shadow-sm border border-primary/10">
+                    <img src={selectedMethod?.qrCode || '/assets/placeholder-qr.png'} alt="QR" className="h-32 w-32 object-contain" />
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Verification Fields */}
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label className="text-xs font-black uppercase opacity-60">আপনার মোবাইল নম্বর</Label>
-                <Input 
-                  placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন" 
-                  value={manualDetails.senderNumber}
-                  onChange={(e) => setManualDetails({...manualDetails, senderNumber: e.target.value})}
-                  className="h-12 rounded-xl focus:ring-primary/20"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-xs font-black uppercase opacity-60">ট্রানজেকশন আইডি (TrxID)</Label>
-                <Input 
-                  placeholder="যেমন: 8N7A6D5C" 
-                  value={manualDetails.transactionId}
-                  onChange={(e) => setManualDetails({...manualDetails, transactionId: e.target.value.toUpperCase()})}
-                  className="h-12 rounded-xl focus:ring-primary/20"
-                />
+            {/* Instruction Panel */}
+            <div className="bg-slate-50 dark:bg-zinc-950 rounded-xl p-3 border border-slate-200 dark:border-zinc-800 space-y-1.5">
+              <p className="text-[10px] font-black text-slate-700 dark:text-zinc-300 uppercase tracking-wider">পেমেন্ট নির্দেশিকা (পড়ুন):</p>
+              <div className="max-h-24 overflow-y-auto pr-1 space-y-1 text-[9px] leading-relaxed text-slate-600 dark:text-zinc-400 font-medium">
+                <p>১. আপনার <strong>{selectedMethod?.id === 'bkash' ? 'বিকাশ' : selectedMethod?.id === 'nagad' ? 'নগদ' : selectedMethod?.id === 'rocket' ? 'রকেট' : 'মোবাইল'}</strong> অ্যাপে যান অথবা USSD ডায়াল করে <strong>"Send Money"</strong> অপশন সিলেক্ট করুন।</p>
+                {selectedMethod?.id !== 'banglaQr' ? (
+                  <p>২. উপরে দেওয়া <strong>Personal</strong> নম্বরটি কপি করে প্রাপক হিসেবে দিন।</p>
+                ) : (
+                  <p>২. উপরে দেওয়া <strong>Bangla QR</strong> কোডটি আপনার ব্যাংক বা পেমেন্ট অ্যাপ দিয়ে স্ক্যান করুন।</p>
+                )}
+                <p>৩. মোট পেমেন্ট অ্যামাউন্ট <strong>৳{Math.round(finalTotal)}</strong> সেন্ড মানি করুন।</p>
+                <p>৪. সফলভাবে টাকা পাঠানোর পর নিচের ট্যাব থেকে <strong>মোবাইল নম্বর</strong> অথবা <strong>TrxID</strong> যেকোনো একটি তথ্য দিয়ে পেমেন্ট নিশ্চিত করুন।</p>
               </div>
             </div>
 
-            <div className="p-4 bg-muted/30 rounded-xl">
-                <p className="text-[10px] leading-relaxed text-muted-foreground italic">
-                   <strong>নির্দেশনা:</strong> {settings?.manualPaymentConfig?.instructions || 'সঠিক পরিমাণ টাকা পাঠিয়ে নিচে তথ্য দিন।'}
-                </p>
+            {/* Selection Tabs */}
+            <div className="flex border-b border-slate-200 dark:border-zinc-800 mt-2">
+              <button
+                type="button"
+                onClick={() => setPaymentDetailTab('phone')}
+                className={`flex-1 pb-1.5 text-[11px] font-bold text-center border-b-2 transition-all ${
+                  paymentDetailTab === 'phone'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200'
+                }`}
+              >
+                {selectedMethod?.id === 'bkash' ? 'বিকাশ' : selectedMethod?.id === 'nagad' ? 'নগদ' : selectedMethod?.id === 'rocket' ? 'রকেট' : 'মোবাইল'} নম্বর দিয়ে
+              </button>
+              <button
+                type="button"
+                onClick={() => setPaymentDetailTab('trx')}
+                className={`flex-1 pb-1.5 text-[11px] font-bold text-center border-b-2 transition-all ${
+                  paymentDetailTab === 'trx'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200'
+                }`}
+              >
+                ট্রানজেকশন আইডি (TrxID) দিয়ে
+              </button>
             </div>
+
+            {/* Verification Field based on active tab */}
+            <div className="space-y-3 pt-1">
+              {paymentDetailTab === 'phone' ? (
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] font-black uppercase opacity-60">আপনার {selectedMethod?.id === 'bkash' ? 'বিকাশ' : selectedMethod?.id === 'nagad' ? 'নগদ' : selectedMethod?.id === 'rocket' ? 'রকেট' : 'মোবাইল'} নম্বর</Label>
+                  <Input 
+                    placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন (যেমন: 017XXXXXXXX)" 
+                    value={manualDetails.senderNumber}
+                    onChange={(e) => setManualDetails({...manualDetails, senderNumber: e.target.value})}
+                    className="h-10 rounded-lg text-xs focus:ring-primary/20 bg-background"
+                  />
+                </div>
+              ) : (
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] font-black uppercase opacity-60">ট্রানজেকশন আইডি (TrxID)</Label>
+                  <Input 
+                    placeholder="যেমন: 8N7A6D5C" 
+                    value={manualDetails.transactionId}
+                    onChange={(e) => setManualDetails({...manualDetails, transactionId: e.target.value.toUpperCase()})}
+                    className="h-10 rounded-lg text-xs focus:ring-primary/20 bg-background"
+                  />
+                </div>
+              )}
+            </div>
+
+            {settings?.manualPaymentConfig?.instructions && (
+              <div className="p-3 bg-muted/30 rounded-lg">
+                  <p className="text-[9px] leading-relaxed text-muted-foreground italic">
+                     <strong>নির্দেশনা:</strong> {settings.manualPaymentConfig.instructions}
+                  </p>
+              </div>
+            )}
           </div>
 
-          <DialogFooter className="p-8 bg-muted/20 border-t flex flex-col sm:flex-row gap-3">
-            <Button variant="outline" onClick={() => setShowPaymentModal(false)} className="rounded-full h-12 flex-1 font-bold">বাতিল করুন</Button>
+          <DialogFooter className="p-4 bg-muted/20 border-t flex flex-row gap-3 shrink-0">
+            <Button variant="outline" onClick={() => setShowPaymentModal(false)} className="rounded-full h-10 flex-1 font-bold text-xs bg-background">বাতিল করুন</Button>
             <Button 
-              disabled={!manualDetails.senderNumber || !manualDetails.transactionId}
+              disabled={
+                paymentDetailTab === 'phone'
+                  ? !manualDetails.senderNumber.trim()
+                  : !manualDetails.transactionId.trim()
+              }
               onClick={() => {
                 setShowPaymentModal(false);
                 toast.success(`${selectedMethod?.id.toUpperCase()} details saved!`);
               }} 
-              className="rounded-full h-12 flex-1 font-black uppercase tracking-widest shadow-lg shadow-primary/20"
+              className="rounded-full h-10 flex-1 font-black uppercase tracking-widest text-xs shadow-md shadow-primary/10"
             >
               পেমেন্ট নিশ্চিত করুন
             </Button>

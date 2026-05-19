@@ -9,12 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet, Calendar, Clock } from 'lucide-react';
+import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet, Calendar, Clock, MoreHorizontal, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { format, isValid } from 'date-fns';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import Swal from 'sweetalert2';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Enrollment {
   _id: string;
@@ -80,6 +89,46 @@ function EnrollmentsContent() {
     } catch (error: any) {
       console.error('Error updating status:', error);
       toast.error(`Update failed: ${error.message}`);
+    } finally {
+      setIsUpdating(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  };
+
+  const deleteEnrollment = async (id: string) => {
+    if (isUpdating.has(id)) return;
+
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to permanently delete this course enrollment?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (!result.isConfirmed) return;
+
+    setIsUpdating(prev => new Set(prev).add(id));
+    try {
+      const response = await fetch(`/api/enrollments/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success(`Enrollment deleted successfully`);
+        fetchEnrollments();
+      } else {
+        const errorData = await response.json().catch(() => ({ message: 'Delete failed' }));
+        toast.error(errorData.message || `Delete failed`);
+      }
+    } catch (error: any) {
+      console.error('Error deleting enrollment:', error);
+      toast.error(`Delete failed: ${error.message}`);
     } finally {
       setIsUpdating(prev => {
         const next = new Set(prev);
@@ -185,29 +234,40 @@ function EnrollmentsContent() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      {enroll.status === 'Pending' && (
-                        <>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="text-emerald-500" 
-                            onClick={() => updateStatus(enroll._id, 'Confirmed')}
-                            disabled={isUpdating.has(enroll._id)}
-                          >
-                            <CheckCircle className="h-4 w-4" />
+                    <div className="flex justify-end">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted" disabled={isUpdating.has(enroll._id)}>
+                            <MoreHorizontal className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="text-destructive" 
-                            onClick={() => updateStatus(enroll._id, 'Cancelled')}
-                            disabled={isUpdating.has(enroll._id)}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-40">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          {enroll.status === 'Pending' && (
+                            <>
+                              <DropdownMenuItem 
+                                className="text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/30 font-bold"
+                                onClick={() => updateStatus(enroll._id, 'Confirmed')}
+                              >
+                                <CheckCircle className="mr-2 h-4 w-4" /> Confirm
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="text-destructive focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/30 font-bold"
+                                onClick={() => updateStatus(enroll._id, 'Cancelled')}
+                              >
+                                <XCircle className="mr-2 h-4 w-4" /> Cancel
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                            </>
+                          )}
+                          <DropdownMenuItem 
+                            className="text-destructive focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/30 font-bold"
+                            onClick={() => deleteEnrollment(enroll._id)}
                           >
-                            <XCircle className="h-4 w-4" />
-                          </Button>
-                        </>
-                      )}
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </TableCell>
                 </TableRow>

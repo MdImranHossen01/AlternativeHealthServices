@@ -77,7 +77,7 @@ function SuccessContent() {
       </p>
       {id && (
         <p className="text-sm font-mono text-muted-foreground bg-muted px-4 py-2 rounded-full mb-10 inline-block">
-          Order ID: <span className="font-bold text-foreground">#{id}</span>
+          Order ID: <span className="font-bold text-foreground">#{id.slice(-8).toUpperCase()}</span>
         </p>
       )}
 

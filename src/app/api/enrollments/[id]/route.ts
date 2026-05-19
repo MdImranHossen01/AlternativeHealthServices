@@ -35,3 +35,26 @@ export async function PATCH(
     return NextResponse.json({ message: 'Error' }, { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const session = await auth();
+    if (!session || !['admin', 'super_admin'].includes((session.user as any)?.role)) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectToDatabase();
+    const domain = await getTenantDomain();
+    const deleted = await Enrollment.findOneAndDelete({ _id: id, domain });
+
+    if (!deleted) return NextResponse.json({ message: 'Enrollment not found' }, { status: 404 });
+    return NextResponse.json({ message: 'Enrollment deleted successfully' });
+  } catch (error: any) {
+    console.error(`Error deleting enrollment:`, error);
+    return NextResponse.json({ message: 'Error deleting enrollment' }, { status: 500 });
+  }
+}
