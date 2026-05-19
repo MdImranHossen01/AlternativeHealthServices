@@ -15,10 +15,13 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params;
+    let { slug } = await params;
     if (!slug) {
         return NextResponse.json({ message: 'Order ID is required' }, { status: 400 });
     }
+
+    // Clean up slug: trim and strip leading '#'
+    slug = slug.trim().replace(/^#/, '');
 
     await connectToDatabase();
     const domain = await getTenantDomain();
@@ -42,7 +45,7 @@ export async function GET(
                 {
                     $expr: {
                         $eq: [
-                            { $substring: [{ $toString: "$_id" }, 16, 8] },
+                            { $substrCP: [{ $toString: "$_id" }, 16, 8] },
                             slug.toLowerCase()
                         ]
                     }
