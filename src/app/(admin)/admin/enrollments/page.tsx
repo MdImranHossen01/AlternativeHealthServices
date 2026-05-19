@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -242,31 +243,33 @@ function EnrollmentsContent() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          {enroll.status === 'Pending' && (
-                            <DropdownMenuItem 
-                              className="text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/30 font-bold"
-                              onClick={() => updateStatus(enroll._id, 'Confirmed')}
-                            >
-                              <CheckCircle className="mr-2 h-4 w-4" /> Confirm
-                            </DropdownMenuItem>
-                          )}
-                          {enroll.status === 'Pending' && (
+                          <DropdownMenuGroup>
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            {enroll.status === 'Pending' && (
+                              <DropdownMenuItem 
+                                className="text-emerald-600 focus:text-emerald-700 focus:bg-emerald-50 dark:focus:bg-emerald-950/30 font-bold"
+                                onClick={() => updateStatus(enroll._id, 'Confirmed')}
+                              >
+                                <CheckCircle className="mr-2 h-4 w-4" /> Confirm
+                              </DropdownMenuItem>
+                            )}
+                            {enroll.status === 'Pending' && (
+                              <DropdownMenuItem 
+                                className="text-destructive focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/30 font-bold"
+                                onClick={() => updateStatus(enroll._id, 'Cancelled')}
+                              >
+                                <XCircle className="mr-2 h-4 w-4" /> Cancel
+                              </DropdownMenuItem>
+                            )}
+                            {enroll.status === 'Pending' && <DropdownMenuSeparator />}
+                            
                             <DropdownMenuItem 
                               className="text-destructive focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/30 font-bold"
-                              onClick={() => updateStatus(enroll._id, 'Cancelled')}
+                              onClick={() => deleteEnrollment(enroll._id)}
                             >
-                              <XCircle className="mr-2 h-4 w-4" /> Cancel
+                              <Trash2 className="mr-2 h-4 w-4" /> Delete
                             </DropdownMenuItem>
-                          )}
-                          {enroll.status === 'Pending' && <DropdownMenuSeparator />}
-                          
-                          <DropdownMenuItem 
-                            className="text-destructive focus:text-red-700 focus:bg-red-50 dark:focus:bg-red-950/30 font-bold"
-                            onClick={() => deleteEnrollment(enroll._id)}
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" /> Delete
-                          </DropdownMenuItem>
+                          </DropdownMenuGroup>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>

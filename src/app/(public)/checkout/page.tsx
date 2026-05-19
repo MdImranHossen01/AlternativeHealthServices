@@ -1022,9 +1022,16 @@ export default function CheckoutPage() {
                   ? !manualDetails.senderNumber.trim()
                   : !manualDetails.transactionId.trim()
               }
-              onClick={() => {
-                setShowPaymentModal(false);
-                toast.success(`${selectedMethod?.id.toUpperCase()} details saved!`);
+              onClick={async () => {
+                const isValid = await form.trigger();
+                if (isValid) {
+                  setShowPaymentModal(false);
+                  toast.success(`${selectedMethod?.id.toUpperCase()} details saved!`);
+                  await form.handleSubmit(onSubmit)();
+                } else {
+                  setShowPaymentModal(false);
+                  toast.error('দয়া করে ডেলিভারি তথ্য সম্পূর্ণ করুন!');
+                }
               }} 
               className="rounded-full h-10 flex-1 font-black uppercase tracking-widest text-xs shadow-md shadow-primary/10"
             >
