@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { User, CheckCircle2, Info, ArrowRight, Smartphone, Copy, Globe, Wallet } from 'lucide-react';
+import { User, CheckCircle2, ArrowRight, Smartphone, Copy, Globe, Wallet, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -32,6 +32,8 @@ const BD_PHONE_REGEX = /^(?:\+8801|01)[3-9]\d{8}$/;
 const formSchema = z.object({
   name: z.string().trim().min(2, 'Name is required').max(100, 'Name is too long'),
   phone: z.string().trim().regex(BD_PHONE_REGEX, 'Invalid Bangladesh phone number').max(15, 'Phone number is too long'),
+  email: z.string().trim().email('Invalid email address').optional().or(z.literal('')),
+  address: z.string().trim().optional(),
   paymentAmount: z.string().min(1, 'Amount is required').max(12, 'Invalid amount format'),
 });
 
@@ -60,29 +62,37 @@ export default function EnrollmentFormV2({
     defaultValues: {
       name: '',
       phone: '',
-      paymentAmount: price !== undefined && price !== null ? price.toString() : '',
+      email: '',
+      address: '',
+      paymentAmount: price !== undefined && price !== null ? price.toString() : '0',
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!selectedMethod) {
-      toast.error('দয়া করে পেমেন্ট মেথড সিলেক্ট করুন');
-      return;
-    }
+    let formattedPaymentNumber = '';
 
-    const paymentDetail = paymentDetailTab === 'phone' ? manualDetails.senderNumber : `TrxID: ${manualDetails.transactionId}`;
-    if (!paymentDetail.trim()) {
-      toast.error('পেমেন্ট ভেরিফিকেশন তথ্য দিন');
-      return;
-    }
+    if (price > 0) {
+      if (!selectedMethod) {
+        toast.error('দয়া করে পেমেন্ট মেথড সিলেক্ট করুন');
+        return;
+      }
 
-    const formattedPaymentNumber = `${selectedMethod.id.toUpperCase()} - ${paymentDetail}`;
+      const paymentDetail = paymentDetailTab === 'phone' ? manualDetails.senderNumber : `TrxID: ${manualDetails.transactionId}`;
+      if (!paymentDetail.trim()) {
+        toast.error('পেমেন্ট ভেরিফিকেশন তথ্য দিন');
+        return;
+      }
 
-    // Basic price match check before submission
-    const submittedPrice = parseFloat(values.paymentAmount);
-    if (isNaN(submittedPrice) || submittedPrice < 1) {
-      toast.error('Invalid payment amount');
-      return;
+      formattedPaymentNumber = `${selectedMethod.id.toUpperCase()} - ${paymentDetail}`;
+
+      // Basic price match check before submission
+      const submittedPrice = parseFloat(values.paymentAmount);
+      if (isNaN(submittedPrice) || submittedPrice < 1) {
+        toast.error('Invalid payment amount');
+        return;
+      }
+    } else {
+      formattedPaymentNumber = 'FREE';
     }
 
     setIsSubmitting(true);
@@ -98,6 +108,8 @@ export default function EnrollmentFormV2({
           name: values.name,
           phone: values.phone,
           paymentNumber: formattedPaymentNumber,
+          email: values.email || undefined,
+          address: values.address || undefined,
         }),
         signal: controller.signal
       });
@@ -107,7 +119,9 @@ export default function EnrollmentFormV2({
       if (response.ok) {
         Swal.fire({
           title: 'আবেদন জমা হয়েছে!',
-          text: `আপনার ${courseName} কোর্সে ভর্তির আবেদনটি সফলভাবে গৃহীত হয়েছে। আমরা দ্রুত পেমেন্ট ভেরিফাই করে আপনার সাথে যোগাযোগ করবো।`,
+          text: price > 0 
+            ? `আপনার ${courseName} কোর্সে ভর্তির আবেদনটি সফলভাবে গৃহীত হয়েছে। আমরা দ্রুত পেমেন্ট ভেরিফাই করে আপনার সাথে যোগাযোগ করবো।`
+            : `আপনার ${courseName} কোর্সে ভর্তির আবেদনটি সফলভাবে সম্পন্ন হয়েছে।`,
           icon: 'success',
           confirmButtonColor: 'var(--primary)',
           customClass: {
@@ -115,7 +129,13 @@ export default function EnrollmentFormV2({
             confirmButton: 'rounded-xl font-bold px-6 py-3',
           }
         });
-        form.reset();
+        form.reset({
+          name: '',
+          phone: '',
+          email: '',
+          address: '',
+          paymentAmount: price !== undefined && price !== null ? price.toString() : '0',
+        });
         setSelectedMethod(null);
         setManualDetails({ senderNumber: '', transactionId: '' });
       } else {
@@ -133,163 +153,95 @@ export default function EnrollmentFormV2({
     }
   }
 
-  // Determine active method for left panel instructions (fallback to bkash configuration)
-  const activeInstructionMethod = selectedMethod || {
-    id: 'bkash',
-    number: manualPaymentConfig?.bkash?.number || '01728-268550',
-    qrCode: manualPaymentConfig?.bkash?.qrCode
-  };
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-      {/* Left: Guidelines */}
-      <div className="space-y-8 bg-slate-50 p-8 md:p-12 rounded-[2.5rem] border border-slate-200">
-        <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase tracking-widest">
-            <Info className="h-3 w-3" /> Payment Instructions
-          </div>
-          <h2 className="text-3xl font-black tracking-tighter uppercase">
-            {activeInstructionMethod.id === 'bkash' ? 'বিকাশ' : 
-             activeInstructionMethod.id === 'nagad' ? 'নগদ' : 
-             activeInstructionMethod.id === 'rocket' ? 'রকেট' : 
-             activeInstructionMethod.id === 'banglaQr' ? 'Bangla QR' : 'মোবাইল'} পেমেন্ট গাইডলাইন
-          </h2>
-          <p className="text-slate-600 font-medium">ভর্তি নিশ্চিত করতে নিচের ধাপগুলো অনুসরণ করে পেমেন্ট সম্পন্ন করুন:</p>
-        </div>
+    <div className="max-w-2xl mx-auto bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/50">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
+                  <User className="h-3.5 w-3.5" /> শিক্ষার্থীর নাম
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="শিক্ষার্থীর পূর্ণ নাম" {...field} className="h-14 rounded-xl bg-slate-50 border-slate-200" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div className="space-y-4">
-          <div className="flex gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100">
-            <div className="h-10 w-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-black shrink-0">১</div>
-            <div>
-              <p className="font-black uppercase text-xs tracking-wider mb-1">ধাপ ১</p>
-              <p className="text-sm text-slate-600 font-medium">
-                আপনার <strong>{activeInstructionMethod.id === 'bkash' ? 'বিকাশ' : activeInstructionMethod.id === 'nagad' ? 'নগদ' : activeInstructionMethod.id === 'rocket' ? 'রকেট' : 'মোবাইল'}</strong> অ্যাপে যান অথবা USSD ডায়াল করে <strong>"Send Money"</strong> অপশন সিলেক্ট করুন।
-              </p>
-            </div>
-          </div>
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
+                  <Smartphone className="h-3.5 w-3.5" /> শিক্ষার্থীর মোবাইল নম্বর
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="017XXXXXXXX" {...field} className="h-14 rounded-xl bg-slate-50 border-slate-200" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          {activeInstructionMethod.id !== 'banglaQr' && (
-            <div className="flex gap-4 p-6 bg-primary/5 rounded-2xl border border-primary/20 scale-105">
-              <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-black shrink-0">২</div>
-              <div className="flex-1">
-                <p className="font-black uppercase text-xs tracking-wider mb-1 text-primary">
-                  ধাপ ২ ({activeInstructionMethod.id === 'bkash' ? 'বিকাশ' : activeInstructionMethod.id === 'nagad' ? 'নগদ' : activeInstructionMethod.id === 'rocket' ? 'রকেট' : 'মোবাইল'} নাম্বার)
-                </p>
-                <div 
-                  className="flex items-center justify-between gap-2 cursor-pointer group mt-1 bg-white p-2 rounded-xl border border-primary/10" 
-                  onClick={async () => {
-                    try {
-                      await navigator.clipboard.writeText(activeInstructionMethod.number);
-                      toast.success('Number Copied!', {
-                        description: activeInstructionMethod.number,
-                        icon: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
-                      });
-                    } catch (err) {
-                      toast.error('Failed to copy');
-                    }
-                  }}
-                >
-                  <p className="text-lg font-black text-slate-900 tracking-widest group-hover:text-primary transition-colors">{activeInstructionMethod.number}</p>
-                  <div className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-primary/10 text-slate-400 group-hover:text-primary transition-all">
-                    <Copy className="h-4 w-4" />
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 font-bold uppercase mt-1">Personal Number (Click to Copy)</p>
-              </div>
-            </div>
-          )}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
+                  <Mail className="h-3.5 w-3.5" /> শিক্ষার্থীর ইমেইল (ঐচ্ছিক)
+                </FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="example@email.com" {...field} className="h-14 rounded-xl bg-slate-50 border-slate-200" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          {activeInstructionMethod.id === 'banglaQr' && (
-            <div className="flex gap-4 p-6 bg-primary/5 rounded-2xl border border-primary/20 scale-105">
-              <div className="h-10 w-10 rounded-full bg-primary text-white flex items-center justify-center font-black shrink-0">২</div>
-              <div className="flex-1">
-                <p className="font-black uppercase text-xs tracking-wider mb-1 text-primary">ধাপ ২ (Bangla QR)</p>
-                {activeInstructionMethod.qrCode ? (
-                  <div className="mt-2 flex flex-col items-center">
-                    <img src={activeInstructionMethod.qrCode} alt="Bangla QR" className="h-32 w-32 object-contain border rounded-lg bg-white p-1" />
-                    <p className="text-xs text-slate-500 font-bold uppercase mt-1">Scan to Pay</p>
-                  </div>
-                ) : (
-                  <p className="text-xs text-slate-500 font-bold uppercase mt-1">Scan QR code using bank/MFS app to pay</p>
-                )}
-              </div>
-            </div>
-          )}
+          <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
+                  <MapPin className="h-3.5 w-3.5" /> শিক্ষার্থীর পূর্ণ ঠিকানা (ঐচ্ছিক)
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="গ্রাম, ডাকঘর, উপজেলা, জেলা" {...field} className="h-14 rounded-xl bg-slate-50 border-slate-200" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <div className="flex gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100">
-            <div className="h-10 w-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-black shrink-0">৩</div>
-            <div>
-              <p className="font-black uppercase text-xs tracking-wider mb-1">ধাপ ৩</p>
-              <p className="text-sm text-slate-600 font-medium">নির্ধারিত পেমেন্ট অ্যামাউন্ট (<span className="text-primary font-black">৳{price}</span>) সেন্ড মানি করুন।</p>
-            </div>
-          </div>
+          <FormField
+            control={form.control}
+            name="paymentAmount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
+                  <Wallet className="h-3.5 w-3.5" /> পেমেন্ট অ্যামাউন্ট (৳)
+                </FormLabel>
+                <FormControl>
+                  <Input type="number" readOnly {...field} className="h-14 rounded-xl bg-slate-100 border-slate-200 font-black text-primary cursor-not-allowed" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <div className="flex gap-4 p-6 bg-white rounded-2xl shadow-sm border border-slate-100">
-            <div className="h-10 w-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-black shrink-0">৪</div>
-            <div>
-              <p className="font-black uppercase text-xs tracking-wider mb-1">ধাপ ৪</p>
-              <p className="text-sm text-slate-600 font-medium">পেমেন্ট সফল হলে ডানপাশের ফর্ম থেকে পেমেন্ট মেথড সিলেক্ট করে তথ্য ভেরিফাই করুন।</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Right: Enrollment Form */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/50">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
-                    <User className="h-3 w-3" /> শিক্ষার্থীর নাম
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="শিক্ষার্থীর পূর্ণ নাম" {...field} className="h-14 rounded-xl bg-slate-50 border-slate-200" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
-                    <Smartphone className="h-3 w-3" /> শিক্ষার্থীর মোবাইল নাম্বার
-                  </FormLabel>
-                  <FormControl>
-                    <Input placeholder="017XXXXXXXX" {...field} className="h-14 rounded-xl bg-slate-50 border-slate-200" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="paymentAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
-                    <Wallet className="h-3 w-3" /> পেমেন্ট অ্যামাউন্ট (৳)
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="number" readOnly {...field} className="h-14 rounded-xl bg-slate-100 border-slate-200 font-black text-primary cursor-not-allowed" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Payment Method Selector */}
+          {/* Payment Method Selector - Only display if price > 0 */}
+          {price > 0 && (
             <div className="space-y-3">
               <label className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
-                <Wallet className="h-3 w-3" /> পেমেন্ট মেথড সিলেক্ট করুন
+                <Wallet className="h-3.5 w-3.5" /> পেমেন্ট মেথড সিলেক্ট করুন
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {['bkash', 'nagad', 'rocket', 'banglaQr'].map((method) => {
@@ -331,20 +283,20 @@ export default function EnrollmentFormV2({
                 </p>
               )}
             </div>
+          )}
 
-            <div className="pt-4">
-              <Button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="w-full h-16 rounded-2xl bg-slate-900 text-white hover:bg-primary transition-all font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-300"
-              >
-                {isSubmitting ? 'প্রসেস হচ্ছে...' : 'ভর্তি নিশ্চিত করুন'}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </div>
+          <div className="pt-4">
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="w-full h-16 rounded-2xl bg-slate-900 text-white hover:bg-primary transition-all font-black uppercase tracking-[0.2em] shadow-2xl shadow-slate-300"
+            >
+              {isSubmitting ? 'প্রসেস হচ্ছে...' : 'ভর্তি নিশ্চিত করুন'}
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
+        </form>
+      </Form>
 
       {/* Manual Payment Verification Modal */}
       <Dialog open={showPaymentModal} onOpenChange={setShowPaymentModal}>
@@ -488,7 +440,7 @@ export default function EnrollmentFormV2({
                   await form.handleSubmit(onSubmit)();
                 } else {
                   setShowPaymentModal(false);
-                  toast.error('দয়া করে শিক্ষার্থীর নাম ও মোবাইল নাম্বার সম্পূর্ণ করুন!');
+                  toast.error('দয়া করে শিক্ষার্থীর নাম ও মোবাইল নম্বর সম্পূর্ণ করুন!');
                 }
               }} 
               className="rounded-full h-10 flex-1 font-black uppercase tracking-widest text-xs shadow-md shadow-primary/10"

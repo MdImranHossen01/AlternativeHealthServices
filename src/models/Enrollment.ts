@@ -5,6 +5,8 @@ export interface IEnrollment extends Document {
   name: string;
   phone: string;
   paymentNumber?: string; // Number used for bKash payment
+  email?: string;
+  address?: string;
   status: 'Pending' | 'Paid' | 'Cancelled';
   domain: string;
   createdAt: Date;
@@ -17,6 +19,8 @@ const EnrollmentSchema: Schema<IEnrollment> = new Schema(
     name: { type: String, required: true },
     phone: { type: String, required: true },
     paymentNumber: { type: String },
+    email: { type: String },
+    address: { type: String },
     status: { 
       type: String, 
       enum: ['Pending', 'Paid', 'Cancelled'], 

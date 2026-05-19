@@ -10,6 +10,8 @@ const enrollmentSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100),
   phone: z.string().regex(/^01\d{9}$/, 'Invalid Bangladesh phone number'),
   paymentNumber: z.string().optional(),
+  email: z.string().email('Invalid email address').optional().or(z.literal('')),
+  address: z.string().optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -60,7 +62,7 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    const { courseId, name, phone, paymentNumber } = validation.data;
+    const { courseId, name, phone, paymentNumber, email, address } = validation.data;
 
     await connectToDatabase();
     const newEnrollment = await Enrollment.create({
@@ -68,6 +70,8 @@ export async function POST(req: NextRequest) {
       name,
       phone,
       paymentNumber,
+      email,
+      address,
       domain,
     });
 

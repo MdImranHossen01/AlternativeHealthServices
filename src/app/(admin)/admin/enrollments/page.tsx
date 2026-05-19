@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet, Calendar, Clock, MoreHorizontal, Trash2 } from 'lucide-react';
+import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet, Calendar, Clock, MoreHorizontal, Trash2, Mail, MapPin } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { format, isValid } from 'date-fns';
@@ -32,6 +32,8 @@ interface Enrollment {
   name: string;
   phone: string;
   paymentNumber?: string;
+  email?: string;
+  address?: string;
   status: string;
   createdAt: string;
 }
@@ -193,9 +195,15 @@ function EnrollmentsContent() {
               filtered.map((enroll) => (
                 <TableRow key={enroll._id} className="hover:bg-muted/30 transition-colors">
                   <TableCell>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-0.5">
                       <span className="font-bold flex items-center gap-1.5"><User className="h-3 w-3 text-primary" /> {enroll.name}</span>
                       <span className="text-xs text-muted-foreground flex items-center gap-1.5"><Phone className="h-3 w-3" /> {enroll.phone}</span>
+                      {enroll.email && (
+                        <span className="text-xs text-muted-foreground flex items-center gap-1.5"><Mail className="h-3 w-3" /> {enroll.email}</span>
+                      )}
+                      {enroll.address && (
+                        <span className="text-xs text-muted-foreground flex items-center gap-1.5"><MapPin className="h-3 w-3" /> {enroll.address}</span>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -205,7 +213,7 @@ function EnrollmentsContent() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {enroll.paymentNumber ? (
+                    {enroll.paymentNumber && enroll.paymentNumber !== 'FREE' ? (
                       <div className="flex flex-col">
                         <span className="text-xs font-bold flex items-center gap-1.5 text-primary"><Wallet className="h-3 w-3" /> {enroll.paymentNumber}</span>
                         <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
