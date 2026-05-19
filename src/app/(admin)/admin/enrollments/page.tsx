@@ -208,7 +208,12 @@ function EnrollmentsContent() {
                     {enroll.paymentNumber ? (
                       <div className="flex flex-col">
                         <span className="text-xs font-bold flex items-center gap-1.5 text-primary"><Wallet className="h-3 w-3" /> {enroll.paymentNumber}</span>
-                        <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Manual bKash</span>
+                        <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
+                          {enroll.paymentNumber.toUpperCase().startsWith('BKASH') ? 'Manual bKash' : 
+                           enroll.paymentNumber.toUpperCase().startsWith('NAGAD') ? 'Manual Nagad' : 
+                           enroll.paymentNumber.toUpperCase().startsWith('ROCKET') ? 'Manual Rocket' : 
+                           enroll.paymentNumber.toUpperCase().startsWith('BANGLAQR') ? 'Bangla QR' : 'Manual Payment'}
+                        </span>
                       </div>
                     ) : (
                       <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Free Course</Badge>

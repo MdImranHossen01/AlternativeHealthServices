@@ -17,8 +17,6 @@ export default async function EnrollmentPage({ params }: { params: Promise<{ slu
 
   if (!course) notFound();
 
-  const bkashNumber = settings?.manualPaymentConfig?.bkash?.number || '01728-268550';
-
   return (
     <main className="min-h-screen py-20 bg-white">
       <div className="container mx-auto px-4 max-w-6xl">
@@ -35,10 +33,9 @@ export default async function EnrollmentPage({ params }: { params: Promise<{ slu
           courseId={course._id.toString()} 
           courseName={course.name} 
           price={course.price || 0}
-          bkashNumber={bkashNumber}
+          manualPaymentConfig={settings?.manualPaymentConfig || {}}
         />
       </div>
     </main>
   );
 }
-
