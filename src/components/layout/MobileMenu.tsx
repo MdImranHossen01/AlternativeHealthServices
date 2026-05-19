@@ -35,7 +35,7 @@ export function MobileMenu({ navItems, categories, session, triggerClassName }: 
           <Menu className="h-6 w-6" />
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[350px] p-0 border-r-0">
+      <SheetContent side="left" className="w-[300px] sm:w-[350px] p-0 border-r-0 pb-20 lg:pb-0">
         <div className="flex flex-col h-full bg-background font-jost">
           {/* Header */}
           <div className="p-6 border-b">

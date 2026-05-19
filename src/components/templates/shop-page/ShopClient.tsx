@@ -93,7 +93,17 @@ export default function ShopClient({ initialProducts, initialCategories, searchP
       setSearchTerm(urlSearch);
     }
   }, [searchParams]);
+
+  // Sync page from URL parameter
+  useEffect(() => {
+    const urlPage = Number(searchParams.get('page')) || 1;
+    if (urlPage !== currentPage) {
+      setCurrentPage(urlPage);
+    }
+  }, [searchParams, currentPage]);
+
   const skipClampRef = useRef(false);
+  const isMounted = useRef(false);
 
   // Sync state to URL without full reload
   const setPageAndUrl = useCallback((page: number) => {
@@ -107,10 +117,19 @@ export default function ShopClient({ initialProducts, initialCategories, searchP
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }, [pathname, router, searchParams]);
 
+  // Reset page to 1 when filters change
   useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
     skipClampRef.current = true;
-    setPageAndUrl(1);
-  }, [selectedCategories, priceRange, sortBy, searchTerm, showOnlyNew, showOnlySale, showOnlyFeatured, showOnlyTrending, setPageAndUrl]);
+    setCurrentPage(1);
+    
+    const params = new URLSearchParams(window.location.search);
+    params.delete('page');
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }, [selectedCategories, priceRange, sortBy, searchTerm, showOnlyNew, showOnlySale, showOnlyFeatured, showOnlyTrending, pathname, router]);
 
   const filteredProducts = products
     .filter(p => {
@@ -248,8 +267,8 @@ export default function ShopClient({ initialProducts, initialCategories, searchP
                     <Filter className="h-4 w-4" /> Filters
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left">
-                  <SheetHeader className="mb-6">
+                <SheetContent side="left" className="p-6 overflow-y-auto">
+                  <SheetHeader className="mb-6 p-0">
                     <SheetTitle>Filter Products</SheetTitle>
                   </SheetHeader>
                   <Sidebar />
