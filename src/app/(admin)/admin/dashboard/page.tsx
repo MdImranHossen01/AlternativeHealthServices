@@ -272,8 +272,16 @@ export default function AdminDashboard() {
               <Calendar className="h-4 w-4 text-emerald-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-emerald-700">{stats?.upcomingAppointmentsCount || 0}</div>
-              <p className="text-xs text-muted-foreground">Confirmed bookings</p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <div className="text-2xl font-bold text-emerald-700">{stats?.upcomingAppointmentsCount || 0}</div>
+                  <p className="text-xs text-muted-foreground">Confirmed</p>
+                </div>
+                <div className="space-y-1 border-l border-emerald-500/10 pl-4">
+                  <div className="text-2xl font-bold text-amber-700">{stats?.pendingAppointmentsCount || 0}</div>
+                  <p className="text-xs text-muted-foreground">Pending</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </Link>

@@ -190,6 +190,12 @@ export async function GET(req: NextRequest) {
       date: { $gte: new Date().toISOString().split('T')[0] } 
     });
 
+    // 12b. Pending Appointments (Pending status)
+    const pendingAppointmentsCount = await Appointment.countDocuments({ 
+      domain, 
+      status: 'Pending' 
+    });
+
     // 13. Pending Enrollments (Waiting for approval)
     const pendingEnrollmentsCount = await Enrollment.countDocuments({ 
       domain, 
@@ -266,6 +272,7 @@ export async function GET(req: NextRequest) {
         grossProfit,
         netProfit,
         upcomingAppointmentsCount,
+        pendingAppointmentsCount,
         pendingEnrollmentsCount,
         newUsersCount,
         returningUsersCount
