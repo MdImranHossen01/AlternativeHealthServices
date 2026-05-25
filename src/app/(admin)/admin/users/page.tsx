@@ -200,7 +200,7 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-8 animate-in fade-in duration-500">
+    <div className="flex flex-col gap-6 px-0 py-4 md:p-8 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-black tracking-tighter text-slate-900">Users Management</h1>

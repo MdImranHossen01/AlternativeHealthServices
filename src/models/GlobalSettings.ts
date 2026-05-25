@@ -108,6 +108,7 @@ export interface IGlobalSettings extends Document {
     currentBatch?: string;
     academyTitle?: string;
   };
+  superAdminNote?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -174,6 +175,7 @@ const GlobalSettingsSchema: Schema<IGlobalSettings> = new Schema(
       }
     ],
     academyConfig: { type: Object, default: {} },
+    superAdminNote: { type: String, default: '' },
   },
   {
     timestamps: true,

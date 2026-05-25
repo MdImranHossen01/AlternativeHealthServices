@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/dialog';
 import Image from 'next/image';
 import { generateHtml } from '@/lib/server-html';
+import ShareDialog from '@/components/storefront/ShareDialog';
 
 const CURRENCY_SYMBOL = '৳';
 
@@ -51,6 +52,7 @@ export default function ProductDetailsV2Client({ product }: ProductDetailsV2Clie
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   const uniqueColors = useMemo(() =>
     Array.from(new Set((product.variants || []).map((v: any) => v.color))).filter(Boolean) as string[],
@@ -153,21 +155,8 @@ export default function ProductDetailsV2Client({ product }: ProductDetailsV2Clie
     }
   };
 
-  const handleShare = async () => {
-    const shareData = { title: product.name, url: window.location.href };
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(window.location.href);
-        toast.success('Link copied to clipboard');
-      }
-    } catch (err: any) {
-      if (err.name !== 'AbortError') {
-        console.error('Share failed:', err);
-        toast.error('Could not share or copy link');
-      }
-    }
+  const handleShare = () => {
+    setIsShareOpen(true);
   };
 
   const handleDeleteProduct = async () => {
@@ -378,6 +367,13 @@ export default function ProductDetailsV2Client({ product }: ProductDetailsV2Clie
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Share Modal */}
+      <ShareDialog
+        isOpen={isShareOpen}
+        onOpenChange={setIsShareOpen}
+        title={product.name}
+      />
     </div>
   );
 }

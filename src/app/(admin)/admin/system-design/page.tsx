@@ -17,7 +17,8 @@ import {
   Truck,
   Settings2,
   Code,
-  X
+  X,
+  Database
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -35,7 +36,7 @@ import Swal from 'sweetalert2';
 
 
 const TEMPLATE_OPTIONS = ['v1', 'v2', 'v3', 'v4', 'v5', 'v6'];
-const THEME_OPTIONS = ['default', 'black', 'caffeine', 'claude', 'elegant', 'marvel', 'material', 'midnight', 'nature', 'perplexity', 'slack', 'summer', 'sunset', 'valorant', 'supabase', 'amber', 'catppuccin', 'clay', 'cyberpunk', 'darkmatter', 'ocean', 'quantum', 't3', 'tangerine', 'vintage', 'green', 'red', 'rose', 'orange', 'blue', 'yellow', 'violet'];
+const THEME_OPTIONS = ['default', 'emerald', 'black', 'caffeine', 'claude', 'elegant', 'marvel', 'material', 'midnight', 'nature', 'perplexity', 'slack', 'summer', 'sunset', 'valorant', 'supabase', 'amber', 'catppuccin', 'clay', 'cyberpunk', 'darkmatter', 'ocean', 'quantum', 't3', 'tangerine', 'vintage', 'green', 'red', 'rose', 'orange', 'blue', 'yellow', 'violet'];
 
 const TEMPLATE_CONFIG = [
   { id: 'layout', label: 'Primary Layout' },
@@ -857,6 +858,39 @@ export default function SuperConfigPage() {
                   </Select>
                 </div>
            </CardContent>
+        </Card>
+
+        {/* Super Admin Note Section */}
+        <Card className="lg:col-span-3 w-full border-none shadow-2xl bg-white/80 backdrop-blur-xl overflow-hidden rounded-3xl">
+          <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-5 md:p-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-white/20 rounded-lg shrink-0">
+                <Database className="w-5 h-5 md:w-6 md:h-6" />
+              </div>
+              <div>
+                <CardTitle className="text-xl md:text-2xl font-bold leading-tight">Super Admin Note</CardTitle>
+                <CardDescription className="text-indigo-100 text-xs md:text-sm mt-1">
+                  Save project credentials, API keys, and system notes securely.
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-5 md:p-8">
+            <div className="space-y-3">
+              <Label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                Credentials & System Notes
+              </Label>
+              <textarea
+                value={settings?.superAdminNote || ''}
+                onChange={(e) => setSettings({
+                  ...(settings ?? {}),
+                  superAdminNote: e.target.value
+                })}
+                placeholder="Enter database URLs, credentials, courier secrets, or private dev notes..."
+                className="w-full min-h-[200px] p-4 rounded-xl border-2 border-gray-100 bg-gray-50 focus:border-indigo-500 focus:bg-white outline-none transition-all resize-y font-mono text-sm shadow-inner"
+              />
+            </div>
+          </CardContent>
         </Card>
 
       </div>

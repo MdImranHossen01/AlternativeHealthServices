@@ -135,7 +135,7 @@ export default function AnalyticsPage() {
   const { stats, visitorTrends, searchTrends, topPages, topQueries, deviceData, countryData, sourceData, retentionData } = safeData
 
   return (
-    <div className="flex-1 space-y-6 p-8 pt-6 bg-muted/20">
+    <div className="flex-1 space-y-6 px-0 py-4 md:p-8 pt-6 bg-muted/20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
@@ -373,7 +373,7 @@ function MetricCard({ title, value, change, icon, description, inverseChange = f
 
 function AnalyticsLoadingSkeleton() {
   return (
-    <div className="flex-1 space-y-6 p-8 pt-6">
+    <div className="flex-1 space-y-6 px-0 py-4 md:p-8 pt-6">
       <Skeleton className="h-10 w-48" />
       <div className="grid gap-4 md:grid-cols-4">{[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 w-full" />)}</div>
       <div className="grid gap-6 md:grid-cols-7"><Skeleton className="col-span-4 h-[400px]" /><Skeleton className="col-span-3 h-[400px]" /></div>
