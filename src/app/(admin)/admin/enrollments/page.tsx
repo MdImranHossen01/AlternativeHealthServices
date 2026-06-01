@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { Pagination } from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -39,10 +41,17 @@ interface Enrollment {
 }
 
 function EnrollmentsContent() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
+
+  // Get current page from search params
+  const currentPage = Math.max(1, Number(searchParams.get('page')) || 1);
 
   const fetchEnrollments = async () => {
     const controller = new AbortController();
@@ -147,6 +156,22 @@ function EnrollmentsContent() {
     e.paymentNumber?.includes(search)
   );
 
+  const ITEMS_PER_PAGE = 20;
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const activePage = totalPages > 0 ? Math.min(currentPage, totalPages) : 1;
+  const startIndex = (activePage - 1) * ITEMS_PER_PAGE;
+  const paginatedEnrollments = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (pageNumber: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (pageNumber > 1) {
+      params.set('page', pageNumber.toString());
+    } else {
+      params.delete('page');
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <div className="flex flex-col gap-6 pt-8 px-6">
       <div className="flex items-center justify-between">
@@ -162,7 +187,12 @@ function EnrollmentsContent() {
           placeholder="Search name, phone or bKash..."
           className="pl-10 rounded-xl bg-background border-muted"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete('page');
+            router.push(`${pathname}?${params.toString()}`);
+          }}
         />
       </div>
 
@@ -181,18 +211,18 @@ function EnrollmentsContent() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={5} className="h-40 text-center">
+                <TableCell colSpan={6} className="h-40 text-center">
                   <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
                 </TableCell>
               </TableRow>
             ) : filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="h-40 text-center text-muted-foreground">
+                <TableCell colSpan={6} className="h-40 text-center text-muted-foreground">
                   No enrollments found.
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((enroll) => (
+              paginatedEnrollments.map((enroll) => (
                 <TableRow key={enroll._id} className="hover:bg-muted/30 transition-colors">
                   <TableCell>
                     <div className="flex flex-col gap-0.5">
@@ -293,10 +323,28 @@ function EnrollmentsContent() {
           </TableBody>
         </Table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="py-4 flex justify-center">
+          <Pagination
+            currentPage={activePage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 }
 
 export default function EnrollmentsPage() {
-  return <EnrollmentsContent />;
+  return (
+    <Suspense fallback={
+      <div className="flex h-40 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    }>
+      <EnrollmentsContent />
+    </Suspense>
+  );
 }

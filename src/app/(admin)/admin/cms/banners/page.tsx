@@ -156,7 +156,11 @@ export default function BannersPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="font-semibold">{banner.title}</span>
+                    <span className="font-semibold">
+                      {banner.title && banner.title.length > 30 
+                        ? `${banner.title.substring(0, 30)}...` 
+                        : banner.title}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="font-mono">
