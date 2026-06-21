@@ -14,10 +14,21 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+    const limit = Math.max(1, parseInt(searchParams.get('limit') || '20', 10));
+    const skip = (page - 1) * limit;
+
     await connectToDatabase();
     const domain = await getTenantDomain();
 
-    // Aggregate users with their order stats
+    // Count total users for this domain (excluding super admins)
+    const total = await User.countDocuments({
+      domain,
+      role: { $ne: 'super_admin' }
+    });
+
+    // Aggregate users with their order stats (paginated)
     const users = await User.aggregate([
       { 
         $match: { 
@@ -48,10 +59,12 @@ export async function GET(req: NextRequest) {
           lastOrderDate: { $max: '$userOrders.createdAt' }
         }
       },
-      { $sort: { createdAt: -1 } }
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit }
     ]);
 
-    return NextResponse.json(users);
+    return NextResponse.json({ users, total });
   } catch (error) {
     console.error('Fetch Users Error:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });

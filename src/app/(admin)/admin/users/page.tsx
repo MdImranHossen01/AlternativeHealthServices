@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { Pagination } from '@/components/ui/pagination';
 import {
   Table,
   TableBody,
@@ -62,8 +64,13 @@ interface UserData {
   lastOrderDate?: string;
 }
 
-export default function UsersPage() {
+function UsersContent() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [users, setUsers] = useState<UserData[]>([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -74,12 +81,17 @@ export default function UsersPage() {
   const { data: session } = useSession();
   const isSuperAdmin = (session?.user as any)?.role === 'super_admin';
 
+  // Get current page from search params
+  const currentPage = Math.max(1, Number(searchParams.get('page')) || 1);
+
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/admin/users');
+      setLoading(true);
+      const response = await fetch(`/api/admin/users?page=${currentPage}&limit=20`);
       if (!response.ok) throw new Error('Failed to fetch users');
       const data = await response.json();
-      setUsers(data);
+      setUsers(data.users || []);
+      setTotalUsers(data.total || 0);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast.error('Failed to load users');
@@ -90,7 +102,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [currentPage]);
 
   const openUserDetails = (user: UserData) => {
     setSelectedUser(user);
@@ -199,6 +211,19 @@ export default function UsersPage() {
     }
   };
 
+  const ITEMS_PER_PAGE = 20;
+  const totalPages = Math.ceil(totalUsers / ITEMS_PER_PAGE);
+
+  const handlePageChange = (pageNumber: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (pageNumber > 1) {
+      params.set('page', pageNumber.toString());
+    } else {
+      params.delete('page');
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <div className="flex flex-col gap-6 px-0 py-4 md:p-8 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
@@ -217,7 +242,7 @@ export default function UsersPage() {
             </Button>
           )}
           <div className="bg-primary/10 px-5 py-2.5 rounded-full border border-primary/20">
-            <span className="text-primary font-bold text-sm">{users.length} Total Users</span>
+            <span className="text-primary font-bold text-sm">{totalUsers} Total Users</span>
           </div>
         </div>
       </div>
@@ -540,7 +565,29 @@ export default function UsersPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {totalPages > 1 && (
+        <div className="py-4 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
+  );
+}
+
+export default function UsersPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-40 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    }>
+      <UsersContent />
+    </Suspense>
   );
 }
 
