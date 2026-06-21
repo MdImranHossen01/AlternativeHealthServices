@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { User, Phone, Wallet, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { User, Phone, Wallet, CheckCircle2, ShieldCheck, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -21,6 +21,7 @@ import Swal from 'sweetalert2';
 const formSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   phone: z.string().regex(/^01\d{9}$/, 'Valid Bangladesh phone number is required (starts with 01, 11 digits)'),
+  email: z.string().email('Valid email address is required'),
   paymentNumber: z.string().optional(),
 });
 
@@ -33,6 +34,7 @@ export default function EnrollmentForm({ courseId, price, bkashNumber }: { cours
     defaultValues: {
       name: '',
       phone: '',
+      email: '',
       paymentNumber: '',
     },
   });
@@ -130,6 +132,22 @@ export default function EnrollmentForm({ courseId, price, bkashNumber }: { cours
               </FormLabel>
               <FormControl>
                 <Input placeholder="01XXXXXXXXX" {...field} className="h-12 rounded-xl bg-white/5 border-white/10 focus:bg-white/10 transition-all" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
+                <Mail className="h-3 w-3 text-primary" /> Email Address
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="your.email@example.com" {...field} className="h-12 rounded-xl bg-white/5 border-white/10 focus:bg-white/10 transition-all" />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -44,7 +44,7 @@ export function ProductCarouselSection({
   if (!products || products.length === 0) return null;
 
   return (
-    <section className={`py-8 md:py-12 ${bgColor} overflow-hidden`}>
+    <section className={`py-8 ${bgColor} overflow-hidden`}>
       <div className="container mx-auto px-4 md:px-0">
 
         {/* Header */}

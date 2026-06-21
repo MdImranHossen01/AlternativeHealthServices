@@ -32,7 +32,7 @@ const BD_PHONE_REGEX = /^(?:\+8801|01)[3-9]\d{8}$/;
 const formSchema = z.object({
   name: z.string().trim().min(2, 'Name is required').max(100, 'Name is too long'),
   phone: z.string().trim().regex(BD_PHONE_REGEX, 'Invalid Bangladesh phone number').max(15, 'Phone number is too long'),
-  email: z.string().trim().email('Invalid email address').optional().or(z.literal('')),
+  email: z.string().trim().email('Invalid email address'),
   address: z.string().trim().optional(),
   paymentAmount: z.string().min(1, 'Amount is required').max(12, 'Invalid amount format'),
 });
@@ -195,7 +195,7 @@ export default function EnrollmentFormV2({
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-slate-500">
-                  <Mail className="h-3.5 w-3.5" /> শিক্ষার্থীর ইমেইল (ঐচ্ছিক)
+                  <Mail className="h-3.5 w-3.5" /> শিক্ষার্থীর ইমেইল
                 </FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="example@email.com" {...field} className="h-14 rounded-xl bg-slate-50 border-slate-200" />

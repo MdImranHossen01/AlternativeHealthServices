@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet, Calendar, Clock, MoreHorizontal, Trash2, Mail, MapPin } from 'lucide-react';
+import { Loader2, Search, GraduationCap, Phone, User, CheckCircle, XCircle, Wallet, Calendar, Clock, MoreHorizontal, Trash2, Mail, MapPin, Filter as FilterIcon, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { format, isValid } from 'date-fns';
@@ -27,6 +27,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Enrollment {
   _id: string;
@@ -49,6 +55,12 @@ function EnrollmentsContent() {
   const [loading, setLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [dateFilter, setDateFilter] = useState({
+    from: '',
+    to: '',
+  });
+  const [selectedEnrollment, setSelectedEnrollment] = useState<Enrollment | null>(null);
 
   // Get current page from search params
   const currentPage = Math.max(1, Number(searchParams.get('page')) || 1);
@@ -150,11 +162,32 @@ function EnrollmentsContent() {
     }
   };
 
-  const filtered = enrollments.filter(e => 
-    e.name.toLowerCase().includes(search.toLowerCase()) || 
-    e.phone.includes(search) ||
-    e.paymentNumber?.includes(search)
-  );
+  const filtered = enrollments.filter(e => {
+    const searchLower = search.toLowerCase();
+    
+    // Search matching
+    const matchesSearch = 
+      e.name.toLowerCase().includes(searchLower) || 
+      e.phone.includes(search) ||
+      (e.paymentNumber && e.paymentNumber.toLowerCase().includes(searchLower)) ||
+      (e.email && e.email.toLowerCase().includes(searchLower)) ||
+      (e.courseId && e.courseId.name.toLowerCase().includes(searchLower));
+
+    // Status matching
+    const matchesStatus = statusFilter === 'All' || e.status === statusFilter;
+
+    // Date matching
+    let matchesDate = true;
+    if (dateFilter.from && dateFilter.to) {
+      const enrollDate = new Date(e.createdAt);
+      const fromDate = new Date(dateFilter.from);
+      const toDate = new Date(dateFilter.to);
+      toDate.setHours(23, 59, 59, 999);
+      matchesDate = enrollDate >= fromDate && enrollDate <= toDate;
+    }
+
+    return matchesSearch && matchesStatus && matchesDate;
+  });
 
   const ITEMS_PER_PAGE = 20;
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
@@ -174,26 +207,109 @@ function EnrollmentsContent() {
 
   return (
     <div className="flex flex-col gap-6 pt-8 px-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black tracking-tighter uppercase">Course Enrollments</h1>
           <p className="text-muted-foreground text-sm">Verify payments and manage student registrations</p>
         </div>
-      </div>
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search name, phone, email or payment info..."
+              className="pl-10 rounded-xl bg-background border-muted"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('page');
+                router.push(`${pathname}?${params.toString()}`);
+              }}
+            />
+          </div>
 
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Search name, phone or bKash..."
-          className="pl-10 rounded-xl bg-background border-muted"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete('page');
-            router.push(`${pathname}?${params.toString()}`);
-          }}
-        />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="h-10 rounded-xl">
+                <FilterIcon className="mr-2 h-4 w-4" />
+                {statusFilter === 'All' ? 'All Status' : statusFilter}
+                <ChevronDown className="ml-2 h-3 w-3 opacity-50" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {['All', 'Pending', 'Confirmed', 'Cancelled'].map((status) => (
+                  <DropdownMenuItem
+                    key={status}
+                    onClick={() => {
+                      setStatusFilter(status);
+                      const params = new URLSearchParams(searchParams.toString());
+                      params.delete('page');
+                      router.push(`${pathname}?${params.toString()}`);
+                    }}
+                    className={statusFilter === status ? "bg-accent font-bold" : ""}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span>{status}</span>
+                      <Badge variant="secondary" className="ml-2 text-[10px] px-1.5 py-0">
+                        {status === 'All'
+                          ? enrollments.length
+                          : enrollments.filter(e => e.status === status).length
+                        }
+                      </Badge>
+                    </div>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <div className="flex items-center gap-2 bg-muted/50 p-1 rounded-xl border">
+            <Input
+              type="date"
+              className="h-8 w-36 border-none bg-transparent focus-visible:ring-0"
+              value={dateFilter.from}
+              onChange={(e) => {
+                setDateFilter(prev => ({ ...prev, from: e.target.value }));
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('page');
+                router.push(`${pathname}?${params.toString()}`);
+              }}
+            />
+            <span className="text-muted-foreground text-xs">to</span>
+            <Input
+              type="date"
+              className="h-8 w-36 border-none bg-transparent focus-visible:ring-0"
+              value={dateFilter.to}
+              onChange={(e) => {
+                setDateFilter(prev => ({ ...prev, to: e.target.value }));
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('page');
+                router.push(`${pathname}?${params.toString()}`);
+              }}
+            />
+          </div>
+
+          {(statusFilter !== 'All' || dateFilter.from || dateFilter.to || search) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setStatusFilter('All');
+                setDateFilter({ from: '', to: '' });
+                setSearch('');
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('page');
+                router.push(`${pathname}?${params.toString()}`);
+              }}
+              className="text-xs text-muted-foreground hover:text-primary rounded-xl"
+            >
+              Clear All
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="rounded-2xl border bg-card overflow-hidden shadow-sm">
@@ -226,13 +342,23 @@ function EnrollmentsContent() {
                 <TableRow key={enroll._id} className="hover:bg-muted/30 transition-colors">
                   <TableCell>
                     <div className="flex flex-col gap-0.5">
-                      <span className="font-bold flex items-center gap-1.5"><User className="h-3 w-3 text-primary" /> {enroll.name}</span>
+                      <span 
+                        className="font-bold flex items-center gap-1.5 cursor-pointer text-primary hover:underline"
+                        onClick={() => setSelectedEnrollment(enroll)}
+                      >
+                        <User className="h-3 w-3 text-primary" /> {enroll.name}
+                      </span>
                       <span className="text-xs text-muted-foreground flex items-center gap-1.5"><Phone className="h-3 w-3" /> {enroll.phone}</span>
                       {enroll.email && (
                         <span className="text-xs text-muted-foreground flex items-center gap-1.5"><Mail className="h-3 w-3" /> {enroll.email}</span>
                       )}
                       {enroll.address && (
-                        <span className="text-xs text-muted-foreground flex items-center gap-1.5"><MapPin className="h-3 w-3" /> {enroll.address}</span>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1.5" title={enroll.address}>
+                          <MapPin className="h-3 w-3 shrink-0" />
+                          <span className="truncate max-w-[250px]">
+                            {enroll.address.length > 50 ? `${enroll.address.slice(0, 50)}...` : enroll.address}
+                          </span>
+                        </span>
                       )}
                     </div>
                   </TableCell>
@@ -253,8 +379,10 @@ function EnrollmentsContent() {
                            enroll.paymentNumber.toUpperCase().startsWith('BANGLAQR') ? 'Bangla QR' : 'Manual Payment'}
                         </span>
                       </div>
-                    ) : (
+                    ) : enroll.paymentNumber === 'FREE' || !enroll.courseId || enroll.courseId.price === 0 ? (
                       <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Free Course</Badge>
+                    ) : (
+                      <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">No Payment Info</Badge>
                     )}
                   </TableCell>
                   <TableCell>
@@ -333,6 +461,104 @@ function EnrollmentsContent() {
           />
         </div>
       )}
+
+      <Dialog open={!!selectedEnrollment} onOpenChange={(open) => !open && setSelectedEnrollment(null)}>
+        <DialogContent className="sm:max-w-[500px] rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 text-primary" />
+              Enrollment Details
+            </DialogTitle>
+          </DialogHeader>
+          {selectedEnrollment && (
+            <div className="grid gap-4 py-4 text-sm">
+              <div className="grid grid-cols-3 items-start gap-4">
+                <span className="font-semibold text-muted-foreground">Student Name:</span>
+                <span className="col-span-2 font-bold text-foreground flex items-center gap-1.5">
+                  <User className="h-4 w-4 text-primary" /> {selectedEnrollment.name}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <span className="font-semibold text-muted-foreground">Phone:</span>
+                <span className="col-span-2 font-medium flex items-center gap-1.5">
+                  <Phone className="h-4 w-4 text-primary" /> {selectedEnrollment.phone}
+                </span>
+              </div>
+              {selectedEnrollment.email && (
+                <div className="grid grid-cols-3 items-center gap-4">
+                  <span className="font-semibold text-muted-foreground">Email:</span>
+                  <span className="col-span-2 font-medium flex items-center gap-1.5">
+                    <Mail className="h-4 w-4 text-primary" /> {selectedEnrollment.email}
+                  </span>
+                </div>
+              )}
+              {selectedEnrollment.address && (
+                <div className="grid grid-cols-3 items-start gap-4">
+                  <span className="font-semibold text-muted-foreground">Address:</span>
+                  <span className="col-span-2 font-medium flex items-start gap-1.5">
+                    <MapPin className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <span>{selectedEnrollment.address}</span>
+                  </span>
+                </div>
+              )}
+              <div className="border-t my-2" />
+              <div className="grid grid-cols-3 items-start gap-4">
+                <span className="font-semibold text-muted-foreground">Course:</span>
+                <span className="col-span-2 font-bold text-foreground">
+                  {selectedEnrollment.courseId?.name || 'Course Deleted'}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <span className="font-semibold text-muted-foreground">Course Fee:</span>
+                <span className="col-span-2 font-bold text-primary">
+                  ৳{selectedEnrollment.courseId?.price || 0}
+                </span>
+              </div>
+              <div className="border-t my-2" />
+              <div className="grid grid-cols-3 items-start gap-4">
+                <span className="font-semibold text-muted-foreground">Payment Details:</span>
+                <span className="col-span-2">
+                  {selectedEnrollment.paymentNumber && selectedEnrollment.paymentNumber !== 'FREE' ? (
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-bold text-primary flex items-center gap-1.5">
+                        <Wallet className="h-4 w-4" /> {selectedEnrollment.paymentNumber}
+                      </span>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">
+                        {selectedEnrollment.paymentNumber.toUpperCase().startsWith('BKASH') ? 'Manual bKash' : 
+                         selectedEnrollment.paymentNumber.toUpperCase().startsWith('NAGAD') ? 'Manual Nagad' : 
+                         selectedEnrollment.paymentNumber.toUpperCase().startsWith('ROCKET') ? 'Manual Rocket' : 
+                         selectedEnrollment.paymentNumber.toUpperCase().startsWith('BANGLAQR') ? 'Bangla QR' : 'Manual Payment'}
+                      </span>
+                    </div>
+                  ) : selectedEnrollment.paymentNumber === 'FREE' || !selectedEnrollment.courseId || selectedEnrollment.courseId.price === 0 ? (
+                    <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20">Free Course</Badge>
+                  ) : (
+                    <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">No Payment Info</Badge>
+                  )}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <span className="font-semibold text-muted-foreground">Registered:</span>
+                <span className="col-span-2 font-medium flex items-center gap-1.5">
+                  <Calendar className="h-4 w-4 text-primary" />
+                  {isValid(new Date(selectedEnrollment.createdAt)) ? format(new Date(selectedEnrollment.createdAt), 'MMM dd, yyyy - hh:mm a') : 'N/A'}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <span className="font-semibold text-muted-foreground">Status:</span>
+                <span className="col-span-2">
+                  <Badge className={`rounded-md ${
+                    selectedEnrollment.status === 'Confirmed' ? 'bg-emerald-500' : 
+                    selectedEnrollment.status === 'Cancelled' ? 'bg-destructive' : 'bg-amber-500'
+                  }`}>
+                    {selectedEnrollment.status}
+                  </Badge>
+                </span>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
