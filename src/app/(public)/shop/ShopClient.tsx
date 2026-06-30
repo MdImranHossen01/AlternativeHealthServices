@@ -165,7 +165,8 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
 
   const clearFilters = () => {
     setSelectedCategories([]);
-    setPriceRange([0, 50000]);
+    setMinPrice('');
+    setMaxPrice('');
     setSearchTerm('');
     setShowOnlyNew(false);
     setShowOnlySale(false);
