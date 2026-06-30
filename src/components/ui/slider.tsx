@@ -22,24 +22,27 @@ function Slider({
       )}
       {...props}
     >
-      <SliderPrimitive.Track 
-        data-slot="slider-track"
-        className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-muted shadow-inner"
-      >
-        <SliderPrimitive.Indicator 
-            data-slot="slider-range"
-            className="absolute h-full bg-primary" 
-        />
-      </SliderPrimitive.Track>
-      
-      {/* Dynamic Thumb generation based on value array */}
-      {(Array.isArray(value) ? value : [value]).map((_, index) => (
-        <SliderPrimitive.Thumb
-            key={index}
-            data-slot="slider-thumb"
-            className="block size-4 cursor-grab rounded-full border border-primary/50 bg-background shadow-lg transition-transform hover:scale-110 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:cursor-grabbing disabled:pointer-events-none dark:border-primary/40"
-        />
-      ))}
+      <SliderPrimitive.Control className="relative flex w-full items-center">
+        <SliderPrimitive.Track 
+          data-slot="slider-track"
+          className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-muted shadow-inner"
+        >
+          <SliderPrimitive.Indicator 
+              data-slot="slider-range"
+              className="absolute h-full bg-primary" 
+          />
+        </SliderPrimitive.Track>
+        
+        {/* Dynamic Thumb generation based on value array */}
+        {(Array.isArray(value) ? value : [value]).map((_, index) => (
+          <SliderPrimitive.Thumb
+              key={index}
+              index={index}
+              data-slot="slider-thumb"
+              className="block size-4 cursor-grab rounded-full border border-primary/50 bg-background shadow-lg transition-transform hover:scale-110 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:cursor-grabbing disabled:pointer-events-none dark:border-primary/40"
+          />
+        ))}
+      </SliderPrimitive.Control>
     </SliderPrimitive.Root>
   )
 }

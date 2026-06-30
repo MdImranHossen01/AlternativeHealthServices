@@ -20,7 +20,8 @@ export async function GET(
     if (!domain) {
       return NextResponse.json({ message: 'Tenant domain is missing' }, { status: 400 });
     }
-    const category = await Category.findOne({ slug, domain });
+    const query = mongoose.Types.ObjectId.isValid(slug) ? { _id: slug, domain } : { slug, domain };
+    const category = await Category.findOne(query);
 
     if (!category) {
       return NextResponse.json({ message: 'Category not found' }, { status: 404 });
@@ -66,8 +67,9 @@ export async function PUT(
 
     const domain = await getTenantDomain();
 
+    const query = mongoose.Types.ObjectId.isValid(slug) ? { _id: slug, domain } : { slug, domain };
     const updatedCategory = await Category.findOneAndUpdate(
-      { slug, domain },
+      query,
       { $set: updateData },
       { new: true, runValidators: true }
     );
@@ -104,7 +106,8 @@ export async function DELETE(
     await connectToDatabase();
 
     // 1. Verify existence first
-    const category = await Category.findOne({ slug, domain });
+    const query = mongoose.Types.ObjectId.isValid(slug) ? { _id: slug, domain } : { slug, domain };
+    const category = await Category.findOne(query);
     if (!category) {
       return NextResponse.json({ message: 'Category not found' }, { status: 404 });
     }

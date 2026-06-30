@@ -79,7 +79,8 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     initialCategory ? [initialCategory] : []
   );
-  const [priceRange, setPriceRange] = useState([0, 50000]);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [searchTerm, setSearchTerm] = useState(initialSearch || '');
   const [showOnlyNew, setShowOnlyNew] = useState(initialFilter === 'new');
@@ -88,16 +89,8 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
   const [showOnlyTrending, setShowOnlyTrending] = useState(initialFilter === 'trending');
   const [currentPage, setCurrentPage] = useState(Number(searchParams.get('page')) || 1);
   const itemsPerPage = 20;
-  // Sync page from URL parameter
-  useEffect(() => {
-    const urlPage = Number(searchParams.get('page')) || 1;
-    if (urlPage !== currentPage) {
-      setCurrentPage(urlPage);
-    }
-  }, [searchParams, currentPage]);
 
   const skipClampRef = useRef(false);
-  const isMounted = useRef(false);
 
   // Sync state to URL without full reload
   const setPageAndUrl = useCallback((page: number) => {
@@ -113,17 +106,9 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
 
   // Reset page to 1 when filters change
   useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-      return;
-    }
     skipClampRef.current = true;
-    setCurrentPage(1);
-    
-    const params = new URLSearchParams(window.location.search);
-    params.delete('page');
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [selectedCategories, priceRange, sortBy, searchTerm, showOnlyNew, showOnlySale, showOnlyFeatured, showOnlyTrending, pathname, router]);
+    setPageAndUrl(1);
+  }, [selectedCategories, minPrice, maxPrice, sortBy, searchTerm, showOnlyNew, showOnlySale, showOnlyFeatured, showOnlyTrending, setPageAndUrl]);
 
   const filteredProducts = products
     .filter(p => {
@@ -132,7 +117,9 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
       const matchesCategory = selectedCategories.length === 0 ||
         (p.categories ?? []).some((c) => selectedCategories.includes(c.slug || '') || selectedCategories.includes(c._id || ''));
       const price = p.salePrice || p.price;
-      const matchesPrice = price >= priceRange[0] && price <= priceRange[1];
+      const min = minPrice !== '' ? Number(minPrice) : 0;
+      const max = maxPrice !== '' ? Number(maxPrice) : Infinity;
+      const matchesPrice = price >= min && price <= max;
       const matchesNewArrival = !showOnlyNew || p.isNewArrival === true;
       const matchesSale = !showOnlySale || (p.salePrice !== undefined && p.salePrice !== null && p.salePrice < p.price);
       const matchesFeatured = !showOnlyFeatured || p.isFeatured === true;
@@ -186,7 +173,7 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
     setShowOnlyTrending(false);
   };
 
-  const Sidebar = () => (
+  const renderSidebar = () => (
     <div className="space-y-8">
       <div>
         <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Categories</h3>
@@ -210,19 +197,29 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
       </div>
 
       <div>
-        <h3 className="text-sm font-bold uppercase tracking-wider mb-6">Price Range</h3>
-        <Slider
-          value={priceRange}
-          max={50000}
-          step={500}
-          onValueChange={(val) => {
-            if (Array.isArray(val)) setPriceRange([...val]);
-          }}
-          className="mb-4"
-        />
-        <div className="flex items-center justify-between text-sm font-medium">
-          <span>৳{priceRange[0]}</span>
-          <span>৳{priceRange[1]}+</span>
+        <h3 className="text-sm font-bold uppercase tracking-wider mb-4">Price Range</h3>
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <span className="absolute left-2.5 top-2.5 text-xs text-muted-foreground">৳</span>
+            <Input
+              type="number"
+              placeholder="Min"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              className="pl-6 text-sm"
+            />
+          </div>
+          <span className="text-muted-foreground text-xs font-medium">to</span>
+          <div className="relative flex-1">
+            <span className="absolute left-2.5 top-2.5 text-xs text-muted-foreground">৳</span>
+            <Input
+              type="number"
+              placeholder="Max"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              className="pl-6 text-sm"
+            />
+          </div>
         </div>
       </div>
 
@@ -238,7 +235,7 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Desktop Sidebar */}
         <aside className="hidden w-64 shrink-0 md:block sticky top-20 self-start h-fit max-h-[calc(100vh-6rem)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40">
-          <Sidebar />
+          {renderSidebar()}
         </aside>
 
         <div className="flex-1 space-y-6">
@@ -266,7 +263,7 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
                   <SheetHeader className="mb-6 p-0">
                     <SheetTitle>Filter Products</SheetTitle>
                   </SheetHeader>
-                  <Sidebar />
+                  {renderSidebar()}
                 </SheetContent>
               </Sheet>
 
@@ -315,7 +312,7 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
           </div>
 
           {/* Active Filters Bar */}
-          {(selectedCategories.length > 0 || searchTerm || priceRange[0] > 0 || priceRange[1] < 50000 || showOnlyNew) && (
+          {(selectedCategories.length > 0 || searchTerm || minPrice !== '' || maxPrice !== '' || showOnlyNew) && (
             <div className="flex flex-wrap gap-2 items-center">
               <span className="text-xs font-bold uppercase text-muted-foreground mr-2">Filtered By:</span>
               {selectedCategories.map(cat => (
@@ -328,9 +325,9 @@ export default function ShopClient({ initialProducts, initialCategories }: ShopC
                   Search: {searchTerm} <X className="h-3 w-3 cursor-pointer" onClick={() => setSearchTerm('')} />
                 </Badge>
               )}
-              {(priceRange[0] !== 0 || priceRange[1] !== 50000) && (
+              {(minPrice !== '' || maxPrice !== '') && (
                 <Badge variant="secondary" className="gap-1 rounded-full px-3 py-1">
-                  Price: ৳{priceRange[0]} - ৳{priceRange[1]}
+                  Price: ৳{minPrice || '0'} - ৳{maxPrice || '∞'} <X className="h-3 w-3 cursor-pointer" onClick={() => { setMinPrice(''); setMaxPrice(''); }} />
                 </Badge>
               )}
               {showOnlyNew && (
